@@ -183,7 +183,12 @@
         * 整欄不用
     * 延伸閱讀 : [辨識異常值](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)、[IQR](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)
 * **Day_10 : 數值特徵-去除離群值**
-    * 方法一 : 去除離群值，可能刪除掉重要資訊，但不刪除會造成特徵縮放(標準化/最大最小化)有很大問題
+    * 方法一 : 去除離群值，可能刪除掉重要資訊，但不刪除會造
+    成特徵縮放(標準化/最大最小化)有很大問題
+        ```py
+        mask = df[col] > threshold_lower & df[col] < threshold_upper
+        df = df[mask]
+        ```
     * 方法二 : 調整離群值
         ```py
         df[col] = df[col].clip(lower, upper) # 將數值限制在範圍內
