@@ -1,14 +1,14 @@
 # 4th-ML100Days
 
 ### 機器學習概論 Introduction of Machine Learning
-* Day_01 : 資料介紹與評估指標
+* **Day_01 : 資料介紹與評估指標**
     * 探索流程 : 找到問題 -> 初探 -> 改進 -> 分享 -> 練習 -> 實戰
     * 思考關鍵點 :
         * 為什麼這個問題重要
         * 資料從何而來
         * 資料型態是什麼
         * 回答問題的關鍵指標是什麼
-* Day_02 : 機器學習概論
+* **Day_02 : 機器學習概論**
     * 機器學習範疇 : 深度學習(Deep Learning) ⊂ 機器學習(Machine Learning) ⊂ 人工智慧 (Artificial Intelligence)
     * 機器學習是什麼 :
         * 讓機器從資料找尋規律與趨勢不需要給定特殊規則
@@ -17,14 +17,14 @@
         * 監督是學習(Supervised Learning) : 圖像分類(Classification)、詐騙偵測(Fraud detection)，需成對資料(x,y)
         * 非監督是學習(Unsupervised Learning) : 降維(Dimension Reduction)、分群(Clustering)、壓縮，只需資料(x)
         * 強化學習(Reinforcement Learning) : 下圍棋、打電玩，透過代理機器人(Agent)與環境(Environment)互動，學習如何獲取最高獎勵(Reward)，例如 Alpha GO
-* Day_03 : 機器學習流程與步驟
+* **Day_03 : 機器學習流程與步驟**
     * 資料蒐集、前處理
         * 政府公開資料、Kaggle 資料
             * 結構化資料 : Excel 檔、CSV 檔
             * 非結構化資料 : 圖片、影音、文字
         * 使用 Python 套件
-            * 開啟圖片 : PIL、skimage、open-cv
-            * 開啟文件 : pandas
+            * 開啟圖片 : `PIL`、`skimage`、`open-cv`
+            * 開啟文件 : `pandas`
         * 資料前處理 :
             * 缺失值填補
             * 離群值處理
@@ -56,14 +56,14 @@
         * 送進模型進行預測
         * 輸出預測結果
         * 視專案需求調整前後端
-* Day_04 : 讀取資料與分析流程(EDA，Exploratory Data Analysis)   
+* **Day_04 : 讀取資料與分析流程(EDA，Exploratory Data Analysis)**   
     * 透過視覺化和統計工具進行分析
         * 了解資料 : 獲取資料包含的資訊、結構、特點
         * 發現 outlier 或異常數值 : 檢查資料是否有誤
         * 分析各變數間的關聯性 : 找出重要的變數
     * 收集資料 -> 數據清理 -> 特徵萃取 -> 資料視覺化 -> 建立模型 -> 驗證模型 -> 決策應用
 ### 資料清理與數據前處理 Data Cleaning and Preprocessing
-* Day_05 : 如何建立一個 DataFrame？如何讀取其他資料？
+* **Day_05 : 如何建立一個 DataFrame？如何讀取其他資料？**
     * 用 [pd.DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) 來建立，[練習網站](https://github.com/guipsamora/pandas_exercises)
     * CSV
         ```py
@@ -106,7 +106,7 @@
         with open('example.pkl','rb') as f:
             arr = pickle.load(f)
         ```
-* Day_06 : 欄位的資料類型介紹及處理
+* **Day_06 : 欄位的資料類型介紹及處理**
     * 資料類型 :
         * 離散變數 : 房間數量、性別、國家
         * 連續變數 : 身高、花費時間、車速
@@ -124,25 +124,25 @@
                     df = pd.get_dummies(df)
                     ```
             * 其他 : 日期、boolean
-* Day_07 : 特徵類型
+* **Day_07 : 特徵類型**
     * 數值型特徵 : 有不同轉換方式，函數/條件式都可以
     * 類別型特徵 : 通常一種類別對應一種分數
     * 二元型特徵 : True/False，可當類別或數值處理
     * 排序型特徵 : 有大小關係時當數值型特徵處理
     * 時間型特徵 : 可當數值或類別處理，但會失去週期性，需特別處理
-* Day_08 : EDA之資料分佈
+* **Day_08 : EDA之資料分佈**
     * 以單變量進行分析
         * 計算集中趨勢
-            * 平均數，mean()
-            * 中位數，median()
-            * 眾數，mode()
+            * 平均數，`mean()`
+            * 中位數，`median()`
+            * 眾數，`mode()`
         * 計算資料分散程度
-            * 最小值，min()
-            * 最大值，max()
+            * 最小值，`min()`
+            * 最大值，`max()`
             * 範圍
-            * 四分位差，quantile()
-            * 變異數，var()
-            * 標準差，std()
+            * 四分位差，`quantile()`
+            * 變異數，`var()`
+            * 標準差，`std()`
     * 視覺化方式
         * [matplotlib](https://matplotlib.org/gallery/index.html)
             ```py
@@ -160,7 +160,7 @@
             sns.axes_style(...) # 更詳細的設定
             ```
     * 延伸閱讀 : [敘述統計與機率分佈](http://www.hmwu.idv.tw/web/R_AI_M/AI-M1-hmwu_R_Stat&Prob_v2.pdf)
-* Day_09 : 離群值(Outlier)及其處理
+* **Day_09 : 離群值(Outlier)及其處理**
     * 異常值出現可能原因
         * 未知值隨意填補或約定成俗代入
         * 錯誤紀錄/手誤/系統性錯誤
@@ -182,7 +182,7 @@
         * 另建欄位 : 標示異常(Y/N)
         * 整欄不用
     * 延伸閱讀 : [辨識異常值](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)、[IQR](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)
-* Day_10 : 數值特徵-去除離群值
+* **Day_10 : 數值特徵-去除離群值**
     * 方法一 : 去除離群值，可能刪除掉重要資訊，但不刪除會造成特徵縮放(標準化/最大最小化)有很大問題
     * 方法二 : 調整離群值
         ```py
