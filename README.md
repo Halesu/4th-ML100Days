@@ -1,6 +1,6 @@
 # 4th-ML100Days
 
-## 機器學習概論 Introduction of Machine Learning
+### 機器學習概論 Introduction of Machine Learning
 * Day_01 : 資料介紹與評估指標
     * 探索流程 : 找到問題 -> 初探 -> 改進 -> 分享 -> 練習 -> 實戰
     * 思考關鍵點 :
@@ -62,7 +62,7 @@
         * 發現 outlier 或異常數值 : 檢查資料是否有誤
         * 分析各變數間的關聯性 : 找出重要的變數
     * 收集資料 -> 數據清理 -> 特徵萃取 -> 資料視覺化 -> 建立模型 -> 驗證模型 -> 決策應用
-## 資料清理與數據前處理 Data Cleaning and Preprocessing
+### 資料清理與數據前處理 Data Cleaning and Preprocessing
 * Day_05 : 如何建立一個 DataFrame？如何讀取其他資料？
     * 用 [pd.DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) 來建立，[練習網站](https://github.com/guipsamora/pandas_exercises)
     * CSV
