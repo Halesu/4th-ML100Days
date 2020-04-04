@@ -193,3 +193,150 @@
         ```py
         df[col] = df[col].clip(lower, upper) # 將數值限制在範圍內
         ```
+* **Day_11 : 數值填補與連續數值標準化**
+    * 常用於填補的統計值
+        * 中位數(median) : `np.median(df[col])`
+        * 分位數(quantiles) : `np.quantile(df[col],q=...)`
+        * 眾數(mode) : 
+            ```py
+            from scipy.stats import mode
+            mode(df[col])
+            ```
+        * 平均數(mean) : `np.mean(df[col])`
+    * 連續型數值[標準化](https://blog.csdn.net/pipisorry/article/details/52247379)
+        * 為何要標準化 : 每個變數 x 對 y 的影響力不同
+        * 是否要做標準化 : 對於權重敏感或損失函數平滑有幫助者
+            * 非樹狀模型 : 線性回歸、羅吉斯回歸、類神經，對預測會有影響
+            * 樹狀模型 : 決策樹、隨機森林樹、梯度提升樹，對預測不會有影響
+        * 優點 : 加速模型收斂，提升模型精準度
+        * 缺點 : 量的單位有影響力時不適用
+        * 標準化方法 :
+            * Z-transform: $ \frac{(x - mean(x))}{std(x)} $
+            * Range (0 ~ 1): $ \frac{x - min(x)}{max(x) - min(x)} $
+            * Range (-1 ~ 1): $ (\frac{x - min(x)}{max(x) - min(x)} - 0.5) * 2 $
+* **Day_12 : 數值型特徵 - 補缺失值與標準化**
+    * [缺失值處理](https://juejin.im/post/5b5c4e6c6fb9a04f90791e0c) : 最重要的是欄位領域知識與欄位中的非缺數值，須注意不要破壞資料分佈
+        * 填補統計值 :
+            * 填補平均數(mean) : 數值型欄位，偏態不明顯
+            * 填補中位數(meadian) : 數值型欄位，偏態明顯
+            * 填補重數(mode) : 類別型欄位
+        * 填補指定值 : 須對欄位領域知識已有了解
+            * 補 0 : 空缺原本就有零的含意
+            * 補不可能出現的數值 : 類別型欄位，但不是合用眾數時
+            ```py
+            df.fillna(0)
+            df.fillna(-1)
+            df.fillna(df.mean())
+            ```
+        * 填補預測值 : 速度慢但精確，從其他欄位學得填補知識
+            * 若填補範圍廣，且是重要的特徵欄位時可用本方式
+            * 須提防 overfitting : 可能退化成其他特徵組合
+        * 標準化 : 以合理的方式平衡特徵間的影響力
+            * 標準化(Standard Scaler) : 假設數值為常態分
+            佈，適用本方式平衡特徵，不易受極端值影響
+            * 最大最小化(MinMax Scaler) : 假設數值為均勻分布，適用本方式平衡特徵，易受極端值影響
+                ```py
+                from sklearn.preprocessing import MinMaxScaler, StandardScaler
+                df_temp = MinMaxScaler().fit_transform(df)
+                df_temp = StandardScaler().fit_transform(df)
+                ```
+* **Day_13 : 常用的 DataFrame 操作
+    * [Panda 官方 Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
+    * [Panda Cheet Sheet](https://assets.datacamp.com/blog_assets/PandasPythonForDataScience.pdf)
+    * 轉換與合併
+        * 將"column"轉換成"row" 
+            ```py
+            df.melt(id_vars=['A'], value_vars=['B', 'C'])
+            ```
+        * 將"row"轉換成"column"
+            ```py
+            df.pivot(index='A', columns='B', values='C')
+            ```
+        * 沿"row"進行合併
+            ```py
+            pd.concat([df1,df2])
+            ```
+        * 沿"column"進行合併
+            ```py
+            pd.concat([df1,df2],axis=1)
+        * 以"id"欄位做全合併(遺失以na補)
+            ```py
+            pd.merge(df1,df2,on='id',how='outer')
+            ```
+        * 以'id'欄位做部分合併
+            ```py
+            pd.merge(df1,df2,on='id',how='inner')
+            ```
+    * subset 操作
+        * 邏輯操作(>,<,=,&,|,~,^)
+            ```py
+            sub_df = df[df.age>20]
+            ```
+        * 移除重複的"row"
+            ```py
+            df = df.drop_duplicates()
+            ```
+        * 前 5 筆、後 n 筆
+            ```py
+            sub_df = df.head()   # default = 5
+            sub_df = df.tail(10)
+            ```
+        * 隨機抽樣
+            ```
+            sub_df = df.sample(frac=0.5)    # 抽50%
+            sub_df = df.sample(n=10)    # 抽10筆
+            ```
+        * 第 n 到 m 筆
+            ```py
+            sub_df = df.iloc[n:m]
+            ```
+        * 欄位中包含 value
+            ```py
+            df.column.isin(value)
+            ```
+        * 判斷 Nan
+            ```py
+            pd.isnull(obj)  # df.isnull()
+            pd.notnull(obj) # df.notnull()
+            ```
+        * 欄位篩選
+            ```py
+            new_df = df['col1'] # df.col1
+            new_df = df[['col1','col2','col3']]
+            df = pd.DataFrame(np.array(([1, 2, 3], [4, 5, 6])),
+                        index=['mouse', 'rabbit'],
+                        columns=['one', 'two', 'three'])
+            new_df = df.filter(items=['one', 'three'])
+            new_df = df.filter(regex='e$', axis=1)
+            new_df = df.filter(like='bbi', axis=0)
+            ```
+    * Groupby 操作 : 
+        ```py
+        sub_df_obj = df.groupby(['col1'])
+        ```
+        * 計算各組的數量
+            ```py
+            sub_df_obj.size()
+            ```
+        * 得到各組的統計值
+            ```py
+            sub_df_obj.describe()
+            ```
+        * 根據 col1 分組後計算 col2 的統計值
+            ```py
+            sub_df_obj['col2'].mean()
+            ```
+        * 根據 col1 分組後的 col2 引用操作
+            ```py
+            sub_df_obj['col2'].apply(...)
+            ``` 
+        * 根據 col1 分組後的 col2 繪圖
+            ```py
+            sub_df_obj['col2'].hist()
+            ```
+* **Day_14 : 相關係數簡介**
+
+
+
+
+
