@@ -371,7 +371,7 @@
         import matplotlib.pyplot as plt
         import seaborn as sns   
 
-        # 以生存年數繪製分布圖
+        # 將欄位分成多分進行統計繪圖
         plt.hist(df[col], edgecolor = 'k', bins = 25)
 
         # KDE, 比較不同的 kernel function
