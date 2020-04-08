@@ -397,12 +397,29 @@
         * 引入非線性，提升模型表達能力
         * 提升魯棒性，減少過似合
     * 主要方法 :
-        * 等寬劃分 `pd.cut()`
-            * 可使用 `np.linspace()` 進行等距切分
+        * 等寬劃分 `pd.cut()`，可使用 `np.linspace()` 進行等距切分
         * 等頻劃分 `pd.qcut()`
         * 聚類劃分
 * **Day_18 : 把連續型變數離散化實作**
     * 把連續型的特徵離散化後，可以配合 `groupby` 劃出與預測目標的圖，來判斷兩者之間是否有某些關係和趨勢。
+        ```py
+        # 將年齡相關資料, 另外存成一個 DataFrame 來處理
+        age_data = app_train[['TARGET', 'DAYS_BIRTH']]
+        age_data['YEARS_BIRTH'] = age_data['DAYS_BIRTH'] / 365
+
+        # 將年齡資料離散化 / 分組
+        age_data['YEARS_BINNED'] = pd.cut(age_data['YEARS_BIRTH'], bins = np.linspace(20, 70, num = 11))
+
+        age_groups  = age_data.groupby('YEARS_BINNED').mean()
+
+        plt.figure(figsize = (8, 8))
+
+        # 繪製目標值平均與分組組別的長條圖
+        plt.bar(range(len(age_groups.index)), age_groups['TARGET'])
+        # 加上 X, y 座標說明, 以及圖表的標題
+        plt.xticks(range(len(age_groups.index)), age_groups.index, rotation = 75); plt.xlabel('Age Group (years)'); plt.ylabel('Average Failure to Repay')
+        plt.title('Failure to Repay by Age Group')
+        ```
 * **Day_19 : Subplot**
     * 使用時機 :
         * 很多相似資料用呈現(如不同組別)
