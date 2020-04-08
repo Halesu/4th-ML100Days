@@ -211,9 +211,9 @@
         * 優點 : 加速模型收斂，提升模型精準度
         * 缺點 : 量的單位有影響力時不適用
         * 標準化方法 :
-            * Z-transform: $ \frac{(x - mean(x))}{std(x)} $
-            * Range (0 ~ 1): $ \frac{x - min(x)}{max(x) - min(x)} $
-            * Range (-1 ~ 1): $ (\frac{x - min(x)}{max(x) - min(x)} - 0.5) * 2 $
+            * Z-transform : $ \frac{(x - mean(x))}{std(x)} $
+            * Range (0 ~ 1) : $ \frac{x - min(x)}{max(x) - min(x)} $
+            * Range (-1 ~ 1) : $ (\frac{x - min(x)}{max(x) - min(x)} - 0.5) * 2 $
 * **Day_12 : 數值型特徵 - 補缺失值與標準化**
     * [缺失值處理](https://juejin.im/post/5b5c4e6c6fb9a04f90791e0c) : 最重要的是欄位領域知識與欄位中的非缺數值，須注意不要破壞資料分佈
         * 填補統計值 :
@@ -335,17 +335,13 @@
             sub_df_obj['col2'].hist()
             ```
 * **Day_14 : 相關係數簡介**
-    * 想要了解兩個變數之間的**線性關係**時，相關係數是一個還不錯的簡單⽅方法，能給出一個 -1~1 之間的值來衡量化兩個變數之間的關係。
+    * 想要了解兩個變數之間的**線性關係**時，相關係數是一個還不錯的簡單方法，能給出一個 -1~1 之間的值來衡量化兩個變數之間的關係。
     * Correlation Coefficient :
         $$r=\frac{1}{n-1} \sum_{i=1}^n\frac{(x_i-\bar{x})}{s_x}\frac{(y_i-\bar{y})}{s_y}$$
     * [相關係數小遊戲](http://guessthecorrelation.com/)
 * **Day_15 : 相關係數實作**
     ```py
-    df = pd.DataFrame([(1,1),
-                       (2,1),
-                       (3,2),
-                       (4,2)]
-                       columns=['X','y'])
+    df = pd.DataFrame(np.concatenate([np.random.randn(20).reshape(-1,1),np.random.randint(0,2,20).reshape(-1,1)],axis=1), columns=["X","y"])
     df.corr()
     np.corrcoef(df)
     ```    
