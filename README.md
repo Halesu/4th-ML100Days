@@ -240,7 +240,7 @@
                 df_temp = MinMaxScaler().fit_transform(df)
                 df_temp = StandardScaler().fit_transform(df)
                 ```
-* **Day_13 : 常用的 DataFrame 操作
+* **Day_13 : 常用的 DataFrame 操作**
     * [Panda 官方 Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)
     * [Panda Cheet Sheet](https://assets.datacamp.com/blog_assets/PandasPythonForDataScience.pdf)
     * 轉換與合併
@@ -335,8 +335,108 @@
             sub_df_obj['col2'].hist()
             ```
 * **Day_14 : 相關係數簡介**
+    * 想要了解兩個變數之間的**線性關係**時，相關係數是一個還不錯的簡單⽅方法，能給出一個 -1~1 之間的值來衡量化兩個變數之間的關係。
+    * Correlation Coefficient :
+        $$r=\frac{1}{n-1} \sum_{i=1}^n\frac{(x_i-\bar{x})}{s_x}\frac{(y_i-\bar{y})}{s_y}$$
+    * [相關係數小遊戲](http://guessthecorrelation.com/)
+* **Day_15 : 相關係數實作**
+    ```py
+    df = pd.DataFrame([(1,1),
+                       (2,1),
+                       (3,2),
+                       (4,2)]
+                       columns=['X','y'])
+    df.corr()
+    np.corrcoef(df)
+    ```    
+    * 通常搭配繪圖進一步了解目標與變數的關係
+        ```py
+        df.plot(x='X',y='y',kind='scatter')
+        df.boxplot(column=['X'], by=['y'])
+        ```
+* **Day_16 : 繪圖與樣式＆Kernel Density Estimation (KDE)**
+    * 繪圖風格 : 用已經被設計過的風格，讓觀看者更清楚明瞭，包含色彩選擇、線條、樣式等。
+        ```py
+        plt.style.use('default') # 不需設定就會使用預設
+        plt.style.use('ggplot') 
+        plt.style.use('seaborn') # 採⽤ seaborn 套件繪圖
+        ```
+    * KDE
+        * 採用無母數方法劃出觀察變數的機率密度函數
+        * Density Plot 特性 :
+            * 歸一 : 線下面積和為1
+        * 常用的 kernal function :
+            * Gaussian(Normal dist)
+            * Cosine
+        * 優點 : 無母數方法，對分布沒有假設
+        * 缺點 : 計算量大
+        * 透過 KDE Plot 可以清楚看出不同組間的分布情形
+        ```py
+        import matplotlib.pyplot as plt
+        import seaborn as sns   
 
+        # 以生存年數繪製分布圖
+        plt.hist(df[col], edgecolor = 'k', bins = 25)
 
+        # KDE, 比較不同的 kernel function
+        sns.kdeplot(df[col], label = 'Gaussian esti.', kernel='gau')
+        sns.kdeplot(adf[col], label = 'Cosine esti.', kernel='cos')
+        sns.kdeplot(df[col], label = 'Triangular esti.', kernel='tri')
 
+        # 完整分布圖 (distplot) : 將 bar 與 Kde 同時呈現
+        sns.distplot(df[col])
+
+        # 繪製 barplot 並顯示目標的 variables 
+        sns.barplot(x="BIRTH_RANGE", y="TARGET", data=df)
+        plt.xticks(rotation=45) # 旋轉刻度標籤
+        ```
+    * 延伸閱讀 :
+        * [Python Graph Gallery](https://python-graph-gallery.com/)
+        * [R Graph Gallery](https://www.r-graph-gallery.com/)
+        * [Interactive plot，互動圖](https://bl.ocks.org/mbostock)
+* **Day_17 : 把連續型變數離散化**
+    * [離散化目的](https://www.zhihu.com/question/31989952) :
+        * 讓事情變簡單，增加運算速度
+        * 減少 outlier 對模型的影響
+        * 引入非線性，提升模型表達能力
+        * 提升魯棒性，減少過似合
+    * 主要方法 :
+        * 等寬劃分 `pd.cut()`
+            * 可使用 `np.linspace()` 進行等距切分
+        * 等頻劃分 `pd.qcut()`
+        * 聚類劃分
+* **Day_18 : 把連續型變數離散化實作**
+    * 把連續型的特徵離散化後，可以配合 `groupby` 劃出與預測目標的圖，來判斷兩者之間是否有某些關係和趨勢。
+* **Day_19 : Subplot**
+    * 使用時機 :
+        * 很多相似資料用呈現(如不同組別)
+        * 同一組資料，想同時用不同的圖呈現
+        * 適時的使用有助於資訊傳達，但過度使用換讓重點混淆
+    * subplot 坐標系 (列-欄-位置)
+        * (321) 代表在⼀個 3列2欄 的最左上⾓ (列1欄1)
+        * (232) 代表在一個 2列3欄 的 (列1欄2) 位置
+        ```py
+        # 方法一 : 數量少的時候或繪圖方法不同時
+        plt.figure(figsize=(8,8))
+        plt.subplot(321)
+        plt.plot([0,1],[0,1], label = 'I am subplot1')
+        plt.legend()
+        plt.subplot(322)
+        plt.plot([0,1],[1,0], label = 'I am subplot2')
+        plt.legend()
+
+        # 方法二 : 數量多的時候或繪圖方法雷同時
+        nrows = 5
+        ncols = 2
+        plt.figure(figsize=(10,30))
+        for i in range(nrows*ncols):
+            plt.subplot(nrows, ncols, i+1)
+        ```
+    * 延伸閱讀 :
+        * [matplotlib 官⽅方範例例](https://matplotlib.org/examples/pylab_examples/subplots_demo.html)
+        * [複雜版 subplot 寫法](https://jakevdp.github.io/PythonDataScienceHandbook/04.08-multiple-subplots.html)
+        * [另類⼦子圖 Seaborn.jointplot](https://seaborn.pydata.org/generated/seaborn.jointplot.html)
+* **Day_19 : Heatmap & Grid-plot**
+    
 
 
