@@ -449,7 +449,44 @@
         * [matplotlib 官⽅方範例例](https://matplotlib.org/examples/pylab_examples/subplots_demo.html)
         * [複雜版 subplot 寫法](https://jakevdp.github.io/PythonDataScienceHandbook/04.08-multiple-subplots.html)
         * [另類⼦子圖 Seaborn.jointplot](https://seaborn.pydata.org/generated/seaborn.jointplot.html)
-* **Day_19 : Heatmap & Grid-plot**
+* **Day_20 : Heatmap & Grid-plot**
+    * Heatmap
+        * 常用於呈現變數間的相關性
+        * 也可以用於呈現不同條件下的數量關係
+        * 常用於呈現混淆矩陣(Confusion matrix)
+        ```py
+        plt.figure(figsize = (8, 6))
+        # 繪製相關係數 (correlations) 的 Heatmap
+        sns.heatmap(df.corr(), cmap = plt.cm.RdYlBu_r, vmin = -1.0, annot = True, vmax = 1.0)
+        plt.title('Correlation Heatmap')
+        ```
+    * pairplot
+        * 對角線 : 該變數的分布(distribution)
+        * 非對角線 : 倆倆便書間的散步圖
+        ```py
+        import seaborn as sns; sns.set(style="ticks", color_codes=True)
+        iris = sns.load_dataset("iris")
+        g = sns.pairplot(iris)
+        ```
+    * Gridplot
+        * 可以自訂對角線和非對角線的繪圖類型
+        ```py
+        g = sns.PairGrid(iris, hue="species")
+        g = g.map_diag(plt.hist)
+        g = g.map_offdiag(plt.scatter)
+        g = g.add_legend()
+
+        g = sns.PairGrid(iris)
+        g = g.map_upper(sns.scatterplot)
+        g = g.map_lower(sns.kdeplot, colors="C0")
+        g = g.map_diag(sns.kdeplot, lw=2)
+        ```
+    * 延伸閱讀 :
+        * [基本 Heatmap](https://matplotlib.org/gallery/images_contours_and_fields/image_annotated_heatmap.html)
+        * [進階 Heatmap](https://www.jianshu.com/p/363bbf6ec335)
+        * [pairplot 更多應用](https://towardsdatascience.com/visualizing-data-with-pair-plots-in-python-f228cf529166)
+* **Day_21 : 模型初體驗 - Logistic Regression**
+    
     
 
 
