@@ -462,7 +462,7 @@
         ```
     * pairplot
         * 對角線 : 該變數的分布(distribution)
-        * 非對角線 : 倆倆便書間的散步圖
+        * 非對角線 : 倆倆變數間的散佈圖
         ```py
         import seaborn as sns; sns.set(style="ticks", color_codes=True)
         iris = sns.load_dataset("iris")
@@ -472,13 +472,13 @@
         * 可以自訂對角線和非對角線的繪圖類型
         ```py
         g = sns.PairGrid(iris, hue="species")
-        g = g.map_diag(plt.hist)
-        g = g.map_offdiag(plt.scatter)
+        g = g.map_diag(plt.hist)    # 對角線繪圖類型
+        g = g.map_offdiag(plt.scatter)  # 非對角線繪圖類型
         g = g.add_legend()
 
         g = sns.PairGrid(iris)
-        g = g.map_upper(sns.scatterplot)
-        g = g.map_lower(sns.kdeplot, colors="C0")
+        g = g.map_upper(sns.scatterplot)    # 上三角繪圖類型
+        g = g.map_lower(sns.kdeplot, colors="C0")   # 下三角繪圖類型
         g = g.map_diag(sns.kdeplot, lw=2)
         ```
     * 延伸閱讀 :
