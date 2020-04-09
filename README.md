@@ -468,7 +468,7 @@
         iris = sns.load_dataset("iris")
         g = sns.pairplot(iris)
         ```
-    * Gridplot
+    * PairGrid
         * 可以自訂對角線和非對角線的繪圖類型
         ```py
         g = sns.PairGrid(iris, hue="species")
@@ -486,7 +486,7 @@
         * [進階 Heatmap](https://www.jianshu.com/p/363bbf6ec335)
         * [pairplot 更多應用](https://towardsdatascience.com/visualizing-data-with-pair-plots-in-python-f228cf529166)
 * **Day_21 : 模型初體驗 - Logistic Regression**
-    
+
     
 
 
