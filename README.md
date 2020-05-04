@@ -486,7 +486,109 @@
         * [進階 Heatmap](https://www.jianshu.com/p/363bbf6ec335)
         * [pairplot 更多應用](https://towardsdatascience.com/visualizing-data-with-pair-plots-in-python-f228cf529166)
 * **Day_21 : 模型初體驗 - Logistic Regression**
+    * [Logistic Regression](https://www.youtube.com/playlist?list=PLNeKWBMsAzboR8vvhnlanxCNr2V7ITuxy)
+        ```py
+        from sklearn.linear_model import LogisticRegression
 
-    
+        # 設定模型與模型參數
+        log_reg = LogisticRegression(C = 0.0001)
 
+        # 使用 Train 資料訓練模型
+        log_reg.fit(train, train_labels)
 
+        # 用模型預測結果
+        # 請注意羅吉斯迴歸是分類預測 (會輸出 0 的機率, 與 1 的機率), 而我們只需要留下 1 的機率這排
+        log_reg_pred = log_reg.predict_proba(test)[:, 1]
+
+        # 將 DataFrame/Series 轉成 CSV 檔案方法
+        df['Target'] = log_reg_pred
+        df.to_csv(file_name, encoding='utf-8', index=False)
+        ```
+### 資料科學特徵工程技術
+* **Day_22 : 特徵工程簡介**
+    * 資料工程是將**事實**對應到**分數**的**轉換過程**
+    * 由於資料包含類別特徵(文字)和數值特徵，所以最小的特徵工程至少包含一種**類別編碼**(例如:標籤編碼)和**特徵縮放**方法(例如:最小最大化)
+        ```py
+        from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+
+        LEncoder = LabelEncoder()
+        MMEncoder = MinMaxScaler()
+        for c in df.columns:
+            df[c] = df[c].fillna(-1)
+            if df[c].dtype == 'object':
+                df[c] = LEncoder.fit_transform(list(df[c].values))
+            df[c] = MMEncoder.fit_transform(df[c].values.reshape(-1, 1))
+        ```
+    * 延伸閱讀 :
+        * [特徵工程是什麼](https://www.zhihu.com/question/29316149)
+* **Day_23 : 數值型特徵 - 去除偏態 **
+    * 當**離群值**資料比例太高，或者**平均值沒有代表性**時，可以考慮去除偏態
+    * 去除偏態包含 : 對數去偏(log1p)、方根去偏(sqrt)、分布去偏(boxcox)
+    * 使用 box-cox 分不去偏時，除了注意  $\lambda$ 參數要藉於 0 到 0.5 之間，並且要注意轉換前的數值不可小於等於 0
+        ```py
+        df_fixed['Fare'] = np.log1p(df_fixed['Fare'])
+
+        from scipy import stats
+        # 修正方式 : 加入下面這一行, 使最小值大於 0, 類似log1p的概念
+        df_fixed['Fare'] = df_fixed['Fare'] + 1
+        df_fixed['Fare'] = stats.boxcox(df_fixed['Fare'])[0]
+        ```
+    * 延伸閱讀 :
+        * [偏度與峰度](https://blog.csdn.net/u013555719/article/details/78530879)
+* **Day_24 : 類別型特徵 - 基礎處理**
+    * 類別型特徵有**標籤編碼**(Label Encoding)與**獨熱編碼**(One Hot Encoding)兩種基礎編碼方式
+    * 標籤編碼將特徵依序轉為代碼，若特徵沒有大小順序之別，則大小順序沒有意義，常用於非深度學習模型，深度學習模型主要依賴倒傳導，標籤編碼不易收斂
+    * 當特徵重要性高且可能值少時，可考慮獨熱編碼
+        ```py
+        from sklearn.preprocessing import LabelEncoder
+        
+        object_features = []
+        for dtype, feature in zip(df.dtypes, df.columns):
+            if dtype == 'object':
+                object_features.append(feature)
+
+        df = df[object_features]
+        df = df.fillna('None')
+        # 標籤編碼
+        for c in df.columns:
+            df_temp[c] = LabelEncoder().fit_transform(df[c])
+        # 獨熱編碼
+        df_temp = pd.get_dummies(df)
+        ```
+    * 延伸閱讀 :
+        * [標籤編碼與獨熱編碼](https://blog.csdn.net/u013555719/article/details/78530879)
+* **Day_25 : 類別型特徵 - 均值編碼**
+    * 均值編碼(Mean Encoding) : 使用目標值的平均值取代原本類別型特徵
+    * 當類別特徵與目標明顯相關時，該考慮採用均值編碼
+    * 樣本數少時可能是極端值，平均結果可能誤差很大，需使用平滑公式來調整
+        * 當平均值可靠度低則傾向相信總平均
+        * 當平均值可靠性高則傾向新信類別的平均
+        * 依照紀錄的比數，在兩者間取折衷
+    $$ 新類別均值 = \frac{原類別平均*類別樣本數 + 全部的總平均*調整因子}{類別樣本數 + 調整因子}$$
+    * 相當容易 overfitting 請小心使用
+        ```py
+        data = pd.concat([df[:train_num], train_Y], axis=1)
+        for c in df.columns:
+            mean_df = data.groupby([c])['target'].mean().reset_index()
+            mean_df.columns = [c, f'{c}_mean']
+            data = pd.merge(data, mean_df, on=c, how='left')
+            data = data.drop([c] , axis=1)
+        data = data.drop(['target'] , axis=1)
+        ```
+* **Day_26 : 類別型特徵 - 其他進階處理**
+    * 記數編碼(Counting) : 計算類別在資料中出現次數，當目前平均值與類別筆數呈現正/負相關時，可以考慮使用
+        ```py
+        count_df = df.groupby(['Ticket'])['Name'].agg({'Ticket_Count':'size'}).reset_index()
+        df = pd.merge(df, count_df, on=['Ticket'], how='left')
+        ```
+    * 雜湊編碼 : 將類別由雜湊函數對應到一組數字
+        * 調整雜湊函數對應值的數量，在計算空間/時間與鑑別度間取折衷
+        * 提高訊息密度並減少無用的標籤
+        ```py
+        df_temp['Ticket_Hash'] = df['Ticket'].map(lambda x:hash(x) % 10)
+        ```
+    * 雜湊編碼也不佳時可使用嵌入式編碼(Embedding)，但需要基於深度學習前提下
+    * 延伸閱讀 :
+        * [特徵哈希](https://blog.csdn.net/laolu1573/article/details/79410187)
+        * [文本特徵抽取](https://www.jianshu.com/p/063840752151)
+        
