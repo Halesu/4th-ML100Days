@@ -450,7 +450,7 @@
         * [複雜版 subplot 寫法](https://jakevdp.github.io/PythonDataScienceHandbook/04.08-multiple-subplots.html)
         * [另類⼦子圖 Seaborn.jointplot](https://seaborn.pydata.org/generated/seaborn.jointplot.html)
 * **Day_20 : Heatmap & Grid-plot**
-    * Heatmap
+    * heatmap
         * 常用於呈現變數間的相關性
         * 也可以用於呈現不同條件下的數量關係
         * 常用於呈現混淆矩陣(Confusion matrix)
@@ -504,9 +504,9 @@
         df['Target'] = log_reg_pred
         df.to_csv(file_name, encoding='utf-8', index=False)
         ```
-### 資料科學特徵工程技術
+### 資料科學與特徵工程技術 Data Science & Feature Engineering
 * **Day_22 : 特徵工程簡介**
-    * 資料工程是將**事實**對應到**分數**的**轉換過程**
+    * 資料工程是將**事實**對應到**分數**的**轉換**
     * 由於資料包含類別特徵(文字)和數值特徵，所以最小的特徵工程至少包含一種**類別編碼**(例如:標籤編碼)和**特徵縮放**方法(例如:最小最大化)
         ```py
         from sklearn.preprocessing import LabelEncoder, MinMaxScaler
@@ -519,22 +519,24 @@
                 df[c] = LEncoder.fit_transform(list(df[c].values))
             df[c] = MMEncoder.fit_transform(df[c].values.reshape(-1, 1))
         ```
-    * 延伸閱讀 :
-        * [特徵工程是什麼](https://www.zhihu.com/question/29316149)
-* **Day_23 : 數值型特徵 - 去除偏態 **
+    * 延伸閱讀 : [特徵工程是什麼](https://www.zhihu.com/question/29316149)
+* **Day_23 : 數值型特徵 - 去除偏態**
     * 當**離群值**資料比例太高，或者**平均值沒有代表性**時，可以考慮去除偏態
     * 去除偏態包含 : 對數去偏(log1p)、方根去偏(sqrt)、分布去偏(boxcox)
     * 使用 box-cox 分不去偏時，除了注意  $\lambda$ 參數要藉於 0 到 0.5 之間，並且要注意轉換前的數值不可小於等於 0
         ```py
+        # 對數去偏
         df_fixed['Fare'] = np.log1p(df_fixed['Fare'])
+
+        # 方根去偏
+        df['score'] = np.sqrt(df['score']) * 10
 
         from scipy import stats
         # 修正方式 : 加入下面這一行, 使最小值大於 0, 類似log1p的概念
         df_fixed['Fare'] = df_fixed['Fare'] + 1
         df_fixed['Fare'] = stats.boxcox(df_fixed['Fare'])[0]
         ```
-    * 延伸閱讀 :
-        * [偏度與峰度](https://blog.csdn.net/u013555719/article/details/78530879)
+    * 延伸閱讀 : [偏度與峰度](https://blog.csdn.net/u013555719/article/details/78530879)
 * **Day_24 : 類別型特徵 - 基礎處理**
     * 類別型特徵有**標籤編碼**(Label Encoding)與**獨熱編碼**(One Hot Encoding)兩種基礎編碼方式
     * 標籤編碼將特徵依序轉為代碼，若特徵沒有大小順序之別，則大小順序沒有意義，常用於非深度學習模型，深度學習模型主要依賴倒傳導，標籤編碼不易收斂
@@ -555,8 +557,7 @@
         # 獨熱編碼
         df_temp = pd.get_dummies(df)
         ```
-    * 延伸閱讀 :
-        * [標籤編碼與獨熱編碼](https://blog.csdn.net/u013555719/article/details/78530879)
+    * 延伸閱讀 : [標籤編碼與獨熱編碼](https://blog.csdn.net/u013555719/article/details/78530879)
 * **Day_25 : 類別型特徵 - 均值編碼**
     * 均值編碼(Mean Encoding) : 使用目標值的平均值取代原本類別型特徵
     * 當類別特徵與目標明顯相關時，該考慮採用均值編碼
@@ -591,4 +592,51 @@
     * 延伸閱讀 :
         * [特徵哈希](https://blog.csdn.net/laolu1573/article/details/79410187)
         * [文本特徵抽取](https://www.jianshu.com/p/063840752151)
-        
+* **Day_27 : 時間型特徵**
+    * 時間型特徵分解 :
+        * 依照原意義分欄處理，年、月、日、時、分、秒或加上第幾周和星期幾
+        * 週期循環特徵
+            * 年週期 : 與季節溫度相關
+            * 月週期 : 與薪水、繳費相關
+            * 周週期 : 與周休、消費習慣相關
+            * 日週期 : 與生理時鐘相關
+        * 週期數值除了由欄位組成還需**頭尾相接**，因此一般以**正(餘)弦函數**加以組合
+            * 年週期 : ( 正:冷 / 負:熱 )
+                $cos((月/6 + 日/180)\pi)$
+            * 周週期 : ( 正 : 精神飽滿 / 負 : 疲倦 )
+                $sin((星期幾/3.5 + 小時/84)\pi)$
+            * 日週期 : ( 正 : 精神飽滿 / 負 : 疲倦 )
+                $sin((小時/12 + 分/720 + 秒/43200)\pi)
+            * 須注意最高點與最低點的設置
+    * 延伸閱讀 :
+        * [時間日期處理](http://www.wklken.me/posts/2015/03/03/python-base-datetime.html)
+        * [datetime](https://docs.python.org/3/library/datetime.html)
+        ```py
+        import datetime
+
+        # 時間特徵分解方式:使用datetime
+        df['pickup_datetime'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strptime(x, '%Y-%m-%d %H:%M:%S UTC'))
+        df['pickup_year'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%Y')).astype('int64')
+        df['pickup_month'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%m')).astype('int64')
+        df['pickup_day'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%d')).astype('int64')
+        df['pickup_hour'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%H')).astype('int64')
+        df['pickup_minute'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%M')).astype('int64')
+        df['pickup_second'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%S')).astype('int64')
+
+        # 加入星期幾(day of week)和第幾周(week of year)
+        df['pickup_dow'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%w')).astype('int64')
+        df['pickup_woy'] = df['pickup_datetime'].apply(lambda x: datetime.datetime.strftime(x, '%W')).astype('int64')
+
+        # 加上"日週期"特徵 (參考講義"週期循環特徵")
+        import math
+        df['day_cycle'] = df['pickup_hour']/12 + df['pickup_minute']/720 + df['pickup_second']/43200
+        df['day_cycle'] = df['day_cycle'].map(lambda x:math.sin(x*math.pi))
+
+        # 加上"年週期"與"周週期"特徵
+        df['year_cycle'] = df['pickup_month']/6 + df['pickup_day']/180
+        df['year_cycle'] = df['year_cycle'].map(lambda x:math.cos(x*math.pi))
+        df['week_cycle'] = df['pickup_dow']/3.5 + df['pickup_hour']/84
+        df['week_cycle'] = df['week_cycle'].map(lambda x:math.sin(x*math.pi))
+        ```
+* **Day_28 : 特徵組合 - 數值與數值組合**
+    *             
