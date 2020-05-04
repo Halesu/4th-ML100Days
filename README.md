@@ -563,7 +563,7 @@
     * 當類別特徵與目標明顯相關時，該考慮採用均值編碼
     * 樣本數少時可能是極端值，平均結果可能誤差很大，需使用平滑公式來調整
         * 當平均值可靠度低則傾向相信總平均
-        * 當平均值可靠性高則傾向新信類別的平均
+        * 當平均值可靠性高則傾向相信類別的平均
         * 依照紀錄的比數，在兩者間取折衷
     $$ 新類別均值 = \frac{原類別平均*類別樣本數 + 全部的總平均*調整因子}{類別樣本數 + 調整因子}$$
     * 相當容易 overfitting 請小心使用
@@ -606,11 +606,8 @@
             * 周週期 : ( 正 : 精神飽滿 / 負 : 疲倦 )
                 $sin((星期幾/3.5 + 小時/84)\pi)$
             * 日週期 : ( 正 : 精神飽滿 / 負 : 疲倦 )
-                $sin((小時/12 + 分/720 + 秒/43200)\pi)
+                $sin((小時/12 + 分/720 + 秒/43200)\pi)$
             * 須注意最高點與最低點的設置
-    * 延伸閱讀 :
-        * [時間日期處理](http://www.wklken.me/posts/2015/03/03/python-base-datetime.html)
-        * [datetime](https://docs.python.org/3/library/datetime.html)
         ```py
         import datetime
 
@@ -638,5 +635,8 @@
         df['week_cycle'] = df['pickup_dow']/3.5 + df['pickup_hour']/84
         df['week_cycle'] = df['week_cycle'].map(lambda x:math.sin(x*math.pi))
         ```
+    * 延伸閱讀 :
+        * [時間日期處理](http://www.wklken.me/posts/2015/03/03/python-base-datetime.html)
+        * [datetime](https://docs.python.org/3/library/datetime.html)
 * **Day_28 : 特徵組合 - 數值與數值組合**
     *             
