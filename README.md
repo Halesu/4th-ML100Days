@@ -639,4 +639,18 @@
         * [時間日期處理](http://www.wklken.me/posts/2015/03/03/python-base-datetime.html)
         * [datetime](https://docs.python.org/3/library/datetime.html)
 * **Day_28 : 特徵組合 - 數值與數值組合**
-    *             
+    * 除了基本的加減乘除，最關鍵的是**領域知識**，例如將經緯度資料組合成高斯距離
+        ```py
+        # 增加緯度差, 經度差, 座標距離等三個特徵
+        df['longitude_diff'] = df['dropoff_longitude'] - df['pickup_longitude']
+        df['latitude_diff'] = df['dropoff_latitude'] - df['pickup_latitude']
+        df['distance_2D'] = (df['longitude_diff']**2 + df['latitude_diff']**2)**0.5
+
+        import math
+        latitude_average = df['pickup_latitude'].mean()
+        latitude_factor = math.cos(latitude_average/180*math.pi)
+        df['distance_real'] = ((df['longitude_diff']*latitude_factor)**2 + df['latitude_diff']**2)**0.5
+        ```
+    * 機器學習的關鍵是特徵工程，能有效地提升模型預測能力            
+    * 延伸閱讀 : [特徵交叉](https://segmentfault.com/a/1190000014799038)
+* **Day_29 : 特徵組合 - 類別與數值組合**
