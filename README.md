@@ -426,8 +426,8 @@
         * 同一組資料，想要同時用不同的圖呈現
         * 適時的使用有助於資訊傳達，但過度使用會讓重點混淆
     * subplot 坐標系 (列-欄-位置)
-        * (321) 代表在⼀個 **3列2欄** 的最左上⾓ (列1欄1)
-        * (232) 代表在一個 **2列3欄** 的 (列1欄2) 位置
+        * (321) 代表在⼀個 **3列2欄** 的最左上⾓ **列1欄1**
+        * (232) 代表在一個 **2列3欄** 的 **列1欄2** 位置
         ```py
         # 方法一 : 數量少的時候或繪圖方法不同時
         plt.figure(figsize=(8,8))
@@ -577,7 +577,7 @@
         data = data.drop(['target'] , axis=1)
         ```
 * **Day_26 : 類別型特徵 - 其他進階處理**
-    * 記數編碼(Counting) : 計算類別在資料中出現次數，當目前平均值與類別筆數呈現正/負相關時，可以考慮使用
+    * 計數編碼(Counting) : 計算類別在資料中出現次數，當目前平均值與類別筆數呈現正/負相關時，可以考慮使用
         ```py
         count_df = df.groupby(['Ticket'])['Name'].agg({'Ticket_Count':'size'}).reset_index()
         df = pd.merge(df, count_df, on=['Ticket'], how='left')
@@ -657,11 +657,13 @@
     * 群聚編碼(Group by Encoding) : 類別特徵與數值特徵可以使用群聚編碼組合出新的特徵
         * 常見的組合方式有 `mean`,`mdian`,`mode`,`max`,`min`,`count`
         * 與均值編碼(Mean Encoding)的比較
+
 | 名稱                  | 均值編碼 Encoding | 群聚編碼 Group by Encoding |
 |-----------------------|------------------|---------------------------|
 | 平均對象                | 目標值           | 其他數值型特徵                |
 | 過擬合\(Overfitting\)  | 容易            | 不容易                    |
 | 對均值平滑化\(Smoothing\) | 需要            | 不需要                    |
+
     * 延伸閱讀 : [數據聚合與分組](https://zhuanlan.zhihu.com/p/27590154)
         ```py
         # 取船票票號(Ticket), 對乘客年齡(Age)做群聚編碼
@@ -680,7 +682,7 @@
         temp.columns = ['Ticket', 'Age_Mean', 'Age_Mode', 'Age_Median', 'Age_Max', 'Age_Min']
         temp.head()
         ```
-| Ticket | Age\_Mean | Age\_Mode  | Age\_Median | Age\_Max   | Age\_Min |            |
+| index | Ticket | Age\_Mean | Age\_Mode  | Age\_Median | Age\_Max   | Age\_Min |            |
 |--------|-----------|------------|-------------|------------|----------|------------|
 | 0      | 110152    | 26\.333333 | 16\.000000  | 30\.000000 | 33\.0    | 16\.000000 |
 | 1      | 110413    | 36\.333333 | 18\.000000  | 39\.000000 | 52\.0    | 18\.000000 |
