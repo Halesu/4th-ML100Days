@@ -728,7 +728,7 @@
         ```
     * GDBT(梯度提升樹)嵌入法
         * 使用梯度提升樹擬合後，以特徵在節點出現的頻率當作特徵重要性，以此刪除重要性低於門檻的特徵
-            
+
             |           | 計算時間 | 共線性  | 特徵穩定性 |
             |-----------|------|------|-------|
             | 相關係數過濾法   | 快速   | 無法排除 | 穩定    |
@@ -738,5 +738,68 @@
         * [特徵選擇](https://zhuanlan.zhihu.com/p/32749489)
         * [特徵選擇手冊](https://machine-learning-python.kspax.io/intro-1)
 * **Day_31 : 特徵評估**
+    * 特徵的重要性 : 分支次數、特徵覆蓋度、損失函數降低量
+    * sklearn 當中的樹狀模型，都有特徵重要性這項方法 `.feature_importance_`，而實際上都是分支次數
+        ```py
+        from sklearn.ensemble import RandomForestRegressor
+        # 隨機森林擬合後, 將結果依照重要性由高到低排序
+        estimator = RandomForestRegressor()
+        estimator.fit(df.values, train_Y)
+        # estimator.feature_importances_ 就是模型的特徵重要性, 這邊先與欄位名稱結合起來, 才能看到重要性與欄位名稱的對照表
+        feats = pd.Series(data=estimator.feature_importances_, index=df.columns)
+        feats = feats.sort_values(ascending=False)
+        ```
+    * 進階版的 GDBT 模型(`Xgboost`、`lightbm`、`catboost`)中，才有上述三種不同的重要性
+        |                | Xgboost 對應參數 | 計算時間 | 估計精確性 | sklearn 有此功能 |
+        |----------------|--------------|------|-------|--------------|
+        | 分支次數           | weight       | 最快   | 最低    | O            |
+        | 分支覆蓋度          | cover        | 快    | 中     | X            |
+        | 損失降低量\(資訊增益度\) | gain         | 較慢   | 最高    | X            |
+    * 機器學習的優化循環
+        1. 原始特徵
+        2. 進階版 GDBT 模型擬合
+        3. 用特徵重要性增刪特徵
+            * 特徵選擇(刪除) : 挑選門檻，刪除一部分重要性較低的特徵
+            * 特徵組合(增加) : 依領域知識，對前幾名的特徵做特徵組合或群聚編碼，形成更強力特徵
+        4. 交叉驗證(cross validation)，確認特徵效果是否改善，若否則返回 3.
+    * 排序重要性(Permutation Importance)
+        * 雖然特徵重要性相當食用，然而計算原理必須基於樹狀模型，於是有了可延伸至非樹狀模型的排序重要性
+        * 排序重要性是打散單一特徵的資料排序，再用原本模型重新預測，觀察打散前後誤差變化有多少
+
+        |        | 特徵重要性 Feature Importance | 排序重要性 Permutation Importance |
+        |--------|--------------------------|------------------------------|
+        | 適用模型   | 限定樹狀模型                   | 機器學習模型均可                     |
+        | 計算原理   | 樹狀模型的分歧特徵                | 打散原始資料中單一特徵的排序               |
+        | 額外計算時間 | 較短                       | 較長                           |
+    * 延伸閱讀 :
+        * [特徵選的優化流程](https://juejin.im/post/5a1f7903f265da431c70144c)
+        * [Permutation Importance](https://www.kaggle.com/dansbecker/permutation-importance?utm_medium=email&utm_source=mailchimp&utm_campaign=ml4insights)
+* **Day_32 : 分類型特徵優化 - 葉編碼**
+    * 葉編碼(leaf encoding) : 採用決策樹的葉點作為編碼依據重新編碼
+        * 葉編碼的目的是**重新標計**資料，以擬合後的樹狀模型分歧條件，將資料**離散化**，這樣筆人為寫作的判斷條件更精準，更符合資料的分布情形
+        * 葉編碼完後，因特徵數量較多，通常搭配**羅吉斯回歸**或者**分解機**做預測，其他模型較不適合
+        ```py
+        # 隨機森林擬合後, 再將葉編碼 (*.apply) 結果做獨熱 / 邏輯斯迴歸
+        rf = RandomForestClassifier(n_estimators=20, min_samples_split=10, min_samples_leaf=5, 
+                            max_features=4, max_depth=3, bootstrap=True)
+        onehot = OneHotEncoder()
+        lr = LogisticRegression(solver='lbfgs', max_iter=1000)
+
+        rf.fit(train_X, train_Y)
+        onehot.fit(rf.apply(train_X))
+        lr.fit(onehot.transform(rf.apply(val_X)), val_Y)
+
+        # 將隨機森林+葉編碼+邏輯斯迴歸結果輸出
+        pred_rf_lr = lr.predict_proba(onehot.transform(rf.apply(test_X)))[:, 1]
+        fpr_rf_lr, tpr_rf_lr, _ = roc_curve(test_Y, pred_rf_lr)
+        # 將隨機森林結果輸出
+        pred_rf = rf.predict_proba(test_X)[:, 1]
+        fpr_rf, tpr_rf, _ = roc_curve(test_Y, pred_rf)
+        ```
+    * 延伸閱讀 :
+        * [Feature transformations with ensembles of trees](https://scikit-learn.org/stable/auto_examples/ensemble/plot_feature_transformation.html#example-ensemble-plot-feature-transformation-py)
+        * [Algorithm-GBDT Encoder](https://zhuanlan.zhihu.com/p/31734283)
+        * [分解機，Factorization Machine，FM](https://kknews.cc/code/62k4rml.html)
+* **Day_33 : 機器如何學習**
 
 
