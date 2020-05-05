@@ -779,6 +779,11 @@
         * 葉編碼的目的是**重新標計**資料，以擬合後的樹狀模型分歧條件，將資料**離散化**，這樣筆人為寫作的判斷條件更精準，更符合資料的分布情形
         * 葉編碼完後，因特徵數量較多，通常搭配**羅吉斯回歸**或者**分解機**做預測，其他模型較不適合
         ```py
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.ensemble import RandomForestClassifier
+        # 因為擬合(fit)與編碼(transform)需要分開, 因此不使用.get_dummy, 而採用 sklearn 的 OneHotEncoder
+        from sklearn.preprocessing import OneHotEncoder
+        from sklearn.metrics import roc_curve
         # 隨機森林擬合後, 再將葉編碼 (*.apply) 結果做獨熱 / 邏輯斯迴歸
         rf = RandomForestClassifier(n_estimators=20, min_samples_split=10, min_samples_leaf=5, 
                             max_features=4, max_depth=3, bootstrap=True)
