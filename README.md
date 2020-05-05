@@ -662,7 +662,7 @@
             | 平均對象                | 目標值           | 其他數值型特徵                |
             | 過擬合\(Overfitting\)  | 容易            | 不容易                    |
             | 對均值平滑化\(Smoothing\) | 需要            | 不需要                    |
-        * 機器學習特徵是 **寧爛勿缺**，以前非樹狀模型為避免共線性，會希望類似特徵不要太多，但現在強力模型大多是樹狀模型，所以通通做成~~雞精~~特徵
+        * 機器學習的特徵是 **寧爛勿缺** 的，以前非樹狀模型為了避免共線性，會希望類似特徵不要太多，但現在強力模型大多是樹狀模型，所以通通做成~~雞精~~特徵
     * 延伸閱讀 : [數據聚合與分組](https://zhuanlan.zhihu.com/p/27590154)
         ```py
         # 取船票票號(Ticket), 對乘客年齡(Age)做群聚編碼
@@ -689,5 +689,53 @@
         | 3     | 110564 | 28\.000000 | 28\.000000 | 28\.000000  | 28\.0    | 28\.000000 |
         | 4     | 110813 | 60\.000000 | 60\.000000 | 60\.000000  | 60\.0    | 60\.000000 |
 * **Day_30 : 特徵選擇**
+    * 特徵需要適當的增加與減少，以提升精確度並減少計算時間
+        * 增加特徵 : 特徵組合(Day_28)，群聚編碼(Day_29)
+        * 減少特徵 : 特徵選擇(Day_30)
+    * 特徵選擇有三大類方法
+        * 過濾法(Filter) : 選定統計值與設定門檻，刪除低於門檻的特徵
+        * 包裝法(Wrapper) : 根據目標函數，逐步加入特徵或刪除特徵
+        * 嵌入法(Embedded) : 使用機器學習模型，根據擬合後的細數，刪除係數低餘門檻的特徵
+    * 相關係數過濾法
+        ```py
+        # 計算df整體相關係數, 並繪製成熱圖
+        import seaborn as sns
+        import matplotlib.pyplot as plt
+        corr = df.corr()
+        sns.heatmap(corr)
+        plt.show()
+
+        # 篩選相關係數大於 0.1 或小於 -0.1 的特徵
+        high_list = list(corr[(corr['SalePrice']>0.1) | (corr['SalePrice']<-0.1)].index)
+        # 刪除目標欄位
+        high_list.pop(-1)
+        ```
+    * Lasso(L1)嵌入法
+        * 使用 Lasso Regression 時，廷整不同的正規化程度，就會自然使得一部分特徵係數為0，因此刪除係數是0的特徵，不須額外指定門檻，但需調整正規化程度
+        ```py
+        from sklearn.linear_model import Lasso
+        L1_Reg = Lasso(alpha=0.001)
+        train_X = MMEncoder.fit_transform(df)
+        L1_Reg.fit(train_X, train_Y)
+        L1_Reg.coef_
+
+        L1_mask = list((L1_Reg.coef_>0) | (L1_Reg.coef_<0))
+        df.columns[L1_mask] # index type
+
+        from itertools import compress
+        L1_mask = list((L1_Reg.coef_>0) | (L1_Reg.coef_<0))
+        L1_list = list(compress(list(df), list(L1_mask)))   # list type
+        ```
+    * GDBT(梯度提升樹)嵌入法
+        * 使用梯度提升樹擬合後，以特徵在節點出現的頻率當作特徵重要性，以此刪除重要性低於門檻的特徵
+        |           | 計算時間 | 共線性  | 特徵穩定性 |
+        |-----------|------|------|-------|
+        | 相關係數過濾法   | 快速   | 無法排除 | 穩定    |
+        | Lasso 嵌入法 | 快速   | 能排除  | 不穩定   |
+        | GDBT 嵌入法  | 較慢   | 能排除  | 穩定    |
+    * 延伸閱讀 :
+        * [特徵選擇](https://zhuanlan.zhihu.com/p/32749489)
+        * [特徵選擇手冊](https://machine-learning-python.kspax.io/intro-1)
+* **Day_31 : 特徵評估**
 
 
