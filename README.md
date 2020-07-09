@@ -761,22 +761,22 @@
         3. 用特徵重要性增刪特徵
             * 特徵選擇(刪除) : 挑選門檻，刪除一部分重要性較低的特徵
             * 特徵組合(增加) : 依領域知識，對前幾名的特徵做特徵組合或群聚編碼，形成更強力特徵
-        4. 交叉驗證(cross validation)，確認特徵效果是否改善，若否則返回 3.
+        4. 交叉驗證(cross validation)，確認特徵效果是否改善
     * 排序重要性(Permutation Importance)
         * 雖然特徵重要性相當食用，然而計算原理必須基於樹狀模型，於是有了可延伸至非樹狀模型的排序重要性
         * 排序重要性是打散單一特徵的資料排序，再用原本模型重新預測，觀察打散前後誤差變化有多少
 
-        |        | 特徵重要性 Feature Importance | 排序重要性 Permutation Importance |
-        |--------|--------------------------|------------------------------|
-        | 適用模型   | 限定樹狀模型                   | 機器學習模型均可                     |
-        | 計算原理   | 樹狀模型的分歧特徵                | 打散原始資料中單一特徵的排序               |
-        | 額外計算時間 | 較短                       | 較長                           |
+            |        | 特徵重要性 Feature Importance | 排序重要性 Permutation Importance |
+            |--------|--------------------------|------------------------------|
+            | 適用模型   | 限定樹狀模型                   | 機器學習模型均可                     |
+            | 計算原理   | 樹狀模型的分歧特徵                | 打散原始資料中單一特徵的排序               |
+            | 額外計算時間 | 較短                       | 較長                           |
     * 延伸閱讀 :
-        * [特徵選的優化流程](https://juejin.im/post/5a1f7903f265da431c70144c)
+        * [特徵選擇的優化流程](https://juejin.im/post/5a1f7903f265da431c70144c)
         * [Permutation Importance](https://www.kaggle.com/dansbecker/permutation-importance?utm_medium=email&utm_source=mailchimp&utm_campaign=ml4insights)
 * **Day_32 : 分類型特徵優化 - 葉編碼**
     * 葉編碼(leaf encoding) : 採用決策樹的葉點作為編碼依據重新編碼
-        * 葉編碼的目的是**重新標計**資料，以擬合後的樹狀模型分歧條件，將資料**離散化**，這樣筆人為寫作的判斷條件更精準，更符合資料的分布情形
+        * 葉編碼的目的是**重新標計**資料，以擬合後的樹狀模型分歧條件，將資料**離散化**，這樣比人為寫作的判斷條件更精準，更符合資料的分布情形
         * 葉編碼完後，因特徵數量較多，通常搭配**羅吉斯回歸**或者**分解機**做預測，其他模型較不適合
         ```py
         from sklearn.linear_model import LogisticRegression
@@ -806,5 +806,115 @@
         * [Algorithm-GBDT Encoder](https://zhuanlan.zhihu.com/p/31734283)
         * [分解機，Factorization Machine，FM](https://kknews.cc/code/62k4rml.html)
 * **Day_33 : 機器如何學習**
+    * 定義模型 : 線性回歸、決策樹、神經網路等等
+        * 例如線性回歸 : $ y = b + w * x $
+            * $w$ : weight 和 $b$ : bias 就是模型參數
+            * 不同參數模型會產生不同的 $\hat{y}$
+            * 希望產生出來的 $\hat{y}$ 與真實答案 $y$ 越接近越好
+            * 找出一組參數讓模型產生的 $\hat{y}$ 與真正的 $y$ 很接近，這個過程有點像是學習的概念。
+    * 評估模型好壞 : 定義一個**目標函數**(objective function)也可稱為**損失函數**(Loss function)，來衡量模型好壞
+        * 例如線性回歸可以使用**均方差**(mean square error)來衡量
+            $$ MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y_i})^2$$
+        * Loss 越大代表模型預測愈不准，代表不該選擇這個參數
+    * 找出最佳參數 : 可以使用爆力法、梯度下降(Gradient Descent)、增量訓練(Addtive Training)等方式
+        * 過擬合(over-fitting) : 訓練過程學習到了噪音導致在實際應用失準
+        * 欠擬合(under-fitting) : 模型無法好好的擬合訓練數據
+            * 如何知道 : 觀察訓練資料與測試資料的誤差趨勢
+            * 如何改善 :
+                * 過擬合 : 
+                    * 增加資料量
+                    * 降低模型複雜度
+                    * 使用正規化(Regularization)
+                * 欠擬合 :
+                    * 增加模型複雜度
+                    * 減輕或不使用正規化
+    * 延伸閱讀 : [學習曲線與 bias/variance trade-off](http://bangqu.com/yjB839.html)
+* **Day_34 : 訓練與測試集切分**
+    * 為何需要切分 :
+        * 機器學習模型需要資料訓練
+        * 若所有資料都送進訓練模型，就沒有額外資料來評估模型
+        * 機器模型可能過擬合，需要驗證/測試集來評估模型是否過擬合
+    * 使用 [train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html) 進行切分
+        ```py
+        from sklearn.model_selection import train_test_split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42, shuffle=False)
+        ```
+    * [K-fold](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold) Cross Validation : 若僅做一次切分，有些資料會沒有被拿來訓練，因此有 cross validation 方法，讓結果更穩定
+        ```py
+        from sklearn.model_selection import KFold
+        X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
+        y = np.array([1, 2, 3, 4])
+        kf = KFold(n_splits=2, shuffle=False)
+        kf.get_n_splits(X)
+        for train_index, test_index in kf.split(X):
+            print("TRAIN:", train_index, "TEST:", test_index)
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+        ```
+    * 驗證集與測試集差異 : 驗證集常用來評估不同超參數或不同模型的結果，測試集則是預先保留的資料，在專案開發過程中都不使用，最終在拿來做測試
+    * 延伸閱讀 : [訓練、驗證與測試集的意義](https://www.youtube.com/watch?v=D_S6y0Jm6dQ&feature=youtu.be&t=1948)
+* **Day_35 : Regression & Classification**
+    * 機器學習主要分為**回歸**問題與**分類**問題
+        * 回歸問題 : 預測目標值為實數($-\infty$至$\infty$)(continuous)
+        * 分類問題 : 預測目標值為類別(0或1)(discrete)
+        * 回歸問題可以轉化為分類問題 :
+            * 原本預測身高(cm)問題可以轉化為預測高、中等、矮(類別)
+    * 二元分類(binary-class) vs. 多元分類(multi-class)
+        * 二元分類 : 目標類別只有兩個，例如詐騙分析(正常用戶、異常用戶)、瑕疵偵測(瑕疵、正常)
+        * 多元分類 : 目標類別有兩種以上，例如手寫數字辨識(0~9)，影像競賽(ImageNet)有高達1000個類別
+    * 多元分類 vs. 多標籤(multi-label)
+        * 多元分類 : 每個樣本只能歸在一個類別
+        * 多標籤 : 一個樣本可以屬於多個類別
+    * 延伸閱讀 : 
+        * [回歸與分類比較](http://zylix666.blogspot.com/2016/06/supervised-classificationregression.html)
+        * [Multi-class vs. Multi-label ](https://medium.com/coinmonks/multi-label-classification-blog-tags-prediction-using-nlp-b0b5ee6686fc)
+* **Day_36 : 評估指標選定**
+    * 設定各項指標來評估模型的準確性，最常見的為準確率(**Accuracy**) = 正確認類樣本數/總樣本數
+    * 不同的評估指標有不同的評估準則與面向，衡量的重點有所不同
+    * 評估指標 - 回歸 : 觀察預測值(prediction)與實際值(ground truth)的**差距**
+        * MAE(mean absolute error)，範圍[0,inf]
+        * MSE(mean square error)，範圍[0,inf]
+        * R-square，範圍[0,1]
+    * 評估指標 - 分類 : 觀察預測值與實際值的**正確程度**
+        * AUC(area under curve)，範圍[0,1]
+        * F1-score(precision, recall)，範圍[0,1]
+        * 混淆矩陣(Confusion Matrix)
+    * 回歸問題可透過 R-square 快速了解準確度，二元分類問題通常使用 AUC 評估，希望哪個類別不要分錯則可使用 F1-score 並觀察 precision 與 recall 數值，多分類問題則可使用 top-k accuracy，例如 ImageNet 競賽通常採用 top-5 accuracy
+    * Q&A :
+        * AUC 計算怪怪的，AUC 的 y_pred 的值填入每個樣本預測機率(probility)而非分類結果
+        * F1-score 計算則填入每個樣本分類結果，如機率 >= 0.5 則視為 1，而非填入機率值
+        ```py
+        from sklearn import metrics, datasets
+        from sklearn.linear_model import LinearRegression
+        from sklearn.model_selection import train_test_split
+
+        # MAE, MSE, R-square
+        X, y = datasets.make_regression(n_features=1, random_state=42, noise=4) # 生成資料
+        model = LinearRegression() # 建立回歸模型
+        model.fit(X, y) # 將資料放進模型訓練
+        prediction = model.predict(X) # 進行預測
+        mae = metrics.mean_absolute_error(prediction, y) # 使用 MAE 評估
+        mse = metrics.mean_squared_error(prediction, y) # 使用 MSE 評估
+        r2 = metrics.r2_score(prediction, y) # 使用 r-square 評估
+
+        # AUC
+        cancer = datasets.load_breast_cancer() # 我們使用 sklearn 內含的乳癌資料集
+        X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, test_size=50, random_state=0)
+        y_pred = np.random.random((50,)) # 我們先隨機生成 50 筆預測值，範圍都在 0~1 之間，代表機率值
+        auc = metrics.roc_auc_score(y_test, y_pred) # 使用 roc_auc_score 來評估。 **這邊特別注意 y_pred 必須要放機率值進去!**
+
+        # F1-score, precision, recall
+        threshold = 0.5 
+        y_pred_binarized = np.where(y_pred>threshold, 1, 0) # 使用 np.where 函數, 將 y_pred > 0.5 的值變為 1，小於 0.5 的為 0
+        f1 = metrics.f1_score(y_test, y_pred_binarized) # 使用 F1-Score 評估
+        precision = metrics.precision_score(y_test, y_pred_binarized) # 使用 Precision 評估
+        recall  = metrics.recall_score(y_test, y_pred_binarized) # 使用 recall 評估
+        ```
+
+    * 延伸閱讀 :
+        * [超詳解 AUC](https://www.dataschool.io/roc-curves-and-auc-explained/)
+        * [更多評估指標](https://zhuanlan.zhihu.com/p/30721429)
+
+    
 
 
