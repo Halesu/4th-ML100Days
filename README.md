@@ -914,7 +914,260 @@
     * 延伸閱讀 :
         * [超詳解 AUC](https://www.dataschool.io/roc-curves-and-auc-explained/)
         * [更多評估指標](https://zhuanlan.zhihu.com/p/30721429)
-
+* **Day_37 : Regression 模型**
+    * Linear Regression (線性回歸) : 簡單線性模型，可用於回歸問題，須注意[資料共線性與資料標準化問題](https://blog.csdn.net/Noob_daniel/article/details/76087829)，通常可做為 baseline 使用
+    * Logistic Regression (羅吉斯回歸) : 分類模型，將線性模型結果加上 [sigmoid](https://baike.baidu.com/item/Sigmoid%E5%87%BD%E6%95%B0/7981407) 函數，將預測值限制在 0~1 之間，即為預測機率值
+    * 延伸閱讀 :
+        * [Andrew Ng 教你 Linear Regression](https://zh-tw.coursera.org/lecture/machine-learning/model-representation-db3jS)
+        * [Logistic Regression 數學原理](https://blog.csdn.net/qq_23269761/article/details/81778585)
+        * [Linear Regression 詳細介紹](https://brohrer.mcknote.com/zh-Hant/how_machine_learning_works/how_linear_regression_works.html)
+        * [Logistic Regression 詳細介紹](https://medium.com/@yehjames/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC3-3%E8%AC%9B-%E7%B7%9A%E6%80%A7%E5%88%86%E9%A1%9E-%E9%82%8F%E8%BC%AF%E6%96%AF%E5%9B%9E%E6%AD%B8-logistic-regression-%E4%BB%8B%E7%B4%B9-a1a5f47017e5)
+        * [你可能不知道的 Logistic Regression](https://taweihuang.hpd.io/2017/12/22/logreg101/)
+* **Day_38 : Regression 模型 </>**
+    * 使用 scikit-learn 套件
+        ```py
+        from sklearn.linear_model import LinearRegression, LogisticRegression
+        from sklearn.metrics import mean_squared_error, accuracy_score
+        # 線性回歸
+        reg = LinearRegression().fit(x_train, y_train)
+        y_pred = reg.predict(x_test)
+        print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+        # 羅吉斯回歸
+        logreg = LogisticRegression().fit(x_train, y_train)
+        y_pred = logreg.predict(x_test)
+        print("Accuracy: ", accuracy_score(y_test, y_pred))
+        ```
+    * Logistic Regression 參數
+        * Penalty : 使用 "L1" or "L2" 正則化參數
+        * C : 正則化的強度，數字越小模型越簡單
+        * Solver : 對損失函數的優化方法，詳細參考[連結](https://blog.csdn.net/lc574260570/article/details/82116197)
+        * Multi-class : 選擇 one-vs-rest 或 multi-nominal 分類方式，若有 10 class， ovr 是訓練 10 個二分類模型，第一個模型負責分類 (class1, non-class1)；第二個負責(class2, non-class2)，以此類推。multi-nominal 是直接訓練多分類模型。詳細參考[連結](https://www.quora.com/What-is-the-difference-between-one-vs-all-binary-logistic-regression-and-multinomial-logistic-regression)
+    * 延伸閱讀 :
+        * [更多 Linear regression 和 Logistic regression 範例](https://github.com/trekhleb/homemade-machine-learning)
+        * [深入了解 multi-nominal Logistic Regresson 原理](http://dataaspirant.com/2017/05/15/implement-multinomial-logistic-regression-python/)
+* **Day_39 : LASSO, Ridge regression**
+    * 機器學習模型的目標函數有兩個非常重要的元素
+        * 損失函數 (Loss function) : 衡量實際值與預測值差異，讓模型往正確方向學習
+        * 正則化 (Regularization) : 避免模型過於複雜，造成過擬合
+        * 為了避免過擬合我們把正則化加入目標函數，目標函數 = 損失函數 + 正則化
+        * 正則化可以懲罰模型的複雜度，當模型越大其值越大
+    * 正則化函數 : 用來衡量模型的複雜度
+        * L1 : $\alpha\sum|weight|$
+        * L2 : $\alpha\sum(weight)^2$
+        * 這兩種都是希望模型的參數數值不要太大，原因是參參數的數值變小，噪音對最終輸出的結果影響越小，提升模型的泛化能力，但也讓模型的擬合能力下降
+    * LASSO 為 Linear Regression 加上 L1
+    * Ridge 為 Linear Regression 加上 L2
+    * 其中有個超參數 $\alpha$ 可以調整正則化強度 
+    * 延伸閱讀 : 
+        * [Linear, Lasso, Ridge Regression 本質區別](https://www.zhihu.com/question/38121173)
+        * [PCA 與 Ridge regression 的關係](https://taweihuang.hpd.io/2018/06/10/pca-%E8%88%87-ridge-regression-%E7%9A%84%E9%97%9C%E4%BF%82/
+        )
+* **Day_40 : LASSO, Ridge regression </>**
+    ```py
+    from sklearn import datasets
+    from sklearn.linear_model import Lasso, Ridge
+    # 讀取糖尿病資料集
+    diabetes = datasets.load_diabetes()
+    # 切分訓練集/測試集
+    x_train, x_test, y_train, y_test = train_test_split(diabetes.data, diabetes.target, test_size=0.2, random_state=4)
     
+    # 建立一個線性回歸模型
+    lasso = Lasso(alpha=1.0)
+    # 將訓練資料丟進去模型訓練
+    lasso.fit(x_train, y_train)
+    # 將測試資料丟進模型得到預測結果
+    y_pred = lasso.predict(x_test)
+    # 印出訓練後的模型參參數
+    print(lasso.coef_)
 
+    # 建立一個線性回歸模型
+    ridge = Ridge(alpha=1.0)
+    # 將訓練資料丟進去模型訓練
+    ridge.fit(x_train, y_train)
+    # 將測試資料丟進模型得到預測結果
+    y_pred = regr.predict(x_test)
+    # 印出訓練後的模型參參數
+    print(ridge.coef_)
+    ```
+* **Day_41 : 決策樹 Decision Tree**
+    * 決策樹 (Decision Tree) : 透過一系列的是非問題，幫助我們將資料切分，可是視覺化每個切分過程，是個具有非常高解釋性的模型
+        * 從訓練資料中找出規則，讓每一次決策使訊息增益 (information Gain) 最大化
+        * 訊息增益越大代表切分後的兩群，群內相似度越高，例如使用健檢資料來預測性別，若使用頭髮長度 50 公分進行切分，則切分後的兩群資料很有可能多數為男生或女生(相似程度高)，這樣頭髮長度就是個好 feature
+    * 如何衡量相似程度
+        * 吉尼係數(不純度) (gini-index)
+            $$Gini = 1 - \sum_jp_j^2$$
+        * 熵 (entropy)
+            $$Entropy = -\sum_jp_jlog_2p_j$$
+    * 決策樹的特徵重要性
+        * 我們可以從構建樹的過程中，透過 feature 被⽤用來切分的次數，來得知哪些 features 是相對有用的
+        * 所有 feature importance 的總和為 1
+        * 實務上可以使用 feature importance 來了解模型如何進行分類
+    * 延伸閱讀 :
+        * [決策樹運作](https://medium.com/jameslearningnote/%E8%B3%87%E6%96%99%E5%88%86%E6%9E%90-%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E7%AC%AC3-5%E8%AC%9B-%E6%B1%BA%E7%AD%96%E6%A8%B9-decision-tree-%E4%BB%A5%E5%8F%8A%E9%9A%A8%E6%A9%9F%E6%A3%AE%E6%9E%97-random-forest-%E4%BB%8B%E7%B4%B9-7079b0ddfbda)
+        * [決策樹與回歸問題](https://www.saedsayad.com/decision_tree_reg.htm)
+* **Day_42 : 決策樹 </>**
+    * 機器學習的建模步驟 :
+        1. 讀取和檢查資料
+            * 使用 pandas 讀取 .csv 檔 : pd.read_csv
+            * 使用 numpy 讀取 txt 檔 : np.loadtxt
+            * 使用 sklearn 內建資料集 : sklearn.datasets.load_xxx
+            * 檢查資料數量 : data.shape
+        2. 將資料切分為訓練 (train) 與測試集 (test)
+            * train_test_split(data)
+        3. 建立模型開始訓練 (fit)
+            * clf = DecisionTreeClassifier()
+            * clf.fit(x_train, y_train)
+        4. 將測試資料放進訓練好的模型進行預測 (predict)，並測試資料的 label (y_test) 做評估
+            * clf.predict(x_test)
+            * accuracy_score(y_test, y_pred)
+            * f1_score(y_test, y_pred)
+    * 根據回歸/分類問題建立不同的 Classifier
+        ```py
+        from sklearn.tree_model import DecisionTreeRegressor
+        from sklearn.tree_model import DecisionTreeClassifier
+        
+        # 讀取鳶尾花資料集
+        iris = datasets.load_iris()
+        # 切分訓練集/測試集
+        x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.25, random_state=4)
+        # 建立模型
+        clf = DecisionTreeClassifier()
+        # 訓練模型
+        clf.fit(x_train, y_train)
+        # 預測測試集
+        y_pred = clf.predict(x_test)
+        print("Acuuracy: ", metrics.accuracy_score(y_test, y_pred))
+        # 列出特徵和重要性
+        print(iris.feature_names)
+        print("Feature importance: ", clf.feature_importances_)
+        ```
+    * 決策樹的超參數
+        * Criterion: 衡量資料相似程度的 metric
+        * Max_depth: 樹能生長的最深限制
+        * Min_samples_split: 至少要多少樣本以上才進行切分
+        * Min_samples_lear: 最終的葉子(節點)上至少要有多少樣本
+        ```py
+        clf = DecisionTreeClassifier(
+                criterion = 'gini',
+                max_depth = None,
+                min_samples_split = 2,
+                min_samples_left = 1,
+        )
+        ```
+    * 延伸閱讀 : [Creating and Visualizing Decision Trees with Python](https://medium.com/@rnbrown/creating-and-visualizing-decision-trees-with-python-f8e8fa394176)
+* **Day_43 : 隨機森林樹 Random Forest**
+    * 決策樹缺點 :
+        * 若不對決策樹進行限制(樹深度、葉子上至少要有多少樣本等)，決策樹非常容易 over-fitting
+    * 集成模型 - 隨機森林 (Random Forest)
+        * 集成 (Ensemble) : 將多個模型的結果組合在一起，透過**投票**或是**加權**的方式獲得最終結果
+        * 每棵樹使用部分訓練資料與特徵進行訓練而成
+    * 延伸閱讀 :
+        * [隨機森林](http://hhtucode.blogspot.com/2013/06/ml-random-forest.html)
+        * [How Random Forest Algorithm Works](https://medium.com/@Synced/how-random-forest-algorithm-works-in-machine-learning-3c0fe15b6674)
+        * [bootstrap](http://sofasofa.io/forum_main_post.php?postid=1000691)
+* **Day_44 : 隨機森林樹 </>**
+    ```py
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.ensemble import RandomForestRegressor
+    clf = RandomForestClassifier(
+            n_estimators=10, #決策樹的數量量
+            criterion="gini",
+            max_features="auto", #如何選取 features         
+            max_depth=10,
+            min_samples_split=2,
+            min_samples_leaf=1)
+    # 將訓練資料丟進去模型訓練
+    clf.fit(x_train, y_train)
+    # 將測試資料丟進模型得到預測結果
+    y_pred = clf.predict(x_test)
+    print("Accuracy: ", accuracy_score(y_test, y_pred))
+
+    # 建立一個線性回歸模型
+    regr = RandomForestRegressor()
+    # 將訓練資料丟進去模型訓練
+    regr.fit(x_train, y_train)
+    # 將測試資料丟進模型得到預測結果
+    y_pred = regr.predict(x_test)
+    print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+    ```
+* **Day_45 : 梯度提升機 Gradient Boosting Machine**
+    * 隨機森林使用的方法為 Bagging (Bootstrap Aggregating)，用抽樣資料與特徵生成每一棵樹，最後在取平均
+    * Boosting 是另一種集成方法，希望由後面生成的樹來修正前面學不好的地方
+    * Bagging :
+        * 透過抽樣 (sampling) 方式生成每一棵樹，樹與樹之間是獨立的
+        * 降低 over-fitting
+        * 減少 variance
+        * Independent classifiers
+    * Boosting :
+        * 透過序列 (additive) 方式生成每一棵樹，每棵樹與前面的樹關聯
+        * 可能會 over-fitting
+        * 減少 bias 和 variance
+        * Sequential classifiers
+    * 延伸閱讀 :
+        * [梯度提升決策樹](https://ifun01.com/84A3FW7.html)
+        * [XGboost](https://www.youtube.com/watch?v=ufHo8vbk6g4)
+        * [陳天奇 - Boosted Tree](https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf)
+        * [李弘毅 - Ensemble](https://www.youtube.com/watch?v=tH9FH1DH5n0)
+* **Day_46 : 梯度提升機 </>**
+    ```py
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.ensemble import GradientBoostingRegressor
+
+    clf = GradientBoostingClassifier(
+        loss="deviance", #Loss 的選擇，若若改為 exponential 則會變成Adaboosting 演算法，概念念相同但實作稍微不同
+        learning_rate=0.1, #每棵樹對最終結果的影響，應與 n_estimators 成反比
+        n_estimators=100 #決策樹的數量量
+        )
+    # 訓練模型
+    clf.fit(x_train, y_train)
+    # 預測測試集
+    y_pred = clf.predict(x_test)
+    print("Acuuracy: ", metrics.accuracy_score(y_test, y_pred))
+    ```
+    * 延伸閱讀 : [Complete Machine Learning Guide to Parameter Tuning in Gradient Boosting](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
+* **Day_47 : 超參數調整**
+    * 機器學習中的超參數
+        * LASSO, Ridge : $\alpha$ 的大小
+        * 決策樹 : 樹的深度、節點最小樣本數
+        * 隨機森林 : 樹的數量
+    * 超參數會影響模型訓練的結果，建議先使用預設再慢慢進行調整
+    * 超參數會影響結果但提升效果有限，資料清理和特徵工程才能最有效的提升準確率
+    * 超參數的調整方法
+        * 窮舉法 (Grid Search) : 直接指定超參數的範圍組合，每一組參數都訓練完成，再根據驗證集的結果選擇最佳參數
+        * 隨機搜尋 (Random Search) : 指定超參數範圍，用均勻分布進行參數抽樣，用抽到的參數進行訓練，再根據驗證集的結果選擇最佳參數，[隨機搜尋](https://medium.com/rants-on-machine-learning/smarter-parameter-sweeps-or-why-grid-search-is-plain-stupid-c17d97a0e881)通常能獲得較好的結果
+    * 正確的超參數調整步驟 : 若使用同意分驗證集 (validation) 來調參，可能讓模型過於擬合驗證集，正確步驟是使用 Cross-validation 確保模型的泛化性
+        1. 將資料切分為訓練/測試集，測試集先保留不用
+        2. 將剛切好的訓練集，再使用 Cross-validation 切成 K 份訓練/驗證集
+        3. 用 gird/random search 的超參數進行訓練與評估
+        4. 選出最佳參數，用該參數與全部訓練集建模
+        5. 最後使用測試集評估結果
+        ```py
+        from sklearn import datasets, metrics
+        from sklearn.model_selection import train_test_split, KFold, GridSearchCV
+        from sklearn.ensemble import GradientBoostingRegressor
+        # 設定要訓練的超參數組合
+        n_estimators = [100, 200, 300]
+        max_depth = [1, 3, 5]
+        param_grid = dict(n_estimators=n_estimators, max_depth=max_depth)
+        ## 建立搜尋物件，放入模型及參數組合字典 (n_jobs=-1 會使用全部 cpu 平行運算)
+        grid_search = GridSearchCV(clf, param_grid, scoring="neg_mean_squared_error", n_jobs=-1, verbose=1)
+        # 開始搜尋最佳參數
+        grid_result = grid_search.fit(x_train, y_train)
+        # 預設會跑 3-fold cross-validadtion，總共 9 種參數組合，總共要 train 27 次模型
+        # 印出最佳結果與最佳參數
+        print("Best Accuracy: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
+        # 使用最佳參數重新建立模型
+        clf_bestparam = GradientBoostingRegressor(
+                            max_depth=grid_result.best_params_['max_depth'],
+                            n_estimators=grid_result.best_params_['n_estimators'])
+        # 訓練模型
+        clf_bestparam.fit(x_train, y_train)
+        # 預測測試集
+        y_pred = clf_bestparam.predict(x_test)
+        print(metrics.mean_squared_error(y_test, y_pred))
+        ```
+    * 延伸閱讀 :
+        * [how to tune machine learning models](https://cambridgecoding.wordpress.com/2016/04/03/scanning-hyperspace-how-to-tune-machine-learning-models/)
+        * [Hyperparameter Tuning the Random Forest in Python](https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74)
+    
 
