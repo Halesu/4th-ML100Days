@@ -1169,5 +1169,78 @@
     * 延伸閱讀 :
         * [how to tune machine learning models](https://cambridgecoding.wordpress.com/2016/04/03/scanning-hyperspace-how-to-tune-machine-learning-models/)
         * [Hyperparameter Tuning the Random Forest in Python](https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74)
-    
+* **Day_48 : Kaggle**
+    * Kaggle 為全球資料科學競賽的網站，許多資料科學的競賽均會在此舉辦，吸引全球優秀的資料科學家參加
+    * 主辦單位通常會把測試資料分為 public set 與 private set，參賽者上傳預測結果可以看到 public set 的成績，但比賽最終會使用 private set 的成績作為排名
+    * Kernels 可以看見許多高手們分享的程式碼與結果，多半會以 jupyter notebook 呈現
+    * Discussion 可以看到高手們互相討論可能的做法，或是資料中是否存在某些問題
+    * [scikit-learn-practice](https://www.kaggle.com/c/data-science-london-scikit-learn)
+* **Day_49 : 混和泛化 (Blending)**
+    * **集成**是使用不同方式，結合多個或多種分類器，作為綜合預測的做法總稱
+        * 將模型截長補短，可以說是機器學習的和議制/多數決
+        * 其中分為資料層面的集成 : 如裝袋法(Bagging)、提升法(Boosting)
+        * 以及模型的特徵集成 : 如混和泛化(Blending)、堆疊泛化(Stacking)
+        * **裝袋法 (Bagging)** : 將資料放入袋中抽取，每回合結束後重新放回袋中重抽，在搭配弱分類器取平均或多數決結果，例如隨機森林
+        * **提升法 (Boosting)** : 由之前模型的預測結果，去改便資料被抽到的權重或目標值
+        * 將錯判的資料機率放大，正確的縮小，就是**自適應提升(AdaBoost, Adaptive Boosting)**
+        * 如果是依照估計誤差的殘差項調整新目標值，則就是**梯度提升機 (Gradient Boosting Machine)** 的作法，只是梯度提升機還加上⽤用梯度來選擇決策樹分支
+        * Bagging/Boosting : 使用不同資料、相同模型，多次估計的結果合成最終預測
+        * Voting/Blending/Stacking : 使用同一自料不同模型，合成出不同預測結果
+    * 混合泛化 (Blending)
+        * 將不同模型的預測值加權合成，權重和為1如果取預測的平均 or 一人一票多數決(每個模型權重相同)，則又稱為投票泛化(Voting)
+        * 容易使用且有效
+        * 使用前提 : 個別**單模效果好**(有調教)並且**模型差異大**，單模要好尤其重要
+        * 延伸閱讀 :
+            * [Blending and Stacking](https://www.youtube.com/watch?v=mjUKsp0MvMI&list=PLXVfgk9fNX2IQOYPmqjqWsNUFl2kpk1U2&index=27&t=0s)
+            * [superblend](https://www.kaggle.com/tunguz/superblend/code)
+            ```py
+            new_train = pd.DataFrame([lr_y_prob, gdbt_y_prob, rf_y_prob])
+            new_train = new_train.T
+
+            clf = LogisticRegression(tol=0.001, penalty='l2', fit_intercept=False, C=1.0)
+            clf.fit(new_train, train_Y)
+
+            coef = clf.coef_[0] / sum(clf.coef_[0]) 
+
+            blending_pred = lr_pred*coef[0]  + gdbt_pred*coef[1] + rf_pred*coef[2]
+            ```
+* **Day_50 : 堆疊泛化 (Stacking)**
+    * 不只將預測結果混和，而是使用預測結果**當新特徵**
+    * Stacking 主要是把模型當作下一階的**特徵編碼器**來使用，但是**待編碼資料**與**訓練編碼器**的資料不可重複(訓練測試的不可重複性)
+    * 若是將訓練資料切成兩份，待編碼資料太少，下一層的資料筆數就會太少，訓練編碼器的資料太少，則編碼器的強度就會不夠，因此使用 K-fold 拆分資料訓練，這樣資料沒有變少，編碼器也夠強韌，但 K 值越大訓練時間越長
+    * 自我遞迴的 Stacking :
+        * Q1：能不能新舊特徵一起用，再用模型預測呢?
+            * A1：可以，這裡其實有個有趣的思考，也就是 : 這樣不就可以一直一直無限增加特徵下去? 這樣後面的特徵還有意義嗎? 不會 Overfitting 嗎?...其實加太多次是會 Overfitting 的，必需謹慎切分 Fold 以及新增次數
+        * Q2：新的特徵，能不能再搭配模型創特徵，第三層第四層...一直下去呢?
+            * A2：可以，但是每多一層，模型會越複雜 : 因此泛化(⼜又稱為魯棒性)會做得更好，精準度也會下降，所以除非第一層的單模調得很好，否則兩三層就不需要繼續往下了
+        * Q3：既然同層新特徵會 Overfitting，層數加深會增加泛化，兩者同時用是不是就能把缺點互相抵銷呢?
+            * A3：可以!!而且這正是 Stacking 最有趣的地方，但真正實踐時，程式複雜，運算時間又要再往上一個量級，之前曾有大神寫過 StackNet 實現這個想法，用JVM 加速運算，但實際上使用時調參困難，後繼使用的人就少了
+        * Q4 : 實際上寫 Stacking 有這麼困難嗎?
+            * 其實不難，就像 sklearn 幫我們寫好了許多機器學習模型，**mlxtend** 也已經幫我們寫好了 Stacking 的模型，所以用就可以了 (參考今日範例或 mlxtrend 官網)
+        * Q5 : Stacking 結果分數真的比較高嗎?
+            * 不一定，有時候單模更高，有時候 Blending 效果就不錯，視資料狀況而定
+        * Q6 : Stacking 可以做參數調整嗎?
+            * 可以，請參考 mlxtrend 的[調參範例](http://rasbt.github.io/mlxtend/user_guide/classifier/StackingCVClassifier/)，主要差異是參數名稱寫法稍有不同
+        * Q7 : 還有其他做 Stacking 時需要注意的事項嗎?
+            * 「分類問題」的 Stacking 要注意兩件事：記得加上 use_probas=True(輸出特徵才會是機率值)，以及輸出的總特徵數會是：模型數量*分類數量(回歸問題特徵數=模型數量量)
+            ```py
+            from mlxtend.classifier import StackingClassifier
+
+            meta_estimator = GradientBoostingClassifier(tol=100, subsample=0.70, n_estimators=50, 
+                                                    max_features='sqrt', max_depth=4, learning_rate=0.3)
+            stacking = StackingClassifier(classifiers =[lr, gdbt, rf], use_probas=True, meta_classifier=meta_estimator)
+            stacking.fit(train_X, train_Y)
+            stacking_pred = stacking.predict(test_X)
+            ```
+* **Day_51~53 : Kaggle期中考**
+    * [Enron Fraud Dataset 安隆公司詐欺案資料集](https://www.kaggle.com/c/ml100)
+        * 如何處理存在各種缺陷的真實資料
+        * 使用 val / test data 來了解機器學習模型的訓練情形
+        * 使用適當的評估函數了解預測結果
+        * 應用適當的特徵工程提升模型的準確率
+        * 調整機器學習模型的超參數來提升準確率
+        * 清楚的說明文件讓別人了解你的成果
+
+
+
 
