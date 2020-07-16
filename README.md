@@ -805,6 +805,7 @@
         * [Feature transformations with ensembles of trees](https://scikit-learn.org/stable/auto_examples/ensemble/plot_feature_transformation.html#example-ensemble-plot-feature-transformation-py)
         * [Algorithm-GBDT Encoder](https://zhuanlan.zhihu.com/p/31734283)
         * [分解機，Factorization Machine，FM](https://kknews.cc/code/62k4rml.html)
+### 機器學習基礎模型建立
 * **Day_33 : 機器如何學習**
     * 定義模型 : 線性回歸、決策樹、神經網路等等
         * 例如線性回歸 : $ y = b + w * x $
@@ -1125,6 +1126,7 @@
     print("Acuuracy: ", metrics.accuracy_score(y_test, y_pred))
     ```
     * 延伸閱讀 : [Complete Machine Learning Guide to Parameter Tuning in Gradient Boosting](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
+### 機器學習調整參數
 * **Day_47 : 超參數調整**
     * 機器學習中的超參數
         * LASSO, Ridge : $\alpha$ 的大小
@@ -1232,6 +1234,7 @@
             stacking.fit(train_X, train_Y)
             stacking_pred = stacking.predict(test_X)
             ```
+### Kaggle 第一次期中考
 * **Day_51~53 : Kaggle期中考**
     * [Enron Fraud Dataset 安隆公司詐欺案資料集](https://www.kaggle.com/c/ml100)
         * 如何處理存在各種缺陷的真實資料
@@ -1240,7 +1243,281 @@
         * 應用適當的特徵工程提升模型的準確率
         * 調整機器學習模型的超參數來提升準確率
         * 清楚的說明文件讓別人了解你的成果
+### 非監督式機器學習
+* **Day_54 : 非監督式機器學習簡介**
+    * 非監督學習允許我們在對結果無法預知時接近問題。非監督學習演算法只基於輸入資料找出模式。當我們無法確定尋找內容，或無標記 (y) 資料時，通常會用這個演算法，幫助我們了了解資料模式
+    * 非監督學習算法概要
+        * 聚類分析 : 尋找資料的隱藏模式
+        * 降低維度 : 特徵數太大且特徵間相關性高，以此方式縮減特徵維度
+        * 其他 : 關聯法則 (購物籃分析)、異常值偵測、探索性資料分析等
+    * 應用案例 :
+        * 客戶分群 : 在資料沒有任何標記，或是問題還沒定義清楚前，可用分群的方式幫助理清資料特性。
+        * 特徵抽象化 : 徵數太多難於理解及呈現的情況下，藉由抽象化的技術幫助降低資料維度，同時不失去原有的資訊，組合成新的特徵。
+        * 購物籃分析 : 資料探勘的經典案例，適用於線下或線上零售的商品組合推薦。
+        * 非結構化資料分析 : 非結構化資料如文字、影像等，可以藉由一些非監督式學習的技術，幫助呈現及描述資料，例如主題模型 (topic model)
+    * 延伸閱讀 :
+        * [李弘毅 - Unsupervised learning](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/PCA.mp4)
+        * [scikit-learn unsupervised learning](https://scikit-learn.org/stable/unsupervised_learning.html)
+        * [Andrew Ng - Unsupervised learning](https://youtu.be/jAA2g9ItoAc)
+* **Day_55 : K-means 聚類算法**
+    * Supervised learning : 目標在找出決策邊界 (decision boundary)
+    * Unsupervised learning : 目標在找出資料結構
+    * Why clustering ?
+        * 在資料還沒有標記、問題還沒定義清楚時，聚類算法可以幫助我們理理解資料特性，評估機器學習問題方向等，也是一種呈現資料的方式
+    * K-means 聚類算法
+        * 把所有資料點分成 k 個 cluster，使得相同 cluster 中的所有資料點彼此儘量相似，而不同 cluster 的資料點儘量不同。
+        * 距離測量量（e.g. 歐⽒氏距離）用於計算資料點的相似度和相異度。每個 cluster 有一個中心點。中心點可理解為最能代表 cluster 的點。
+        * 算法流程 :
+            1. 隨機取 K 個點 (cluster centroid)
+            2. 對每一個 training example 根據它距離哪一個 cluster centroid 較近，標記爲其中之一 (cluster assignment)
+            3. 然後把 centroid 移到同一群 training examples 的中心點 (update centroid)
+            4. 反覆進行 cluster assignment 及 update centroid, 直到 cluster assignment 不再導致 training example 被 assign 爲不同的標記 (算法收斂)
+        * K-means 目標是使總體群內平方誤差最小
+        $$\sum_{i=0}^n\min_{\mu_j\in{C}} (||x_i-\mu_j||^2) $$
+        * 注意事項 :
+            * Random initialization : initial 設定的不同，會導致得到不同 clustering 的結果，可能導致 local optima，而非 global optima。
+            * 因爲沒有預先的標記，對於 cluster 數量多少才是最佳解，沒有標準答案，得靠手動測試觀察。
+    * 延伸閱讀 :
+        * [Andrew Ng - K-means](https://www.youtube.com/watch?v=hDmNF9JG3lo)
+        * [Unsupervised machine learning](https://pythonprogramming.net/flat-clustering-machine-learning-python-scikit-learn/
+        )
+            ```py
+            from sklearn.cluster import KMeans  
+            kmeans = KMeans(n_clusters=3, n_init=1, init='random')
+            kmeans.fit(X)
+            print(kmeans.cluster_centers_)
+            print(kmeans.labels_)
+            ```
+* **Day_56 : K-means 觀察 : 使用輪廓分析**
+    * 分群模型的評估
+        * 困難點 : 非監督模型因為沒有目標值，因此無法使用目標值與預測值的差距來衡量優劣
+        * 評估方式類型
+            * 有目標值的分群 : 如果資料有目標值，只是先忽略略目標值做非監督學習，則只要微調後，就可以使用原本監督的測量函數評估準確性
+            * 無目標值的分群 : 通常沒有目標值/目標值非常少才會用非監督模型，這種情況下，只能使用資料本身的分布資訊，來做模型的評估
+    * 輪廓分析(Silhouette analysis)
+        * 歷史 : 最早由 Peter J. Rousseeuw 於 1986 提出。它同時考慮了群內以及相鄰群的距離，除了可以評估資料點分群是否得當，也可以用來來評估不同分群方式對於資料的分群效果
+        * 設計精神 : 同一群的資料點應該很近，不同群的資料點應該很遠，所以設計一種當同群資料點越近 / 不同群資料點越遠時越⼤大的分數，當資料點在兩群交界附近，希望分數接近 0
+        * 單點輪廓值 : 
+            * 對任意單一資料點 i，「與 i 同一群」的資料點，距離 i 的平均稱為 ai
+            * 「與 i 不同群」的資料點中，不同群距離 i 平均中，最近的稱為bi ( 其實就是要取第二靠近 i 的那一群平均，滿足交界上分數為 0 的設計) 
+            * i 點的輪廓分數 si : (bi-ai) / max{bi, ai} 其實只要不是刻意分錯，bi 通常會⼤大於等於 ai，所以上述公式在此條件下可以化簡為 1 - ai / bi
+        * 整體輪廓分析 : 
+            * 分組觀察，依照不同的類別，將同類別的輪廓分數排序後顯示，發現兩組的輪廓值大多在平均以下，且比例例上接近 0 的點也比較多，這些情況都表示這兩組似乎沒分得那麼開
+            * 平均值觀察，計算分群的輪廓分數總平均，分的群數越多應該分數越小，如果總平均值沒有隨著分群數增加而變小，，就說明了那些分群數較不洽當
+            ```py
+            from sklearn.cluster import KMeans
+            from sklearn.metrics import silhouette_samples, silhouette_score
 
+            # 宣告 KMean 分群器, 對 X 訓練並預測
+            clusterer = KMeans(n_clusters=n_clusters, random_state=10)
+            cluster_labels = clusterer.fit_predict(X)
 
+            # 計算所有點的 silhouette_score 平均
+            silhouette_avg = silhouette_score(X, cluster_labels)
+            print("For n_clusters =", n_clusters,
+                "The average silhouette_score is :", silhouette_avg)
 
+            # 計算所有樣本的 The silhouette_score
+            sample_silhouette_values = silhouette_samples(X, cluster_labels)
+            ```
+* **Day_57 : 階層分群法**
+    * 階層式分析 : 一種構建 cluster 的層次結構的算法。該算法從分配給自己 cluster 的所有資料點開始。然後，兩個距離最近的 cluster 合併為同一個 cluster。最後，當只剩下一個 cluster 時，該算法結束。
+    * K-means vs. 階層分群 :
+        * K-means : 需要定義群數(n of clusters)
+        * 階層分群 : 可根據定義距離來分群(bottom-up)，也可以決定群數做分群(top-down)
+    * 階層分群演算法流程 : 不指定分群數量
+        1. 每筆資料為一個 cluster
+        2. 計算每兩群之間的距離
+        3. 將最近的兩群合併成一群
+        4. 重覆步驟 2、3，直到所有資料合併成同一 cluster
+    * 階層分群距離計算方式 :
+        * single-link : 群聚與群聚間的距離可以定義為不同群聚中最接近兩點間的距離。
+        * complete-link : 群聚間的距離定義為不同群聚中最遠兩點間的距離，這樣可以保證這兩個集合合併後, 任何一對的距離不會⼤大於 d。
+        * average-link : 群聚間的距離定義為不同群聚間各點與各點間距離總和的平均。
+    * 階層分群的優劣分析 :
+        * 優點 : 概念簡單，易於呈現，不需指定群數
+        * 缺點 : 只適用於少量資料，大量資料會很難處理
+    * 延伸閱讀 :
+        * [Hierarchical Clustering](https://www.youtube.com/watch?v=Tuuc9Y06tAc)
+        * [Example : Breast cancer Miroarray study](https://www.youtube.com/watch?v=yUJcTpWNY_o)
+        ```py
+        from sklearn.cluster import AgglomerativeClustering
+        from sklearn import datasets
 
+        iris = datasets.load_iris()
+        X = iris.data
+        y = iris.target
+
+        estimators = [('hc_iris_ward', AgglomerativeClustering(n_clusters=3, linkage="ward")),
+                      ('hc_iris_complete', AgglomerativeClustering(n_clusters=3, linkage="complete")),
+                      ('hc_iris_average', AgglomerativeClustering(n_clusters=3, linkage="average"))]
+        
+        for name, est in estimators:
+            est.fit(X)
+            labels = est.labels_
+        ```
+* **Day_58 : 階層分群法 觀察 : 2D 樣版資料集**
+    * 資料集用途 : 通常這樣的資料集，是用來讓人眼評估非監督模型的好壞，因為非監督模型的任務包含分群(對應於監督的分類)與流形還原(對應監督的迴歸)，所以 2D 樣板資料集在設計上也包含這兩種類型的資料集
+    * sklearn 的 2D 樣版資料集 : 
+        * sklearn 的資料集主要分為兩種 : 載入式 (Loaders) 與⽣生成式 (Samples generator)，載入式的是固定資料，生成式的則是先有既定模式，在模式下有限度的隨機生成每次使用的資料集
+        * 2D 樣版資料集屬於生成式資料集，使用不同分布，用以顯⽰示各種非監督模型的優缺點，提供使用者參考
+
+    * 2D 樣板資料集很多套件都有，也不限於只有 Python 上使用的套件 : 如 sklearn / mathworks / mlbench 都有對應的資料集
+        ```py
+        from sklearn import cluster, datasets
+        # 設定 2D 樣板資料
+        n_samples = 1500
+        random_state = 100
+
+        # 生成 同心圓 資料點
+        noisy_circles = datasets.make_circles(n_samples=n_samples, factor=.5, noise=.05)
+
+        # 生成 斜向三群 資料點 (使用轉換矩陣)
+        X, y = datasets.make_blobs(n_samples=n_samples, random_state=random_state)
+        transformation = [[0.6, -0.6], [-0.4, 0.8]]
+        X_aniso = np.dot(X, transformation)
+        aniso = (X_aniso, y)
+
+        # 生成 稀疏三群 資料點
+        varied = datasets.make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state=random_state)
+        
+        # 生成 雙半月 資料點
+        noisy_moons = datasets.make_moons(n_samples=n_samples, noise=.05)
+
+        # 生成 緊密三群 資料點
+        blobs = datasets.make_blobs(n_samples=n_samples, random_state=8)
+
+        # 生成 2維均勻分布 資料點
+        no_structure = np.random.rand(n_samples, 2), None
+        ```
+* **Day_59 : 降維方法 - 主成分分析**
+    * 為甚麼需要降低維度 (Dimension reduction)
+        * 減少 RAM or disk space 使用，有助於加速 learning algorithm
+        * 影像壓縮 : 原始影像維度爲 512, 在降低維度到 16 的情況下 , 圖片雖然有些許模糊 , 但依然保有明顯的輪廓和特徵
+        * 壓縮資料可進而組合出新的、抽象化的特徵，減少冗餘的資訊
+        * 特徵太多時，很難 visualize data, 不容易觀察資料。把資料維度 (特徵) 降到 2 到 3 個 , 則能夠用一般的 2D 或 3D 圖表呈現資料
+    * 主成分分析 (PCA) : 透過計算 eigen value, eigen vector, 可以將原本的 features 降維至特定的維度
+        * 原本資料有 100 個 features，透過 PCA，可以將這 100 個 features 降成 2 個 features
+        * 新 features 為舊 features 的線性組合，且彼此不相關
+        * 在維度太大發生 overfitting 的情況下，可以嘗試用PCA 組成的特徵來做監督式學習
+        * 不建議在早期時做 , 否則可能會丟失重要的 features 而 underfitting         
+        * 可以在 optimization 階段時 , 考慮 PCA , 並觀察運用了了 PCA 後對準確度的影響
+    * 延伸閱讀 :
+        * [Unsupervised Learning](https://www.youtube.com/watch?v=ipyxSYXgzjQ)
+        * [Further Principal Components](https://www.youtube.com/watch?v=dbuSGWCgdzw)
+        * [Principal Components Regression](https://www.youtube.com/watch?v=eYxwWGJcOfw)
+        * [Andrew Ng - Dimensionality Reduction](https://www.youtube.com/watch?time_continue=1&v=rng04VJxUt4)
+        ```py
+        from sklearn import decomposition
+
+        pca = decomposition.PCA(n_components=3)
+        pca.fit(X)
+        X = pca.transform(X)
+        ```
+* **Day_60 : PCA 觀察 : 使用手寫辨識資料集**
+    * 手寫辨識資料集的來源 : 手寫辨識資料集 (MNIST, Modified National Institute of Standards and Technology databas) 原始來源的NIST，應該是來自於美國人口普查局的員工以及學生手寫所得，其中的 Modified 指的是資料集為了了適合機器學習做了了一些調整 : 將原始圖案一律轉成黑底白字，做了對應的抗鋸齒的調整，最後存成 28x28 的灰階圖案，成為了目前最常聽到的基礎影像資料集
+    * sklearn 中的手寫辨識資料集 : 與完整的MNIST不同，sklearn為了方便非深度學習的計算，再一次將圖片的大⼩小壓縮到 8x8 的大小，雖然仍是灰階，但就形狀上已經有點難以用肉眼辨識，但壓縮到如此大小時，每張手寫圖就可以當作 64 (8x8=64) 個特徵的一筆資料，搭配一般的機器學習模型做出學習與預測
+    * 為什麼挑 MNIST 檢驗 PCA 的降維效果 :
+        * 高維度、高複雜性、人可理解的資料集
+        * 由於 PCA 的強大，如果資料有意義的維度太低，則前幾個主成分就可以將資料解釋完畢
+        * 使用一般圖形資料，維度又會太高，因此我們使用 sklearn 版本的 MNIST 檢驗 PCA，以兼顧內容的複雜性與可理解性
+        ```py
+        # 載入套件
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import pandas as pd
+
+        from sklearn import datasets
+        from sklearn.decomposition import PCA
+        from sklearn.linear_model import SGDClassifier
+        from sklearn.pipeline import Pipeline
+        from sklearn.model_selection import GridSearchCV
+        import warnings
+        warnings.filterwarnings("ignore")
+
+        # 定義 PCA 與隨後的邏輯斯迴歸函數
+        logistic = SGDClassifier(loss='log', penalty='l2', max_iter=10000, tol=1e-5, random_state=0)
+        pca = PCA()
+        pipe = Pipeline(steps=[('pca', pca), ('logistic', logistic)])
+
+        # 載入手寫數字辨識集
+        digits = datasets.load_digits()
+        X_digits = digits.data
+        y_digits = digits.target
+
+        # 先執行 GridSearchCV 跑出最佳參數
+        param_grid = {
+            'pca__n_components': [4, 10, 20, 30, 40, 50, 64],
+            'logistic__alpha': np.logspace(-4, 4, 5),
+        }
+        search = GridSearchCV(pipe, param_grid, iid=False, cv=5, return_train_score=False)
+        search.fit(X_digits, y_digits)
+        print("Best parameter (CV score=%0.3f):" % search.best_score_)
+        print(search.best_params_)
+
+        # 繪製不同 components 的 PCA 解釋度
+        pca.fit(X_digits)
+
+        fig, (ax0, ax1) = plt.subplots(nrows=2, sharex=True, figsize=(6, 6))
+        ax0.plot(pca.explained_variance_ratio_, linewidth=2)
+        ax0.set_ylabel('PCA explained variance')
+
+        ax0.axvline(search.best_estimator_.named_steps['pca'].n_components, linestyle=':', label='n_components chosen')
+        ax0.legend(prop=dict(size=12))
+
+        # 繪製不同採樣點的分類正確率
+        results = pd.DataFrame(search.cv_results_)
+        components_col = 'param_pca__n_components'
+        best_clfs = results.groupby(components_col).apply(lambda g: g.nlargest(1, 'mean_test_score'))
+
+        best_clfs.plot(x=components_col, y='mean_test_score', yerr='std_test_score', legend=False, ax=ax1)
+        ax1.set_ylabel('Classification accuracy (val)')
+        ax1.set_xlabel('n_components')
+        plt.tight_layout()
+        plt.show()
+        ```
+* **Day_61 : 降維方法 - t-SNE**
+    * PCA 的問題
+        * 求共變異數矩陣進⾏行奇異值分解，因此會被資料的差異性影響，無法很好的表現相似性及分佈。
+        * PCA 是一種線性降維方式，特徵間爲非線性關係時 (e.g. ⽂文字、影像資料)，PCA 很容易 underfitting
+    * t-SNE
+        * t-SNE 也是一種降維方式，但它用了更複雜的公式來來表達⾼高維和低維之間的關係。
+        * 主要是將高維的資料用 gaussian distribution 的機率密度函數近似，而低維資料的部分用 t 分佈來來近似，在用 KL divergence 計算相似度，再以梯度下降 (gradient descent) 求最佳解。
+        * t-SNE 優劣
+            * 優點 : 
+                * 當特數量過多時，使用 PCA 可能會造成降維後的 underfitting，這時可以考慮使用t-SNE 來降維，
+                * t-SNE 對於特徵非線性資料有更好的降維呈現能力
+            * 缺點 : 
+                * t-SNE 的需要比較多的時間執行
+    * 延伸閱讀 :
+        * [visualing data use t-SNE](https://www.youtube.com/watch?v=RJVL80Gg3lA)
+        * [李弘毅 - Unsupervised learning](https://www.youtube.com/watch?v=GBUEjkpoxXc)
+        ```py
+        from sklearn import manifold
+
+        tsne = manifold.TSNE(n_components=2, random_state=0, init='pca', learning_rate=200., early_exaggeration=12.)
+        X_tsne = tsne.fit_transform(X)
+        ```
+* **Day_62 : t-sne 觀察 : 分群與流形還原**
+    * 流形還原的意義
+        * 流形還原就是將高維度上相近的點，對應到低維度上相近的點，沒有資料點的地方不列入考量範圍
+        * 簡單的說，如果資料結構像瑞士捲一樣，那麼流形還原就是把它攤開鋪平 (流形還原資料集的其中一種，就是叫做瑞士捲 - Swiss Roll)
+        * 其實流形還原的模型相當多種，只是應用上較少，常見的除了了 t-sne 之外，還有 Isomap / LLE / MDS 等等，因為實用度不高，之後的課程中我們也不會教，因此只在此展示幾種流形還原的結果圖
+        ```py
+        from sklearn import manifold
+        from time import time
+
+        n_components = 2
+        perplexities = [4, 6, 9, 14, 21, 30, 45, 66, 100]
+        
+        for i, perplexity in enumerate(perplexities):
+            t0 = time()
+            tsne = manifold.TSNE(n_components=n_components, init='random',
+                                random_state=0, perplexity=perplexity)
+            Y = tsne.fit_transform(X)
+            t1 = time()
+            # perplexity 越高，時間越長，效果越好
+            print("S-curve, perplexity=%d in %.2g sec" % (perplexity, t1 - t0))
+        ```
+### 深度學習理論與實作
+* **Day_63 : 深度學習簡介**
