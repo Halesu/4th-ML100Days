@@ -1108,7 +1108,7 @@
         * [梯度提升決策樹](https://ifun01.com/84A3FW7.html)
         * [XGboost](https://www.youtube.com/watch?v=ufHo8vbk6g4)
         * [陳天奇 - Boosted Tree](https://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf)
-        * [李弘毅 - Ensemble](https://www.youtube.com/watch?v=tH9FH1DH5n0)
+        * [李宏毅 - Ensemble](https://www.youtube.com/watch?v=tH9FH1DH5n0)
 * **Day_46 : 梯度提升機 </>**
     ```py
     from sklearn.ensemble import GradientBoostingClassifier
@@ -1256,7 +1256,7 @@
         * 購物籃分析 : 資料探勘的經典案例，適用於線下或線上零售的商品組合推薦。
         * 非結構化資料分析 : 非結構化資料如文字、影像等，可以藉由一些非監督式學習的技術，幫助呈現及描述資料，例如主題模型 (topic model)
     * 延伸閱讀 :
-        * [李弘毅 - Unsupervised learning](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/PCA.mp4)
+        * [李宏毅 - Unsupervised learning](http://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/PCA.mp4)
         * [scikit-learn unsupervised learning](https://scikit-learn.org/stable/unsupervised_learning.html)
         * [Andrew Ng - Unsupervised learning](https://youtu.be/jAA2g9ItoAc)
 * **Day_55 : K-means 聚類算法**
@@ -1491,7 +1491,7 @@
                 * t-SNE 的需要比較多的時間執行
     * 延伸閱讀 :
         * [visualing data use t-SNE](https://www.youtube.com/watch?v=RJVL80Gg3lA)
-        * [李弘毅 - Unsupervised learning](https://www.youtube.com/watch?v=GBUEjkpoxXc)
+        * [李宏毅 - Unsupervised learning](https://www.youtube.com/watch?v=GBUEjkpoxXc)
         ```py
         from sklearn import manifold
 
@@ -1521,3 +1521,207 @@
         ```
 ### 深度學習理論與實作
 * **Day_63 : 深度學習簡介**
+    * 類神經網路路 (Neural Network)
+        * 在1956年的達特茅斯會議中誕⽣生，以數學模擬神經傳導輸出預測，在初期人工智慧領域中就是重要分支
+        * 因層數一多計算量就大幅增加等問題，過去無法解決，雖不斷有學者試圖改善，在歷史中仍不免大起大落
+        * 直到近幾年在**算法**、**硬體能力**與**巨量資料**的改善下，多層的類神經網路才重新成為當前人工智慧的應用主流
+    * 類神經網路與深度學習的比較
+        * 就基礎要素而言，深度學習是**比較多層**的類神經網路
+        * 但就實務應用的層次上，因著**設計思路**與**連結架構**的不同，兩者有了很大的差異性
+
+        |       | 類神經網路<br>(Neural Network)                        | 深度學習<br>(Deep Learning)     |
+        |-------|:-------------------------------------------------------|-----------------------------------|
+        | 隱藏層數量 | 1~2層                                           | 十數層到百層以上不等                 |
+        | 活躍年代  | 1956~1974                                      | 2011⾄至今                    |
+        | 代表結構  | 感知器 (Perceptron)<br>啟動函數 (Activation Function) | 卷積神經網路(CNN)<br>遞歸神經網路(RNN) |
+        | 解決問題  | 基礎迴歸問題                                         | 影像、自然語言處理等多樣問題|
+    * 深度學習應用爆發的三大關鍵
+        * 類神經的應用曾沉寂二三十年，直到 2012 年 AlexNet 在 ImageNet 圖像分類競賽獲得驚艷表現後，才重回主流舞台
+        * 深度學習相比於過去，到底有哪些關鍵優勢呢
+            * 算法改良
+                * 網路結構：**CNN 與 RNN** 等結構在神經連結上做有意義的精省，使得計算力得以用在刀口上
+                * 細節改良：**DropOut (隨機移除)** 同時有節省連結與集成的效果，**BatchNormalization (批次正規化)** 讓神經層間有更好的傳導力
+            * 計算機硬體能力提升
+                * **圖形處理器 (GPU)** 的誕生，持續了晶片摩爾定律，讓計算成為可行
+            * 巨量資料
+                * 個人行動裝置的普及網路速度的持續提升，帶來巨量的資料量，使得深度學習有了可以學習的素材
+    * **卷積神經網路** (CNN, Convolutional Neural Network)
+        * 設計目標：影像處理
+        * 結構改進：CNN 參考像素遠近省略神經元，並且用影像特徵的平移不變性來共用權重，大幅減少了影像計算的負擔
+        * 衍伸應用：只要符合上述兩種特性的應用，都可以使用 CNN 來來計算，例如 AlphaGo 的 v18 版的兩個主網路都是 CNN 圖片
+    * **遞歸神經網路** (RNN, Recurrent Neural Network)
+        * 設計目標：時序資料處理
+        * 結構改進：RNN 雖然看似在 NN 外增加了時序間的橫向傳遞，但實際上還是依照時間遠近省略了部分連結
+        * 衍伸應用：只要資料是有**順序性**的應用，都可以使用 RNN 來計算，近年在**自然語言處理 (NLP)** 上的應用反而成為大宗
+    * 深度學習 - 巨觀結構
+        * **輸入層 (input layer)**：輸入資料進入的位置
+        * **輸出層 (hidden layer)**：輸出預測值的最後一層
+        * **隱藏層 (output layer)**：除了上述兩層外，其他層都稱為隱藏
+    * 深度學習 - 微觀結構
+        * **啟動函數 (Activation Function)**：位於神經元內部，將上一層神經元的輸入總和，轉換成這一個神經元輸出值的函數
+        * **損失函數 (Loss Function)**：定義預測值與實際值的誤差大小
+        * **倒傳遞 (Back-Propagation)**：將損失值，轉換成類神經權重更新的方法
+    * 延伸閱讀 :
+        * [⼈工智慧大歷史](https://medium.com/@suipichen/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E5%A4%A7%E6%AD%B7%E5%8F%B2-ffe46a350543)
+        * [3 分鐘搞懂深度學習到底在深什麼](https://panx.asia/archives/53209)
+* **Day_64 : 深度學習體驗 - 模型調整與學習曲線**
+    * 深度學習體驗平台：[TensorFlowPlayGround](https://playground.tensorflow.org/)
+        * TensorFlow PlayGround 是 Google 精心開發的體驗網⾴頁，提供學習者在接觸語言之前，就可以對深度學習能概略了
+    * 平台上目前有 4 個分類問題與 2 個迴歸問題
+    * 練習 1：按下啟動，觀察指標變化
+        * 全部使用預設值，按下啟動按鈕，看發生了什麼變化?
+        * 遞迴次數（Epoch，左上）：逐漸增加
+        * 神經元（中央）：⽅方框圖案逐漸明顯，權重逐漸加粗，滑鼠移至上方會顯示權重
+        * 訓練/測試誤差：開始時明顯下降，幅度漸漸趨緩
+        * 學習曲線：訓練/測試誤差
+        * 結果圖像化：圖像逐漸穩定後續討論觀察，如果沒有特別註明，均以訓練/測試誤差是否趨近 0 為主，這種情況我們常稱為**收斂**
+    * 練習 2：增減隱藏層數
+        * 練習操作
+            * 資料集切換：分類資料集(左下) - 2 群，調整層數後啟動學習
+            * 資料集切換：分類資料集(左上) - 同心圓，調整層數後啟動學習
+            * 資料集切換：迴歸資料集(左) - 對⾓角線，調整層數後啟動學習
+        * 實驗結果
+            * 2 群與對角線：因資料集結構簡單，即使沒有隱藏層也會收斂
+            * 同心圓：資料集稍微複雜 (無法線性分割)，因此最少要⼀一層隱藏層才會收斂
+    * 練習 3：增減神經元數
+        * 練習操作
+            * 資料集切換：分類資料集(左上)-同心圓，隱藏層設為 1 後啟動學習
+            * 切換不同隱藏層神經元數量後，看看學習效果有何不同？
+        * 實驗結果
+            * 當神經元少於等於兩個以下時，將無法收斂
+    * 練習 4：切換不同特徵
+        * 練習操作
+            * 資料集切換：分類資料集(左上) - 同心圓，隱藏層 1 層，隱藏神經元 2 個
+            * 切換任選不同的 2 個特徵後啟動，看看學習效果有何不同?
+        * 實驗結果
+            * 當特徵選到兩個特徵的平方時，即使中間只有 2 個神經元也會收斂
+    * 知識要點
+        * 雖然圖像化更直覺，但是並非量化指標且可視化不容易，故深度學習的觀察指標仍以**損失函數/誤差**為主
+        * 對於不同資料類型，適合加深與加寬的問題都有，但**加深**適合的問題類型較多
+        * 輸入特徵的選擇影響結果甚鉅，因此深度學習也需要考慮**特徵工程**
+* **Day_65 : 深度學習體驗 - 啟動函數與正規化**
+    * 練習 5：切換批次大小
+        * 練習操作
+            * 資料集切換 : 分類資料集(右下) - 螺旋雙臂，特徵全選，隱藏層1層 / 8神經元
+            * 調整不同的批次大小後執行 500 次遞迴，看看學習效果有何不同?
+        * 實驗結果
+            * 批次大小很小時，雖然收斂過程非常不穩定，但平均而言會收斂到較好的結果
+            * 實務上，批次大小如果極小，效果確實比較好，但計算時間會相當久，因此通常會依照時間需要而折衷
+    * 練習 6：切換學習速率
+        * 練習操作
+            * 資料集切換：分類資料集(右下) - 螺旋雙臂，特徵全選，隱藏層1層 / 8神經元，批次大小固定 10
+            * 調整不同的學習速率後執行 500 次遞迴，看看學習效果有何不同?
+        * 實驗結果
+            * 小於 0.3 時學習速率較大時，收斂過程會越不穩定，但會收斂到較好的結果
+            * 大於 1 時因為過度不穩定而導致無法收斂
+    * 練習 7：切換啟動函數
+        * 練習操作
+            * 資料集切換 : 分類資料集(右下) - 螺旋雙臂，特徵全選，隱藏層1層 / 8神經元，批次大小固定 10，學習速率固定 1
+            * 調整不同的啟動函數後執行 500 次遞迴，看看學習效果有何不同?
+        * 實驗結果
+            * 在這種極端的情形下，Tanh 會無法收斂，Relu 很快就穩定在很糟糕的分類狀狀態，惟有 Sigmoid 還可以收斂到不錯的結果
+            * 但實務上，Sigmoid 需要大量計算時間，而Relu 則相對快得很多，這也是需要取捨的，在本例中因為只有一層，所以狀況不太明顯
+    * 練習 8：切換正規化選項與參數
+        * 練習操作
+            * 資料集切換 : 分類資料集(右下) - 螺旋雙臂，特徵全選，隱藏層1層 / 8神經元，批次大小固定 10，學習速率固定 0.3，啟動函數設為 Tanh
+            * 調整不同的正規化選項與參數後執行 500 次遞迴，看看學習效果有何不同?
+        * 實驗結果
+            * 我們已經知道上述設定本來就會收斂，只是在較小的 L1 / L2 正規劃參數下收斂比較穩定一點
+            * 但正規化參數只要略大，反而會讓本來能收斂的設定變得無法收斂，這點 L1 比 L2情況略略嚴重，因此本例例中最適合的正規化參數是 L2 + 參數 0.001
+            * 實務上：L1 / L2 較常使用在非深度學習上，深度學習上效果有限
+    * 延伸閱讀 : 
+        * [Understanding neural networks with TensorFlow Playground](https://cloud.google.com/blog/products/gcp/understanding-neural-networks-with-tensorflow-playground)
+        * [深度學習網路調參技巧](https://zhuanlan.zhihu.com/p/24720954)
+### 初探深度學習使用Keras
+* **Day_66 : Keras 安裝與介紹**
+    * Keras 是什麼?
+        * 易學易懂的深度學習套件
+            * Keras 設計出發點在於容易上手，因此隱藏了很多實作細節，雖然自由度稍嫌不夠，但很適合教學
+            * Keras 實作並優化了各式經典組件，因此即使是同時熟悉TensorFlow 與 Keras 的老手，開發時也會兩者並用互補
+        * Keras 包含的組件有哪些?
+            * Keras 的組件很貼近直覺，因此我們可以用 TensorFlow PlayGround 體驗所學到的概念，分為兩大類來理解 ( 非一一對應 )
+            * 模型形狀狀類
+                * 直覺概念：神經元數 / 隱藏層數 / 啟動函數
+                * Keras 組件 : Sequential Model / Functional Model / Layers
+            * 配置參數類
+                * 直覺概念：學習速率 / 批次大小 / 正規化
+                * Keras 組件 : Optimier / Reguliarizes / Callbacks
+        * 深度學習寫法封裝
+            * TensorFlow 將深度學習中的 GPU/CPU 指令封裝起來來，減少語法差異，Keras 則是將前者更近一步封裝成單⼀一套件，用少量的程式便能實現經典模型
+        * Keras 的後端
+            * Keras 的實現，實際上完全依賴 TensorFlow 的語法完成，這種情形我們稱 TensorFlow 是 Keras 的一種後端(Backend)
+        * Keras/TensorFlow 的比較
+
+            |      | Keras        | Tensorflow                     |
+            |------|:-----------:|:------------------------------:|
+            | 學習難度 | 低            | 高                              |
+            | 模型彈性 | 中            | 高                              |
+            | 主要差異 | 處理神經層        | 處理資料流                          |
+            | 代表組件 | Layers/Model | Tensor / Session /<br> Placeholder |
+    * Keras 安裝流程
+        * 安裝分歧點
+            * 是否有 GPU : 
+                * 因為有 GPU 則需要先裝 GPU 的指令集，所以有 GPU 則需要 4 個步驟，沒有就只需要 2 步驟
+            * 作業系統 : 
+                * 因為不同作業系統間，GPU 的安裝步驟會因介面或指令有所不同，所以我們會分 Windows / Linux (以Ubuntu為例例) / Mac 分別介紹流程
+        * Keras 安裝注意事項
+            * 是否使用了 Anaconda 虛擬環境 : 
+                * 如果您的 Python 環境是採用Anaconda 安裝，那麼進行後續安裝時，請先切換到你常用的虛擬環境下安裝 (點選 Anaconda / Anaconda Prompt 後再安裝)，以確保安裝與常用環境是同一目錄
+            * 軟硬體間版本搭配 :
+                * 由於 GPU 的 CUDA / cuDNN 版本經常升級，因此 TensorFlow / Keras 的版本也需要頻繁更換版本，因此建議以安裝當時的[官網資訊為準](https://www.tensorflow.org/install/gpu)
+
+
+        * 安裝 Keras 大致上分為四個步驟 : 依序安裝 CUDA / cuDNN / TensorFlow / Keras，只要注意四個程式間的版本問題以及虛擬環境問題，基本上應該能順利安裝完成
+    * 安裝流程 - 沒有 GPU 版
+        * Step 1 - 安裝 TensorFlow
+            `pip install tensorflow`
+            * Ubuntu 前面加上 `sudo`
+        * Step 2 - 安裝 Keras
+            `pip install keras`
+            * Python 找不到 `pip` 指令，可以採用 `pip3` 代替執行安裝
+    * 安裝流程 - 有 GPU 版
+        * Step 1 - 安裝 [CUDA](https://developer.nvidia.com/cuda-downloads)
+        * Step 2 - 安裝 [cuDNN](https://developer.nvidia.com/cudnn)
+        * Step 3 - 安裝 TensorFlow GPU 版
+            `pip install tensorflow-gpu`
+        * Step 4 - 安裝 Keras
+            `pip install keras`
+        * Step 4-2 - 新增環境變數於 PATH
+            * (只有 Windows 需要, 其他作業系統請跳過) 如果是Win10，可從開始 / 控制台 / 系統開啟視窗後，點選"進階"分頁最下面的按鈕"環境變數"，會跳出下列列視窗，請在下半視窗中尋找"Path"變數，把下列列兩個路徑加入
+                ```
+                C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin
+                C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\libnvvp
+                ```
+                項目間要用分號( ; )隔開 / CUDA 版號請依 Step1 實際安裝版本為準
+        * 驗證安裝
+            * 安裝完後，可以開啟一個 .ipynb 檔輸入下列指令並執行，如果都有順利利執行，就是安裝成功了了!!
+                ```py
+                import tensorflow
+                import keras
+                ```
+    * 延伸閱讀 : [Keras 中文文檔](https://keras.io/zh/#keras_1)
+        ```py
+        import keras
+        from keras import backend as K
+
+        # 檢查 backend
+        keras.backend.backend()
+        # 檢查 fuzz factor
+        keras.backend.epsilon()       
+        # 檢查Keras float 
+        K.floatx()
+        # 設定 Keras 浮點運算為float16
+        K.set_floatx('float16')
+        ```
+* **Day_67 : Keras embedded dataset 的介紹與應用**
+    
+
+
+
+
+
+
+
+
+
+
