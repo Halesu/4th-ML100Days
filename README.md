@@ -1218,13 +1218,13 @@
         * Q3：既然同層新特徵會 Overfitting，層數加深會增加泛化，兩者同時用是不是就能把缺點互相抵銷呢?
             * A3：可以!!而且這正是 Stacking 最有趣的地方，但真正實踐時，程式複雜，運算時間又要再往上一個量級，之前曾有大神寫過 StackNet 實現這個想法，用JVM 加速運算，但實際上使用時調參困難，後繼使用的人就少了
         * Q4 : 實際上寫 Stacking 有這麼困難嗎?
-            * 其實不難，就像 sklearn 幫我們寫好了許多機器學習模型，**mlxtend** 也已經幫我們寫好了 Stacking 的模型，所以用就可以了 (參考今日範例或 mlxtrend 官網)
+            * A4 : 其實不難，就像 sklearn 幫我們寫好了許多機器學習模型，**mlxtend** 也已經幫我們寫好了 Stacking 的模型，所以用就可以了 (參考今日範例或 mlxtrend 官網)
         * Q5 : Stacking 結果分數真的比較高嗎?
-            * 不一定，有時候單模更高，有時候 Blending 效果就不錯，視資料狀況而定
+            * A5 : 不一定，有時候單模更高，有時候 Blending 效果就不錯，視資料狀況而定
         * Q6 : Stacking 可以做參數調整嗎?
-            * 可以，請參考 mlxtrend 的[調參範例](http://rasbt.github.io/mlxtend/user_guide/classifier/StackingCVClassifier/)，主要差異是參數名稱寫法稍有不同
+            * A6 : 可以，請參考 mlxtrend 的[調參範例](http://rasbt.github.io/mlxtend/user_guide/classifier/StackingCVClassifier/)，主要差異是參數名稱寫法稍有不同
         * Q7 : 還有其他做 Stacking 時需要注意的事項嗎?
-            * 「分類問題」的 Stacking 要注意兩件事：記得加上 use_probas=True(輸出特徵才會是機率值)，以及輸出的總特徵數會是：模型數量*分類數量(回歸問題特徵數=模型數量量)
+            * A7 :「分類問題」的 Stacking 要注意兩件事：記得加上 use_probas=True(輸出特徵才會是機率值)，以及輸出的總特徵數會是：模型數量*分類數量(回歸問題特徵數=模型數量量)
             ```py
             from mlxtend.classifier import StackingClassifier
 
@@ -1714,7 +1714,7 @@
         K.set_floatx('float16')
         ```
 * **Day_67 : Keras embedded dataset 的介紹與應用**
-    
+
 
 
 
