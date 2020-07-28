@@ -1714,14 +1714,736 @@
         K.set_floatx('float16')
         ```
 * **Day_67 : Keras embedded dataset 的介紹與應用**
+    * Keras 自帶的數據集 : 
+        * CIFAR10 小圖像分類
+        * CIFAR100 小圖像分類
+        * IMDB電影評論情緒分類
+        * 路透社 newswire 話題分類
+        * 手寫數字的 MNIST 數據庫
+        * 時尚文章的時尚 MNIST 數據庫
+        * 波士頓房屋價格回歸數據集
+    * 下載後預設存儲目錄 `C:Users\Administrator\.keras\datasets` 下的同名檔，注意有個點 `.keras`
+    * 執行下載時，要 import 相應的模組，利用資料集模組提供的函數下載資料
+    * CIFAR10
+        * 小圖像分類
+        * 數據集 50,000 張 32x32 彩色訓練圖像，標註超過 10 個類別，10,000 張測試圖像。
+            ```py
+            '''Label description
+            0 : airplane
+            1 : automobile
+            2 : bird
+            3 : cat
+            4 : deer
+            5 : dog
+            6 : frog
+            7 : horse
+            8 : ship
+            9 : truck
+            '''
+            from keras.datasets import cifar10
+            (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+            ```
+    * CIFAR100
+        * 小圖像分類
+        * 數據集 50,000 張 32x32 彩色訓練圖像，標註超過100個類別，10,000 張測試圖像。
+            ```py
+            from keras.datasets import cifar100
+            (x_train, y_train), (x_test, y_test) = cifar100.load_data(label_mode=‘fine’) 
+            ```
+    * MNIST 數據庫
+        * 手寫數字的 MNIST 數據庫
+        * 數據集包含 10 個數字的 60,000 個 28x28 灰度圖像，以及 10,000 個圖像的測試集。
+            ```py
+            from keras.datasets import mnist
+            (x_train, y_train), (x_test, y_test) = mnsit.load_data()
+            ```
+    * 時尚文章的時尚 MNIST 數據庫
+        * Zalando's article images
+        * 數據集包含 10 個時尚類別的 60,000 個 28x28 灰度圖像，以及 10,000 個圖像的測試集。這個數據集可以用作 MNIST 的直接替換。
+            ```py
+            '''Label description
+            0 : T-shirt / top
+            1 : Trouser
+            2 : Pullover
+            3 : Dress
+            4 : Coat
+            5 : Sandal
+            6 : Shirt
+            7 : Sneaker
+            8 : Bag
+            9 : Ankle boot
+            '''
+            from keras.datasets import fashion_mnsit
+            (x_train, y_train), (x_test, y_test) = fashion_mnsit.load_data()
+            ```
+    * 波士頓房屋價格回歸
+        * 取自卡內基梅隆大學維護的 StatLib 庫
+        * 20 世紀 70 年代後期，樣本在波士頓郊區的不同位置包含 13 個房屋屬性。目標是一個地點房屋的中位值(單位：k $)
+            ```py
+            from keras.datasets import boston_housing   
+            (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
+            ```
+    * IMDB 電影評論情緒分類
+        * 來自 IMDB 的 25,000 部電影評論的數據集，標有情緒(正面 / 負面)。評論已經過預處理，每個評論都被編碼為一系列單詞索引(整數)
+        * 單詞由數據集中的整體頻率索引
+            * 整數"3"編碼數據中第 3 個最頻繁的單詞。
+            * "0"不代表特定單詞，而是用於編碼任何未知單詞
+            ```py
+            '''
+            path：如果您沒有本地數據（at'~/.keras/datasets/' + path），它將被下載到此位置。
+            num_words：整數或無。最常見的詞彙需要考慮。任何不太頻繁的單詞將 oov_char 在序列數據中顯示為值。
+            skip_top：整數。最常被忽略的詞（它們將 oov_char 在序列數據中顯示為值）。
+            maxlen：int。最大序列長度。任何更長的序列都將被截斷。
+            seed：int。用於可重複數據改組的種子。
+            start_char：int。序列的開頭將標有此字符。設置為 1，因為 0 通常是填充字符。
+            oov_char：int。這是因為切出字 num_words 或 skip_top 限制將這個字符替換。
+            index_from：int。使用此索引和更高的索引實際單詞。
+            '''
+            from keras.datasets import imdb
+            (x_train, y_train), (x_test, y_test) = imdb.load_data(path=“imdb.npz”,num_words= None,skip_top=0,maxlen=None, seed=113,start_char=1,oov_char=2,index_from=3)  
+            ```
+    * 路透社新聞專題主題分類
+        * 來自路透社的 11,228 條新聞專線的數據集，標註了 46 個主題。與 IMDB 數據集一樣，每條線都被編碼為一系列字索引
+            ```py
+            from keras.datasets import reuters
+            (x_train, y_train), (x_test, y_test) = reuters.load_data(path=“reuters npz”,num_words= None,skip_top=0,maxlen=None, test_split=0.2,seed=113,start_char=1,oov_char=2,index_from=3)
+            ```
+    * 如何使用 Keras 自帶數據集做目標學習
+        * 適用於文本分析與情緒分類
+            * IMDB 電影評論情緒分類
+            * 路透社新聞專題主題分類
+        * 適用於影像分類與識別學習
+            * CIFAR10 / CIFAR100
+            * MNIST / Fashion-MNIST
+        * 適用於 Data / Numerical 學習
+            * Boston housing price regression dataset
+        * 針對小數據集的深度學習
+            * 數據預處理與數據提升
+    * 延伸閱讀 :
+        * [Keras : The Python Deep Learning Library](https://github.com/keras-team/keras/)
+        * [Keras dataset](https://keras.io/api/datasets/)
+        * [Predicting Boston House Prices](https://www.kaggle.com/sagarnildass/predicting-boston-house-prices)
+        * [imagenet](http://www.image-net.org/about-stats)
+        * [COCO(Common Objects in Context)](http://cocodataset.org/)
+* **Day_68 : 序列模型搭建網路 Sequential API**
+    * 序列模型是多個網路層的線性堆疊
+        * Sequential 是一系列模型的簡單線性疊加，可以在構造函數中傳入一些列的網路層
+            ```py
+            from keras.models import Sequential
+            from keras.layers import Dense, Activation
+            model = Sequential([Dense(32, _input_shap=(784,)), Activation(“relu”)])
+            ```
+        * 也可以透過 `.add`
+            ```py
+            model = Sequential()
+            model.add(Dense(32, _input_dim=784))
+            model.add(Activation(“relu”))
+            ```
+    * 指定模型輸入維度
+        * Sequential 的第一層(只有第一層，後面的層會自動匹配)需要知道輸入的 shape
+            * 在第一層加入一個 input_shape 參數，input_shape 應該是一個 shape 的 tuple 資料類型
+            * input_shape 是一系列整數的 tuple，**某些位置可以為 None**
+            * input_shape 中不用指明 batch_size 的數目
+            * 2D 的網路層，如 Dense，允許在層的構造函數的 input_dim 中指定輸入的維度。
+            * 對於某些 3D 時間層，可以在構造函數中指定 input_dim 和 input_length 來實現。
+            * 對於某些 RNN，可以指定 batch_size。這樣後面的輸入必須是 (batch_size, input_shape) 的輸入
+    * 常用參數說明
+
+        | 名稱         | 作用                     | 原型參數                                                                                                      |
+        |------------|------------------------|-----------------------------------------------------------------------------------------------------------|
+        | Dense      | 實現全連接層                 | Dense\(units,activation,use_bias=True,kernel_initializer='golorot_uniform',bias_initializer='zeros') |
+        | Activation | 對上層輸出應用激活函數            | Activation(activation)                                                                                  |
+        | Dropout    | 對上層輸出應用 dropout 以防止過擬合 | Dropout(ratio)                                                                                          |
+        | Flatten    | 對上層輸出一維化               | Flatten()                                                                                               |
+        | Reshape    | 對上層輸出 reshape          | Reshape(target_shape)                                                                                  |
+    * Sequential 模型的基本元件一般需要 :
+        * Model 宣告
+        * model.add 添加層
+        * model.compile 配置學習過程參數
+        * model.fit 模型訓練參數設置+訓練
+        * 模型評估
+        * 模型預測
+    * 延伸閱讀 : [Getting started with Keras Sequential model](https://keras.io/getting-started/sequential-model-guide/)
+        ```py
+        # 載入必須使用的 Library
+        import keras
+        from keras.datasets import cifar10
+        from keras.models import Sequential, load_model
+        from keras.layers import Dense, Dropout, Activation, Flatten
+        from keras.layers import Conv2D, MaxPooling2D
+
+        batch_size = 32
+        num_classes = 10
+        epochs = 10
+
+        # The data, shuffled and split between train and test sets:
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+
+        # Convert class vectors to binary class matrices.
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        # build our CNN model, 多加幾層
+        model = Sequential()
+        model.add(Conv2D(32, (5, 5), padding='same',
+                        input_shape=x_train.shape[1:]))
+        model.add(Activation('relu'))
+        model.add(Conv2D(64, (5, 5)))
+        model.add(Activation('relu'))
+        model.add(Conv2D(128, (5, 5)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(1024))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.25))
+        model.add(Dense(num_classes))
+        model.add(Activation('softmax'))
+
+        print(model.summary())
+        ```
+* **Day_69 : Keras Module API 的介紹與應用**
+    * 函數式 API
+        * ⽤用戶定義多輸出模型、非循環有向模型或具有共享層的模型等複雜模型的途徑
+        * 定義復雜模型（如多輸出模型、有向無環圖，或具有共享層的模型）的方法。
+        * 所有的模型都可調用，就像網絡層一樣
+            * 利用函數式 API，可以輕易地重用訓練好的模型：可以將任何模型看作是一個層，然後通過傳遞一個張量來調用它。注意，在調用模型時，您不僅重用模型的結構，還重用了了它的權重。
+    * 函數式 API 與順序模型
+        * 模型需要多於一個的輸出，那麼你總應該選擇函數式模型。
+            * 函數式模型是最廣泛的一類模型，序貫模型（Sequential）只是它的一種特殊情況。
+        * 延伸說明
+            * 層對象接受張量為參數，返回一個張量。
+            * 輸入是張量，輸出也是張量的一個框架就是一個模型，通過 Model 定義。
+            * 這樣的模型可以被像 Keras 的 Sequential 一樣被訓練。
+    * 如何配置
+        * 使用函數式模型的一個典型場景是搭建多輸入、多輸出的模型
+    * 延伸閱讀 : [Getting started with the Keras function API](https://keras.io/guides/functional_api/)
+
+        ```py
+        from keras.layers import Input, Embedding, LSTM, Dense
+        from keras.models import Model
+
+        #主要輸入接收新聞標題本身，即一個整數序列（每個整數編碼一個詞）。
+        #這些整數在1 到10,000 之間（10,000 個詞的詞彙表），且序列長度為100 個詞
+        #宣告一個 NAME 去定義Input
+        main_input = Input(shape=(100,), dtype='int32', name='main_input')
+
+        # Embedding 層將輸入序列編碼為一個稠密向量的序列，
+        # 每個向量維度為 512。
+        x = Embedding(output_dim=512, input_dim=10000, input_length=100)(main_input)
+
+        # LSTM 層把向量序列轉換成單個向量，
+        # 它包含整個序列的上下文信息
+        lstm_out = LSTM(32)(x)
+
+        #插入輔助損失，使得即使在模型主損失很高的情況下，LSTM 層和Embedding 層都能被平穩地訓練
+        news_output = Dense(1, activation='sigmoid', name='news_out')(lstm_out)
+
+        #輔助輸入數據與LSTM 層的輸出連接起來，輸入到模型
+        import keras
+        news_input = Input(shape=(5,), name='news_in')
+        x = keras.layers.concatenate([lstm_out, news_input])
 
 
+        # 堆疊多個全連接網路層
+        x = Dense(64, activation='relu')(x)
+        x = Dense(64, activation='relu')(x)
+        #作業解答: 新增兩層
+        x = Dense(64, activation='relu')(x)
+        x = Dense(64, activation='relu')(x)
 
+        # 最後添加主要的邏輯回歸層
+        main_output = Dense(1, activation='sigmoid', name='main_output')(x)
 
+        # 宣告 MODEL API, 分別採用自行定義的 Input/Output Layer
+        model = Model(inputs=[main_input, news_input], outputs=[main_output, news_output])
 
+        #輔助輸入數據與LSTM 層的輸出連接起來，輸入到模型
+        import keras
+        news_input = Input(shape=(5,), name='news_in')
+        x = keras.layers.concatenate([lstm_out, news_input])
 
+        # 堆疊多個全連接網路層
+        x = Dense(64, activation='relu')(x)
+        x = Dense(64, activation='relu')(x)
 
+        # 最後添加主要的邏輯回歸層
+        main_output = Dense(1, activation='sigmoid', name='main_output')(x)
 
+        model.compile(optimizer='rmsprop',
+              loss={'main_output': 'binary_crossentropy', 'news_out': 'binary_crossentropy'},
+              loss_weights={'main_output': 1., 'news_out': 0.2})
+        model.summary()
+        ```
+* **Day_70 : Multi-layer Perception 簡介**
+    * Multi-layer Perceptron (MLP) 多層感知器 :
+        * 為一種監督式學習的演算法
+        * 此算法將可以使用非線性近似將資料分類或進行迴歸運算
+        * 多層感知機是一種前向傳遞類神經網路，至少包含三層結構(輸入層、隱藏層和輸出層)，並且利用到「倒傳遞」的技術達到學習(model learning)的監督式學習，以上是傳統的定義。
+        * 現在深度學習的發展，其實 MLP 是深度神經網路路(deep neural network, DNN)的一種 special case，概念基本上一樣，DNN 只是在學習過程中多了一些手法和層數會更多更深。
+        * 若每個神經元的激活函數都是線性函數，那麼，任意層數的 MLP 都可被約簡成一個等價的單層感知器
+    * MLP 優點：
+        * 有能力建立非線性的模型
+        * 可以使⽤用 partial_fit 建立 real-time 模型
+    * MLP缺點 :
+        * 擁有大於一個區域最小值，使用不同的初始權重，會讓驗證時的準確率浮動
+        * MLP模型需要調整每層神經元數、層數、疊代次數
+        * 對於特徵的預先處理很敏感
+        ```py
+        from keras.utils import np_utils
+        import numpy as np
+        #載入手寫辨識的資料集
+        from keras.datasets import mnist
+        (x_train_image,y_train_label),\
+        (x_test_image,y_test_label)= mnist.load_data()
 
+        #指定測試集與訓練資料集
+        x_Train =x_train_image.reshape(60000, 784).astype('float32')
+        x_Test = x_test_image.reshape(10000, 784).astype('float32')
 
+        # normalize inputs from 0-255 to 0-1
+        x_Train_normalize = x_Train / 255
+        x_Test_normalize = x_Test / 255
 
+        #把LABEL轉成NUMERICAL Categorical 
+        y_Train_OneHot = np_utils.to_categorical(y_train_label)
+        y_Test_OneHot = np_utils.to_categorical(y_test_label)
+
+        #建立模型
+        from keras.models import Sequential
+        from keras.layers import Dense
+
+        #宣告採用序列模型
+        model = Sequential()
+
+        #建構輸入層
+        model.add(Dense(units=256, 
+                input_dim=784, 
+                kernel_initializer='normal', 
+                activation='relu'))
+        #建構輸出層
+        model.add(Dense(units=10, 
+                kernel_initializer='normal', 
+                activation='softmax'))
+        print(model.summary())
+
+        #模型訓練
+        model.compile(loss='categorical_crossentropy', 
+              optimizer='adam', metrics=['accuracy'])
+        train_history = model.fit(x=x_Train_normalize,
+                                  y=y_Train_OneHot,validation_split=0.2, 
+                                  epochs=10, batch_size=32,verbose=1)
+
+        #以圖形顯示訓練過程
+        import matplotlib.pyplot as plt
+        def show_train_history(train_history,train,validation):
+            plt.plot(train_history.history[train])
+            plt.plot(train_history.history[validation])
+            plt.title('Train History')
+            plt.ylabel(train)
+            plt.xlabel('Epoch')
+            plt.legend(['train', 'validation'], loc='upper left')
+            plt.show()
+
+        show_train_history(train_history,'accuracy','val_accuracy')
+        show_train_history(train_history,'loss','val_loss')
+
+        #評估模型準確率
+        scores = model.evaluate(x_Test_normalize, y_Test_OneHot)
+        print('accuracy=',scores[1])
+        ```
+* **Day_71 : 損失函數的介紹與應用**
+    * 損失函數
+        * 機器學習中所有的算法都需要最大化或最小化一個函數，這個函數被稱為「目標函數」。其中，我們一般把最小化的一類函數，稱為「損失函數」。它能根據預測結果，衡量出模型預測能力的好壞
+        * 損失函數大致可分為：分類問題的損失函數和回歸問題的損失函數
+    * 損失函數為什麼是最小化
+        * 期望：希望模型預測出來的東西可以跟實際的值一樣
+        * 損失函數中的損失就是「實際值和預測值的落差」
+        * 預測出來的東西基本上跟實際值都會有落差
+        * 在回歸問題稱為「殘差(residual)」
+        * 在分類問題稱為「錯誤率(error rate)」
+        * $y$ 表示實際值，$\hat{y}$ 表示預測值
+        $$ loss/residual = y - \hat{y}$$
+        $$ error\_rate = \frac{\sum_{i=1}^n sign(y_i\neq \hat{y_i})}{n}$$
+    * 損失函數的分類介紹
+        * 均方誤差(mean_squared_error)：
+            * 就是最小平方法(Least Square) 的目標函數 -- 預測值與實際值的差距之平均值。還有其他變形的函數, 如 mean_absolute_error、mean_absolute_percentage_error、mean_squared_logarithmic_error
+            $$ MSE = \frac{\sum{(\hat{y}-y)^2}}{N} $$
+            * 使用時機：
+                * n 個樣本的預測值（$y$）與（$\hat{y}$）的差距
+                * Numerical 相關
+            ```py
+            from keras import losses
+            model.compile(loss= 'mean_squared_error', optimizer='sgd')
+            #其中，包含 y_true， y_pred 的傳遞，函數是表達如下：
+            keras.losses.mean_squared_error(y_true, y_pred)
+            ```
+        * Cross Entropy
+            * 當預測值與實際值愈相近，損失函數就愈小，反之差距很大，就會更影響損失函數的值
+            * 要⽤用 Cross Entropy 取代 MSE，因為，在梯度下時，Cross Entropy 計算速度較快
+            * 使⽤用時機：
+                * 整數目標：Sparse categorical_crossentropy
+                * 分類目標：categorical_crossentropy
+                * 二分類目標：binary_crossentropy
+            ```py
+            from keras import losses
+            model.compile(loss= ‘categorical_crossentropy ‘, optimizer='sgd’)
+            #其中, 包含y_true， y_pred的傳遞, 函數是表達如下：
+            keras.losses.categorical_crossentropy(y_true, y_pred)
+            ```
+        * Hinge Error (hinge)
+            * 是一種單邊誤差，不考慮負值同樣也有多種變形，squared_hinge、categorical_hinge
+            $$ l(y) = max(0,1-t．y)$$
+            * 使用時機：
+                * 適用於『支援向量機』(SVM)的最大間隔分類法(maximum-margin classification)
+            ```py
+            from keras import losses
+            model.compile(loss= ‘hinge‘, optimizer='sgd’)
+            #其中，包含 y_true，y_pred 的傳遞, 函數是表達如下
+            keras.losses.hinge(y_true, y_pred)
+            ```
+        * 自定義損失函數
+            * 根據問題的實際情況，定制合理的損失函數
+            * 舉例：預測果汁日銷量問題，如果預測銷量大於實際銷量量則會損失成本；如果預測銷量小於實際銷量則會損失利潤。
+            * 考慮重點：製造一盒果汁的成本和銷售一盒果汁的利潤不是等價的
+            * 需要使用符合該問題的自定義損失函數自定義損失函數為
+                * 若預測結果 $y$ 小於標準答案 $\hat{y}$，損失函數為利潤乘以預測結果 $y$ 與標準答案之差
+                * 若預測結果 $y$ 大於標準答案 $\hat{y}$，損失函數為成本乘以預測結果 y 與標準答案之差用
+                ```py
+                loss = tf.reduce_sum(tf.where(tf.greater(y, y_), COST*(y-y_), PROFIT*(y_-y)))
+                ```
+    * 延伸閱讀 :
+        * [交叉熵](https://blog.csdn.net/qq_40147863/article/details/82015360)
+        * [losses function](https://keras.io/losses/)
+* **Day_72 : 啟動函數的介紹與應用**   
+    * 何謂啟動函數
+        * 啟動函數定義了每個節點(神經元)的輸出和輸入的關係的函數，為神經元提供規模話非線性能力，讓神經網路具備了強大的擬合能力
+        * 輸出值的範圍 :
+            * 當輸出值範圍是有限的時候，基於梯度的優化方法會更加穩定，因為特徵的表現受有限的權值的影響更為顯著
+            * 當輸出值範圍是無限的時候，模型的訓練會更加高效
+    * 啟動函數的作用
+        * 深度學習的基本原理是基於人工神經網路，信號從一個神經元進入，經過非線性的 activation function，如此循環往復直到輸出層，正是由於這些非線性函數的反覆疊加，層使得神經往復有足夠的能力來抓取複雜的 pattern
+        * 啟動函數的最大作用就是**非線性化**
+            * 如果不用啟動函數，無論神經網路有多少層，輸出都是輸入的線性組合
+        * 啟動函數的另一個特徵是
+            * 他應該可以區分前行網路和反向式傳播網路的網路參數更新，然後相應的使用梯度下降或其他優化技術優化權重以減少誤差
+    * 常用的啟動函數介紹
+        * Sigmoid
+        $$ f(z) = \frac{1}{1+exp(-z)} $$
+            * 特點是會把輸出限在 0~1 之間，當 x < 0，輸出就是 0，當 x > 0，輸出就是 1，這樣使得輸出在傳遞過程中不容易發散
+            * 兩個主要缺點
+                * 容易過飽和，丟失梯度。這樣在反向傳播時，很容易出現梯度消失的情況，導致訓練無法完整
+                * 輸出均值不是 0
+        * Softmax
+        $$ \sigma(z)_j = \frac{e^{z_j}}{\sum_{k=1}^Ke^{z_k}} $$
+            * 把一個 k 維的 real value 向量 (a1, a2, a3, ...) 映射成一個 (b1, b2, b3, ...) 其中 bi 是一個 0~1 的常數，輸出神經元之和為 1.0，所以可以拿來做多分類預測
+            * 為什麼要取指數
+                * 模擬 max 行為，要讓大者更大
+                * 需要一個可導函數
+        * Tanh
+        $$ tanh(x) = 2\sigma(2x) - 1$$
+        $$tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
+            * Tanh 讀做 Hyperbolic tangent
+            * 稱為雙正切函數，取值範圍 [-1, 1]
+            * 在特徵相差明顯時的效果很好，在循環過程中不斷擴大特徵效果
+        * ReLU
+        $$ f(x) = max(0, x)$$
+            * 修正線性單元 (Rectified linear unit)
+            * 在 x > 0，導數恆為 1
+            * 在 x < 0，梯度恆為 0，這時候他也會出現飽和現象，甚至使神經元直接無效，從而齊權重無法得到更新(這種情況下通常稱為 dying ReLU)
+            * Leak ReLU 和 PReLU 的提出正是為了解決這一問題
+        * ELU
+        $$ f(x))= \begin{cases} x & \text {, if $x > 0$} \\ a(e^x-1) & \text{, if $x \leq 0$} \end{cases} $$
+            * ELU 是針對 ReLU 的一個改進型，相比於 ReLU 函數，在輸入為負的情況下，是有一定的輸出的
+            * 這樣可以消除 ReLU 死掉的問題
+            * 還是有梯度飽和和指數運算的問題
+        * PReLU
+        $$ f(x) = max(ax, x)$$
+            * 參數化修正線性單元 (Parameteric Rectified linear unit)
+            * Leaky ReLU，當 $a = 0.1$ 時，我們叫 PReLU 為 Leaky ReLU
+            * PReLU 和 Leaky ReLU 有一些共點，即為負值輸入添加了一個線性項
+        * Maxout
+        $$ f(x) = max(wT1x + b1, wT2x + b2)$$
+            * Maxout 是深度學習網路中的一層網路，就像池化層、卷積層依樣，可以看成是網路的啟動層
+            * Maxout 神經元的啟動函數是取得所有「函數層」中的最大值 
+            * 擬合力非常強，優點是簡單設計，不會過飽和，同時又沒有 ReLU 的缺點
+            * 缺點是過程參數相當於多了一倍
+    * Sigmoid vs. Tanh
+        * Tanh 將輸出值壓縮到了 [-1, 1] 範圍，因此他是 0 均值的，解決了 Sigmoid 函數非 zero-centered 問題，但是他也存在梯度消失和冪運算的問題
+        * 其實 Tanh(x) = 2 * Sigmoid(2x) - 1 
+    * Sigmoid vs. Softmax
+        * Sigmoid 將一個 real value 映射到 (0, 1) 的區間，用來做二分類
+        * 把一個 k 維的 real value 向量 (a1, a2, a3, ...) 映射成一個 (b1, b2, b3, ...) 其中 bi 是一個 0~1 的常數，輸出神經元之和為 1.0，所以可以拿來做多分類預測
+        * 二分類問題時 Sigmoid 和 Softmax 是一樣的，求的都是 cross entropy loss
+    * 梯度消失 (Vanishing gradient problem)
+        * 原因 : 前面的層比後面的層梯度變化更小，故變化更慢
+        * 結果 : Output 變化慢 -> Gradient 變化小 -> 學得慢
+        * Sigmoid 和 Tanh 都有這樣特性，不適合用在 layers 多的 DNN 架構
+    * 如何選擇正確的啟動函數
+        * 根據各函數的的優缺點來配置
+            * 如果使用 ReLU，要小心 learning rate，注意不要讓網路出現很多「dead」神經元，如果不好解決，可以試試 Leaky ReLU、PReLU、Maxout 
+        * 根據問題的性質
+            * 用於分類器，Sigmoid 函數及其組合通常效果更好
+            * 由於梯地消失問題，有時要避免使用 Sigmoid 和 Tanh 函數。ReLU 函數是一個通用的啟動函數，目前的大多情況下使用
+            * 如果神經網路中出現死的神經元，那麼 PReLU 函數就是最好的選擇
+            * ReLU 函數只建議用在隱藏層
+        * 考慮 DNN 損失函數和啟動函數
+            * 如果使用 Sigmoid 啟動函數，則交叉熵損失函數肯定比均方差損失函數的好
+            * 如果是 DNN 用於分類，擇一般在輸出層使用 Softmax 啟動函數
+            * ReLU 啟動函數對梯度消失問題有一定層度的解決，尤其是在 CNN 模型中
+    * 延伸閱讀 :
+        * [神經網路常用啟動函數總結](https://zhuanlan.zhihu.com/p/39673127)
+        * [CS231N Lecture](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture6.pdf)
+        ```py
+        import numpy as np
+        #sigmoid 數學函數表示方式
+        def sigmoid(x):
+            return (1 / (1 + np.exp(-x)))
+        #Sigmoid 微分
+        def dsigmoid(x):
+            return (x * (1 - x))
+        #Softmax 數學函數表示方式
+        def softmax(x):
+            return np.exp(x) / float(sum(np.exp(x)))
+        #tanh 數學函數表示方式
+        def tanh(x):
+            return(np.exp(x) - np.exp(-x))/(np.exp(x) + np.exp(-x))
+        #tanh 微分
+        def dtanh(x):
+            return 1 - np.square(x)
+        #ReLU 數學函數表示方式
+        def ReLU(x):
+            return abs(x) * (x > 0)
+        #ReLU 微分
+        def dReLU(x):
+            return (1 * (x > 0))
+        ```
+* **Day_73 : 梯度下降 Gradient Descent 簡介** 
+    * 機器學習算法當中，優化算法的功能，是通過改善訓練方式，來最⼩小化(或最大化)損失函數
+    * 最常用的優化算法是**梯度下降**
+        * 通過尋找最小值，控制方差，更新模型參數，最終使模型收斂
+        * $w_{i+1} = w_i - d_i·η_i , i=0,1,...$
+        * 參數 $η$ 是學習率。這個參數既可以設置為固定值，也可以用一維優化方法沿著訓練的方向逐步更新計算
+        * 參數的更新分為兩步：第一步計算梯度下降的方向，第二步計算合適的學習
+    * 學習率對梯度下降的影響
+        * 學習率定義了每次疊代中應該更改的參數量。換句話說，它控制我們應該收斂到最低的速度。小學習率可以使迭代收斂，大學習率可能超過最小值
+        $$ compute : \frac{\partial{L}}{\partial{w}} $$
+        $$ w \leftarrow w - \eta\frac{\partial{L}}{\partial{w}} $$
+    * 梯度下降法的過程
+        * 首先需要設定一個初始參數值，通常情況下將初值設為零 (w=0)，接下來需要計算成本函數 cost 
+        * 然後計算函數的導數(某個點處的斜率值)，並設定學習效率參數 (lr) 的值。
+        * 重複執行上述過程，直到參數值收斂，這樣我們就能獲得函數的最優解
+    * 怎麼確定到極值點了呢？
+        * $η$ 又稱學習率，是一個挪動步長的基數，df(x)/dx 是導函數，當離得遠的時候導數大，移動的就快，當接近極值時，導數非常小，移動的就非常小，防止跨過極值點
+        * Gradient descent never guarantee global minima
+        * Different initial point will be caused reach different minima, so different results
+        * avoid local minima
+            * 在訓練神經網絡的時候，通常在訓練剛開始的時候使用較大的 learning rate，隨著訓練的進行，我們會慢慢的減小 learning rate，具體就是每次迭代的時候減少學習率的大小，更新公式：
+            decayed_learning_rate＝learning_rate*                                            decay_rate＾(global_step/decay_steps)
+
+                | 參數                      | 意義       |
+                |-------------------------|----------|
+                | decayed\_learning\_rate | 衰減後的學習率  |
+                | learning\_rate          | 初始學習率    |
+                | decay\_rate             | 衰減率      |
+                | global\_step            | 當前的 step |
+                | decay\_steps            | 衰減週期     |
+        * 使用 momentum，是梯度下降法中一種常用的加速技術。
+            * Gradient Descent 的實現：SGD, 對於一般的SGD，其表達式為
+            $x ← x\ −\ \alpha\ ∗\ dx$ (x沿負梯度⽅方向下降)
+            而帶 momentum 項的 SGD 則寫成如下形式：
+            $v\ = \beta\ ∗\ v\ −\ \alpha\ ∗\ dx$
+            $x\ ←\ x\ +\ v$
+            * 其中 $\beta$ 即 momentum 係數，通俗的理解上面式⼦子就是，如果上一次的 momentum（即 $\beta$）與這一次的負梯度方向是相同的，那這次下降的幅度就會加大，所以這樣做能夠達到加速收斂的過程
+    * 梯度下降法的缺點包括：
+        * 靠近極小值時速度減慢。
+        * 直線搜索可能會產生一些問題。
+        * 可能會「之字型」地下降
+    * 延伸閱讀 :
+        * [learning rate decay](https://zhuanlan.zhihu.com/p/32923584)
+        * [機器/深度學習 - 基礎數學 : 梯度下降](https://medium.com/@chih.sheng.huang821/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E5%9F%BA%E7%A4%8E%E6%95%B8%E5%AD%B8-%E4%BA%8C-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95-gradient-descent-406e1fd001f)
+        * 各種衰減方法
+            * exponential_decay : 指數衰減
+                ```
+                decayed_learning_rate = learning_rate * decay_rate ^ (global_step / decay_steps)
+                ```
+            * natural_exp_decay : 自然指數衰減
+                ```
+                decayed_learning_rate = learning_rate * exp(-decay_rate * global_step)
+                ```
+            * inverse_time_decay : 逆時間衰減
+                ```
+                decayed_learning_rate = learning_rate / (1 + decay_rate * global_step / decay_step)
+                ```
+            * polynomial_decay : 多項式衰減
+                ```
+                global_step = min(global_step, decay_steps)
+                decayed_learning_rate = (learning_rate - end_learning_rate) *(1 - global_step / decay_steps) ^ (power) + end_learning_rate
+                ```
+        ```py
+        import numpy as np
+        import matplotlib.pyplot as plt
+        %matplotlib inline
+
+        # 目標函數:y=(x+3)^2
+        def func(x): 
+            return np.square(x+3)
+
+        # 目標函數一階導數:dy/dx=2*(x+3)
+        def dfunc(x): 
+            return 2 * (x+3)
+
+        def GD(w_init, df, epochs, lr):    
+            """  梯度下降法。給定起始點與目標函數的一階導函數，求在epochs次反覆運算中x的更新值
+                :param w_init: w的init value    
+                :param df: 目標函數的一階導函數    
+                :param epochs: 反覆運算週期    
+                :param lr: 學習率    
+                :return: x在每次反覆運算後的位置   
+            """    
+            xs = np.zeros(epochs+1) # 把 "epochs+1" 轉成dtype=np.float32    
+            x = w_init    
+            xs[0] = x    
+            for i in range(epochs):         
+                dx = df(x)        
+                # v表示x要跨出的幅度        
+                v = - dx * lr        
+                x += v        
+                xs[i+1] = x    
+            return xs
+
+        # 起始權重
+        w_init = 3    
+        # 執行週期數
+        epochs = 20 
+        # 學習率   
+        #lr = 0.3
+        lr = 0.01
+        # 梯度下降法 
+        x = GD(w_init, dfunc, epochs, lr=lr) 
+        print (x)
+
+        #劃出曲線圖
+        color = 'r'    
+        
+        from numpy import arange
+        t = arange(-6.0, 6.0, 0.01)
+        plt.plot(t, func(t), c='b')
+        plt.plot(x, func(x), c=color, label='lr={}'.format(lr))    
+        plt.scatter(x, func(x), c=color, )    
+        plt.legend()
+        
+        plt.show()
+        ```
+* **Day_74 : Gradient Descent 數學原理**
+    * Gradient 梯度 
+        * 在微積分裡面，對多元函數的參數求 ∂ 偏導數，把求得的各個參數的**偏導數以向量的形式寫出來，就是梯度**。
+        * 比如函數 f(x), 對 x 求偏導數，求得的梯度向量就是 (∂f/∂x)，簡稱 grad f(x)或者▽f (x)
+    * 最常用的優化算法 - 梯度下降
+        * 目的：沿著目標函數梯度下降的方向搜索極小值（也可以沿著梯度上升的方向搜索極大值
+        * 要計算 Gradient Descent，考慮
+            * Loss = 實際 ydata – 預測 ydata = w * 實際 xdata – w * 預測 xdata (bias 為 init value，被消除)
+            * Gradient = ▽f (θ) (Gradient = ∂L/∂w)
+            * 調整後的權重 = 原權重 – η(Learning rate) * Gradient
+            $$ w \leftarrow w - \eta\frac{\partial{L}}{\partial{w}}$$
+    * 梯度下降的算法調優
+        * Learning rate 選擇，實際上取值取決於數據樣本，如果損失函數在變小，說明取值有效，否則要增大 Learning rate
+        * 自動更新 Learning rate  - 衰減因子 decay
+            * 算法參數的初始值選擇。初始值不同，獲得的最小值也有可能不同，因此梯度下降求得的只是局部最小值；當然如果損失函數是凸函數則一定是最優解。
+            * 學習率衰減公式
+                * lr_i = lr_start * 1.0 / (1.0 + decay * i)
+                * 其中 lr_i 為第一迭代 i 時的學習率，lr_start 為初始值，decay 為一個介於[0.0, 1.0]的小數。從公式上可看出：
+                    * decay 越小，學習率衰減地越慢，當 decay = 0 時，學習率保持不變
+                    * decay 越大，學習率衰減地越快，當 decay = 1 時，學習率衰減最快
+        * 使用 momentum 是梯度下降法中一種常用的加速技術。
+        $x ← x\ −\ \alpha\ ∗\ dx$ (x沿負梯度⽅方向下降)
+        $v\ = \beta\ ∗\ v\ −\ \alpha\ ∗\ dx$
+        $x\ ←\ x\ +\ v$
+        * 其中 ß 即 momentum 係數，通俗的理解上面式子就是，如果上一次的 momentum（即ß ）與這一次的負梯度方向是相同的，那這次下降的幅度就會加大，所以這樣做能夠達到加速收斂的過程
+    * 延伸閱讀 :
+        * [gradient descent using python and numpy](https://stackoverflow.com/questions/17784587/gradient-descent-using-python-and-numpy)
+        * [梯度下降算法的参数更新公式](https://blog.csdn.net/hrkxhll/article/details/80395033)
+        ```py
+        import matplotlib
+        import matplotlib.pyplot as plt
+        %matplotlib inline 
+        #適用於 Jupyter Notebook, 宣告直接在cell 內印出執行結果
+        import random as random
+        import numpy as np
+        import csv
+
+        # 給定初始的data
+        x_data = [ 338., 333., 328., 207., 226., 25., 179.,  60., 208.,  606.]
+        y_data = [ 640., 633., 619., 393., 428., 27., 193.,  66., 226., 1591.]
+
+        #給定神經網路參數:bias 跟weight
+        x = np.arange(-200,-100,1) #給定bias
+        y = np.arange(-5,5,0.1) #給定weight
+
+        Z =  np.zeros((len(x), len(y)))
+        #meshgrid返回的兩個矩陣X、Y必定是 column 數、row 數相等的，且X、Y的 column 數都等
+        #meshgrid函數用兩個坐標軸上的點在平面上畫格。
+        X, Y = np.meshgrid(x, y)
+        for i in range(len(x)):
+            for j in range(len(y)):
+                b = x[i]
+                w = y[j]
+                Z[j][i] = 0  
+                for n in range(len(x_data)):
+                    Z[j][i] = Z[j][i] +  (y_data[n] - b - w*x_data[n])**2
+                Z[j][i] = Z[j][i]/len(x_data)
+
+        # ydata = b + w * xdata 
+        b = -120 # initial b
+        w = -4 # initial w
+        lr = 0.000001 # learning rate
+        iteration = 100000
+
+        # Store initial values for plotting.
+        b_history = [b]
+        w_history = [w]
+
+        #給定初始值
+        lr_b = 0.0
+        lr_w = 0.0
+
+        '''
+        Loss = (實際ydata – 預測ydata)
+        Gradient = -2*input * Loss 
+        調整後的權重 = 原權重 – Learning * Gradient
+        '''
+        # Iterations
+        for i in range(iteration):
+            
+            b_grad = 0.0
+            w_grad = 0.0
+            for n in range(len(x_data)):        
+                b_grad = b_grad  - 2.0*(y_data[n] - b - w*x_data[n])*1.0
+                w_grad = w_grad  - 2.0*(y_data[n] - b - w*x_data[n])*x_data[n]
+                
+            lr_b = lr_b + b_grad ** 2
+            lr_w = lr_w + w_grad ** 2
+            
+            # Update parameters.
+            b = b - lr * b_grad 
+            w = w - lr * w_grad
+            
+            # Store parameters for plotting
+            b_history.append(b)
+            w_history.append(w)
+
+        # plot the figure
+        plt.contourf(x,y,Z, 50, alpha=0.5, cmap=plt.get_cmap('jet'))
+        plt.plot([-188.4], [2.67], 'x', ms=12, markeredgewidth=3, color='orange')
+        plt.plot(b_history, w_history, 'o-', ms=3, lw=1.5, color='black')
+        plt.xlim(-200,-100)
+        plt.ylim(-5,5)
+        plt.xlabel(r'$b$', fontsize=16)
+        plt.ylabel(r'$w$', fontsize=16)
+        plt.show()
+        ```
