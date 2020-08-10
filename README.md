@@ -2337,7 +2337,7 @@
         plt.plot(x, func(x), c=color, label='lr={}'.format(lr))    
         plt.scatter(x, func(x), c=color, )    
         plt.legend()
-        
+
         plt.show()
         ```
 * **Day_74 : Gradient Descent 數學原理**
@@ -2447,3 +2447,2325 @@
         plt.ylabel(r'$w$', fontsize=16)
         plt.show()
         ```
+* **Day_75 : 反向式傳播簡介**
+    * 何謂反向傳播
+        * 反向傳播（BP：Backpropagation）是「誤差反向傳播」的簡稱，是一種與最優化方法（如梯度下降法）結合使用的該方法對網路中所有權重計算損失函數的梯度。這個梯度會反饋給最優化方法，用來更新權值以最小化損失函數。
+        * 反向傳播要求有對每個輸入值想得到的已知輸出，來計算損失函數梯度。因此，它通常被認為是一種監督式學習方法，可以對每層疊代計算梯度。反向傳播要求人工神經元（或「節點」）的啟動函數可微。
+    * 推導流程 :
+        * $\to$ 建立神經網路 (Input、Hidden、Output)  
+        $\to$ 拆解神經網路為局部設計算單元 
+        $\to$  給定計算單元 
+        $\to$ 神經網路初始化 (init value) 
+        $\to$ Forward Propagation 
+        $\to$ 取得 OUTPUT 
+        $\to$ 解函數微分 
+        $\to$ Back Propagation
+    * BP 神經網路是一種按照逆向傳播算法訓練的多層前饋神經網路
+        * 優點：具有任意複雜的模式分類能力和優良的多維函數映射能力，解決了了簡單感知器不能解決的一些其他的問題。
+            * 從結構上講，BP 神經網路具有輸入層、隱含層和輸出層。
+            * 從本質上講，BP 算法就是以網路誤差平方目標函數、採用梯度下降法來計算目標函數的最小值。
+        * 缺點：
+            * ①學習速度慢，即使是一個簡單的過程，也需要幾百次甚⾄至上千次的學習才能收斂。
+            * ②容易陷入局部極小值。
+            * ③網路層數、神經元個數的選擇沒有相應的理論指導。
+            * ④網路路推廣能力有限。
+        * 應用：
+            * ①函數逼近。
+            * ②模式識別。
+            * ③分類。
+            * ④數據壓縮。
+    * 重要知識點複習：
+        * 第1階段：解函數微分
+            * 每次疊代中的傳播環節包含兩步：
+                * （前向傳播階段）將訓練輸入送入網路以獲得啟動響應；
+                * （反向傳播階段）將啟動響應同訓練輸入對應的目標輸出求差，從而獲得輸出層和隱藏層的響應誤差。
+        * 第2階段：權重更新
+            * Follow Gradient Descent 
+            * 第 1 和第 2 階段可以反覆循環疊代，直到網路對輸入的響應達到滿意的預定的目標範圍為止。
+    * 延伸閱讀 :
+        * [深度學習(Deep Learning)-反向傳播](https://ithelp.ithome.com.tw/articles/10198813)
+        * [BP神经网络的原理及Python实现](https://blog.csdn.net/conggova/article/details/77799464)
+        ```py
+        #定義並建立一神經網路
+        class mul_layer():
+            def _ini_(self):
+                self.x = None
+                self.y = None
+            def forward(self, x, y):
+                self.x = x
+                self.y = y
+                out = x*y
+                return out
+            def backward(self, dout):
+                dx = dout * self.y
+                dy = dout * self.x
+                return dx, dy
+
+        # 初始值設定
+        n_X = 2
+        price_Y = 100
+        b_TAX = 1.1
+
+        # 指定Build _Network組合
+        mul_fruit_layer = mul_layer()
+        mul_tax_layer = mul_layer()
+
+        #forward 
+        fruit_price = mul_fruit_layer.forward(price_Y, n_X)
+        total_price = mul_tax_layer.forward(fruit_price, b_TAX)
+
+        #backward 
+        dtotal_price = 1 #this is linear function, which y=x, dy/dx=1
+        d_fruit_price, d_b_TAX = mul_tax_layer.backward(dtotal_price)
+        d_price_Y, d_n_X =  mul_tax_layer.backward(d_fruit_price)
+        ```
+* **Day_76 : 優化器 Optimizers 簡介**
+    * 什麼是優化算法 - Optimizer
+        * 機器學習算法當中，大部分算法的本質就是建立優化模型，通過最優化方法對目標函數進行優化從而訓練出最好的模型
+        * 優化算法的功能，是通過改善訓練方式，來最小化(或最大化)損失函數 E(x)
+        * 優化策略和算法，是用來更新和計算影響模型訓練和模型輸出的網絡參數，使其逼近或達到最優值
+    * 最常用的優化算法
+        * Gradient Descent
+            * 最常用的優化算法是梯度下降
+            * 這種算法使用各參數的梯度值來最小化或最大化損失函數E(x)。
+            * 通過尋找最小值，控制方差，更新模型參數，最終使模型收斂
+        * 動量 Momentum
+            * 「一顆球從山上滾下來，在下坡的時候速度越來越快，遇到上坡，方向改變，速度下降」
+            $$ V_t \leftarrow \beta V_{t-1} - \eta\frac{\partial{L}}{\partial{w}}$$
+            $$ w \leftarrow w + V_t $$
+            * $v_t$ : 「方向速度」，會跟上一次的更新有關
+            * 如果上一次的梯度跟這次同方向的話，$|V_t|$ (速度)會越來來越大(代表梯度增強)，$w$ 參數的更新梯度便會越來越快，如果方向不同，$|V_t|$ 便會比上次更小(梯度減弱)，$w$ 參數的更新梯度便會變小
+            * 加入的這一項，可以使得梯度方向不變的維度上速度變快，梯度方向有所改變的維度上的更新速度變慢，這樣就可以加快收斂並減小震盪
+        * SGD - 隨機梯度下降法(stochastic gradient decent)
+            * 找出參數的梯度(利用微分的方法)，往梯度的方向去更新參數(weight)
+            $$ w \leftarrow w -\eta \frac{\partial{L}}{\partial{w}}$$
+            * $w$ 為權重 (weight) 參數，$L$ 為損失函數 (loss function)， $\eta$ 是學習率 (learning rate)， $\frac{\partial{L}}{\partial{w}}$ 是損失函數對參數的梯度(微分)
+            * 優點：SGD 每次更新時對每個樣本進行梯度更新，對於很大的數據集來說，可能會有相似的樣本，而 SGD 一次只進行一次更新，就沒有冗餘，而且比較快
+            * 缺點：但是 SGD 因為更新比較頻繁，會造成 cost function 有嚴重的震盪
+        * SGD 調用
+            * `keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)`
+                * lr：<float> 學習率。
+                * Momentum 動量：<float> 參數，用於加速 SGD 在相關方向上前進，並抑制震盪。
+                * Decay(衰變)：<float> 每次參數更新後學習率衰減值。
+                * nesterov：布爾值。是否使用 Nesterov 動量。
+            ```py
+            from keras import optimizers
+
+            model = Sequential() model.add(Dense(64, kernel_initializer='uniform', input_shape=(10,)))model.add(Activation('softmax’)) 
+            #實例化一個優化器對象，然後將它傳入model.compile()，可以修改參數
+            sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) model.compile(loss='mean_squared_error', optimizer=sgd)
+            # 通過名稱來調用優化器，將使用優化器的默認參數。
+            model.compile(loss='mean_squared_error', optimizer='sgd')
+            ```
+        * mini-batch gradient descent
+            * batch-gradient，其實就是普通的梯度下降算法但是採⽤用批量處理。
+                * 當數據集很大（比如有 100000 個左右時），每次 iteration 都要將 1000000 個數據跑一遍，機器帶不動。於是有了 mini-batch-gradient —— 將 1000000 個樣本分成 1000 份，每份 1000 個，都看成一組獨立的數據集，進行 forward_propagation 和 backward_propagation。
+            * 在整個算法的流程中，cost function 是局部的，但是 W 和 b 是全局的。
+                * 批量梯度下降對訓練集上每一個數據都計算誤差，但只在所有訓練數據計算完成後才更新模型。
+                * 對訓練集上的一次訓練過程稱為一代（epoch）。因此，批量梯度下降是在每一個訓練 epoch 之後更新模型。
+            * batchsize：批量大小，即每次訓練在訓練集中取batchsize 個樣本訓練；
+                * batchsize = 1; 
+                * batchsize = mini-batch; 
+                * batchsize = whole training set 
+            * iteration：1 個 iteration 等於使用 batchsize 個樣本訓練一次；
+            * epoch：1 個 epoch 等於使用訓練集中的全部樣本訓練一次；
+            * Example:
+                ```
+                features is (50000, 400) 
+                labels is (50000, 10) 
+                batch_size is 128
+                Iteration = 50000/128+1 = 391
+                ```
+            * 怎麼配置 mini-batch 梯度下降
+                * Mini-batch sizes，簡稱為「batch sizes」，是算法設計中需要調節的參數。
+                * 較小的值讓學習過程收斂更快，但是產生更多噪聲。
+                * 較大的值讓學習過程收斂較慢，但是準確的估計誤差梯度。
+                * batch size 的默認值最好是 32 盡量選擇 2 的冪次⽅方，有利於 GPU 的加速。
+                * 調節 batch size 時，最好觀察模型在不同 batch size 下的訓練時間和驗證誤差的學習曲線。
+                * 調整其他所有超參數之後再調整 batch size 和學習率。
+        * Adagrad
+            * 對於常見的數據給予比較小的學習率去調整參數，對於不常見的數據給予比較大的學習率調整參數
+                * 每個參數都有不同的 learning rate
+                * 根據之前所有 gradient 的 root mean square 修改
+            * 第 t 次更新
+                $$ g^t = \frac{\partial{L}}{\partial{\theta}}|_{\theta={\theta^t}}$$
+                * Gradient descent
+                    $$ \theta^{t+1} = \theta^t - \eta g^t$$
+                * Adagrad
+                    $$ \theta^{t+1} = \theta^t - \frac{\eta}{\sigma^t} g^t$$
+                    $$ \sigma^t = \sqrt{\frac{(g^0)^2+...+(g^t)^2}{t+1}} $$
+        * Adagrad 調用
+            * 超參數設定值 :
+            `keras.optimizers.Adagrad(lr=0.01, epsilon=None, decay=0.0)`
+                * lr：float >= 0. 學習率。一般 $\eta$ 就取 0.01
+                * epsilon： float >= 0。若為 None，默認為 K.epsilon()
+                * decay：float >= 0。每次參數更新後學習率衰減值
+                ```py
+                from keras import optimizers 
+
+                model = Sequential() 
+                model.add(Dense(64, kernel_initializer='uniform', input_shape=(10,)))
+                model.add(Activation('softmax’)) 
+
+                #實例化一個優化器對象，然後將它傳入model.compile() , 可以修改參數 
+                opt = optimizers.Adagrad(lr=0.01, epsilon=None, decay=0.0)
+                model.compile(loss='mean_squared_error', optimizer=opt) 
+                ```
+        * RMSprop
+            * RMSProp 算法也旨在抑制梯度的鋸齒下降，但與動量相比， RMSProp 不需要手動配置學習率超參數，由算法自動完成。更重要的是，RMSProp 可以為每個參數選擇不同的學習率。
+            * RMSprop 是為了解決 Adagrad 學習率急劇下降問題的，所以比對梯度更新規則：
+                * Adagrad
+                    $$ \theta^{t+1} = \theta^t - \frac{\eta}{\sigma^t} g^t$$
+                    $$ \sigma^t = \sqrt{\frac{(g^0)^2+...+(g^t)^2}{t+1}} $$
+                    Root mean square (RMS) of all Gradient
+                * RMSprop
+                    $$ \theta^{t+1} = \theta^t - \frac{\eta}{\sqrt{r^t}} g^t$$
+                    $$ r^t = (1 - p)(g^t)^2 + pr^{t-1}$$
+                    分母換成了過去的梯度平方的衰減平均值
+        * RMSprop 調用
+            `keras.optimizers.RMSprop(lr=0.001, rho=0.9, epsilon=None, decay=0.0)`
+            * This optimizer is usually a good choice for recurrent neural networks.Arguments
+                * lr：float >= 0。Learning rate. 
+                * rho：float >= 0。 
+                * epsilon：float >= 0。Fuzz factor. If None, defaults to K.epsilon()。
+                * decay：float >= 0。 Learning rate decay over each update。
+                ```py
+                from keras import optimizers
+                
+                model = Sequential() 
+                model.add(Dense(64, kernel_initializer='uniform', input_shape=(10,)))
+                model.add(Activation('softmax’)) 
+                
+                #實例化一個優化器對象，然後將它傳入model.compile() , 可以修改參數
+                opt = optimizers.RMSprop(lr=0.001, epsilon=None, decay=0.0) 
+                model.compile(loss='mean_squared_error', optimizer=opt) 
+                ```
+        * Adam 說明
+            * 除了像 RMSprop 一樣存儲了過去梯度的平⽅方 $v_t$ 的指數衰減平均值，也像 momentum 一樣保持了過去梯度 $m_t$ 的指數衰減平均值, 「 t 」：
+                * the first moment (the mean)
+                $$ m_t = \beta_1m_t + (1 - \beta_1)g_t$$
+                * the second moment (the uncentered variance)
+                $$ v_t = \beta_2m_t + (1 - \beta_2){g_t}^2$$
+            * 計算梯度的指數移動平均數，$m_0$ 初始化為 0。綜合考慮之前時間步的梯度動量。
+            * β1 係數為指數衰減率，控制權重分配（動量與當前梯度），通常取接近於 1 的值。默認為 0.9 
+            * 其次，計算梯度平方的指數移動平均數，$v_0$ 初始化為 0。
+            * β2 係數為指數衰減率，控制之前的梯度平⽅方的影響情況。類似於 RMSProp 算法，對梯度平方進行加權均值。默認為 0.999
+            * 由於 $m_0$ 初始化為 0，會導致 $m_t$ 偏向於 0，尤其在訓練初期階段。所以，此處需要對梯度均值 $m_t$ 進行偏差糾正，降低偏差對訓練初期的影響。與 $m_0$ 類似，因為 $v_0$ 初始化為 0 導致訓練初始階段 $v_t$ 偏向 0，對其進行糾正。
+                $$ \hat{m_t} = \frac{m_t}{1 - {{\beta^t}_1}}$$
+                $$ \hat{v_t} = \frac{v_t}{1 - {{\beta^t}_2}}$$
+            * 更新參數，初始的學習率 lr 乘以梯度均值與梯度方差的平方根之比。其中默認學習率 lr =0.001, eplison (ε=10^-8)，避免除數變為 0。
+            * 對更新的步長計算，能夠從梯度均值及梯度平方兩個角度進行自適應地調節，而不是直接由當前梯度決定
+        * Adam 調用
+        `keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False)`
+            * lr：float >= 0. 學習率。
+            * beta_1：float, 0 < beta < 1. 通常接近於 1。
+            * beta_2：float, 0 < beta < 1. 通常接近於 1。
+            * epsilon：float >= 0. 模糊因數. 若為None, 默認為 K.epsilon()。
+            * amsgrad：boolean. 是否應用此演算法的 AMSGrad 變種，來自論文「On the Convergence of Adam and Beyond」
+            * decay：float >= 0. 每次參數更新後學習率衰減值。
+            ```py
+            from keras import optimizers 
+
+            model = Sequential() 
+            model.add(Dense(64, kernel_initializer='uniform', input_shape=(10,)))
+            model.add(Activation('softmax’)) 
+
+            #實例化一個優化器對象，然後將它傳入 model.compile() , 可以修改參數
+            opt = optimizers.Adam(lr=0.001, epsilon=None, decay=0.0) 
+            model.compile(loss='mean_squared_error', optimizer=opt) 
+            ```
+    * 如何選擇優化器
+        * 隨機梯度下降（SGD）：SGD 指的是 mini batch gradient descent 優點：針對大數據集，訓練速度很快。從訓練集樣本中隨機選取一個 batch 計算一次梯度，更新一次模型參數。
+            * 缺點：對所有參數使用相同的學習率。對於稀疏數據或特徵，希望盡快更新一些不經常出現的特徵，慢一些更新常出現的特徵。所以選擇合適的學習率比較困難。
+        * 容易收斂到局部最優 Adam：利用梯度的一階矩估計和二階矩估計動態調節每個參數的學習率。
+            * 優點：
+                1. 經過偏置校正後，每一次迭代都有確定的範圍，使得參數比較平穩。善於處理稀疏梯度和非平穩目標。
+                2. 對內存需求小
+                3. 對不同內存計算不同的學習
+        * RMSProp：自適應調節學習率。對學習率進行了約束，適合處理非平穩目標和 RNN。
+        * 如果輸入數據集比較稀疏，SGD、NAG 和動量項等方法可能效果不好。因此對於稀疏數據集，應該使⽤用某種自適應學習率的方法，且另一好處為不需要⼈人為調整學習率，使用默認參參數就可能獲得最優值。
+            * Adagrad, RMSprop, Adam。
+        * 如果想使訓練深層網絡模型快速收斂或所構建的神經網絡較為複雜，則應該使用 Adam 或其他自適應學習速率的方法，因為這些方法的實際效果更優。  
+            * Adam 就是在 RMSprop 的基礎上加了 bias-correction 和 momentum，
+            * 隨著梯度變的稀疏，Adam 比 RMSprop 效果會好。
+    * 延伸閱讀 :
+        * [An overview of gradient descent optimization algorithms](https://arxiv.org/pdf/1609.04747.pdf)
+        * [Optimizers](https://keras.io/api/optimizers/)
+        * [优化器如何选择](https://blog.csdn.net/qq_35860352/article/details/80772142)
+        * [Second Order Optimization Algorithms](https://web.stanford.edu/class/msande311/lecture13.pdf)
+* **Day_77 : 訓練神經網路的細節與技巧**
+    * 什麼是 Overfitting
+        * 過度擬合 (overfitting) 代表
+            * 訓練集的損失下降的遠比驗證集的損失還來的快
+            * 驗證集的損失隨訓練時間增長，反而上升
+        * 如何檢視我的模型有沒有 overfitting
+            * 在 Keras 中，加入驗證集
+            ```py
+            # 訓練模型並檢視驗證集的結果
+            model.fit(x_train, y_train, 
+                    epochs=100, 
+                    batch_size=256, 
+                    validation_data=(x_test, y_test), 
+                    shuffle=True)
+            # 將訓練集切分一部分當作驗證集
+            model.fit(x_train, y_train, 
+                    epochs=100, 
+                    batch_size=256, 
+                    validation_split=0.2, 
+                    shuffle=True)
+            ```
+            * 注意：使用 validation_split 與 shuffle 時，Keras 是先自 x_train/y_train 取最後 (1-x)% 做為驗證集使用，再行 shuffle。
+            * 在訓練完成後，將 training loss 與 validation loss 取出並繪圖
+            ```py
+            # 以視覺畫方式檢視訓練過程
+            import matplotlib.pyplot as plt
+            train_loss = model.history.history["loss"]
+            valid_loss = model.history.history["val_loss"]
+
+            train_acc = model.history.history["accuracy"]
+            valid_acc = model.history.history["val_accuracy"]
+
+            plt.plot(range(len(train_loss)), train_loss, label="train loss")
+            plt.plot(range(len(valid_loss)), valid_loss, label="valid loss")
+            plt.legend()
+            plt.title("Loss")
+            plt.show()
+
+            plt.plot(range(len(train_acc)), train_acc, label="train accuracy")
+            plt.plot(range(len(valid_acc)), valid_acc, label="valid accuracy")
+            plt.legend()
+            plt.title("Accuracy")
+            plt.show()
+            ```
+    * 延伸閱讀 :
+        * [The Problem of Overfitting](https://medium.com/@ken90242/machine-learning%E5%AD%B8%E7%BF%92%E6%97%A5%E8%A8%98-coursera%E7%AF%87-week-3-4-the-c05b8ba3b36f)
+        * [Overfitting in Machine Learning](https://elitedatascience.com/overfitting-in-machine-learning)
+        * [Overfitting vs. Underfitting](https://towardsdatascience.com/overfitting-vs-underfitting-a-complete-example-d05dd7e19765)
+* **Day_78 : 訓練神經網路前的注意事項**
+    * 訓練模型前的檢查
+        * 為何要做事前檢查
+            * 訓練模型的時間跟成本都很大 (如 GPU quota & 你/妳的人生)
+        * 要做哪些檢查：
+            1. 使用的裝置：是使用 CPU or GPU / 想要使用的 GPU 是否已經被別人佔用?
+                * nvidia-smi 可以看到目前可以取得的GPU 裝置使用狀態   
+            2. Input preprocessing：資料 (Xs) 是否有進行過適當的標準化?   
+            3. Output preprocessing：目標 (Ys) 是否經過適當的處理? (如 onehot-encoded)
+                * 透過 Function 進行處理，而非在 Cell 中單獨進行避免遺漏、錯置
+            4. Model Graph：模型的架構是否如預期所想?
+                * model.summary() 可以看到模型堆疊的架構
+            5. 超參數設定(Hyper-parameters)：訓練模型的相關參數是否設定得當?
+                * 將模型/程式所使用到的相關參數集中管理，避免散落在各處
+    * 延伸閱讀 :
+        * [Troubleshooting Deep Neural Networks](http://josh-tobin.com/assets/pdf/troubleshooting-deep-neural-networks-01-19.pdf)
+            * 檢查程式碼
+            * 養成好的程式撰寫習慣([PEP8](https://www.python.org/dev/peps/pep-0008/))
+            * 確認參數設定欲實作的模型是否合適當前的資料
+            * 確認資料結構資料是否足夠
+            * 是否乾淨
+            * 是否有適當的前處理
+            * 以簡單的⽅方式實現想法建立評估機制開始循環測試 (evaluate - tuning - debugging)
+* **Day_79 : 訓練神經網路的細節與技巧 - Learning Rate Effect**
+    * 如果 Learning rate (LR, alpha) 太大，將會導致每步更新時，無法在陡峭的損失山谷中，順利的往下滑動；但若太小，則要滑到谷底的時間過於冗長，且若遇到平原區則無法找到正確的方向。
+    * Options in SGD optimizer
+        * Momentum：動量 – 在更新方向以外，加上一個固定向量，使得真實移動方向會介於算出來的 gradient step 與 momentum 間。
+            * Actual step = momentum step + gradient step
+        * Nesterov Momentum：拔草測風向
+            * 將 momentum 納入 gradient 的計算
+            * Gradient step computation is based on x + momentum
+    * 重要知識點複習
+        * 學習率對訓練造成的影響
+            * 學習率過大：每次模型參數改變過大，無法有效收斂到更低的損失平面
+            * 學習率過小：每次參數的改變量小，導致
+                * 損失改變的幅度小
+                * 平原區域無法找到正確的方向在 
+        * SGD 中的動量方法•
+            * 在損失方向上，加上一定比率的動量協助擺脫平原或是小山谷
+    * 延伸閱讀 :
+        * [Estimating an Optimal Learning Rate For a Deep Neural Network](https://towardsdatascience.com/estimating-optimal-learning-rate-for-a-deep-neural-network-ce32f2556ce0)
+        * [cs231n : learning and evaluation](https://cs231n.github.io/neural-networks-3/)
+        * [深度学习超参数简单理解](https://zhuanlan.zhihu.com/p/23906526)
+* **Day_80 : 優化器與學習率的組合與比較** 
+    * </>
+        ```py
+        import os
+        import keras
+        import itertools
+
+        # 從 Keras 的內建功能中，取得 train 與 test 資料集
+        train, test = keras.datasets.cifar10.load_data()
+
+        ## 資料前處理
+        def preproc_x(x, flatten=True):
+            x = x / 255.
+            if flatten:
+                x = x.reshape((len(x), -1))
+            return x
+
+        def preproc_y(y, num_classes=10):
+            if y.shape[-1] == 1:
+                y = keras.utils.to_categorical(y, num_classes)
+            return y 
+        
+        x_train, y_train = train
+        x_test, y_test = test
+
+        # 資料前處理 - X 標準化
+        x_train = preproc_x(x_train)
+        x_test = preproc_x(x_test)
+
+        # 資料前處理 -Y 轉成 onehot
+        y_train = preproc_y(y_train)
+        y_test = preproc_y(y_test)
+
+        """
+        建立神經網路
+        """
+        def build_mlp(input_shape, output_units=10, num_neurons=[512, 256, 128]):
+            input_layer = keras.layers.Input(input_shape)
+            
+            for i, n_units in enumerate(num_neurons):
+                if i == 0:
+                    x = keras.layers.Dense(units=n_units, activation="relu", name="hidden_layer"+str(i+1))(input_layer)
+                else:
+                    x = keras.layers.Dense(units=n_units, activation="relu", name="hidden_layer"+str(i+1))(x)
+            
+            out = keras.layers.Dense(units=output_units, activation="softmax", name="output")(x)
+            
+            model = keras.models.Model(inputs=[input_layer], outputs=[out])
+            return model
+        
+        ## 超參數設定
+        LEARNING_RATE = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5]
+        EPOCHS = 50
+        BATCH_SIZE = 256
+        OPTIMIZER = [keras.optimizers.SGD, keras.optimizers.RMSprop, keras.optimizers.Adagrad, keras.optimizers.Adam]
+
+        results = {}
+        for lr, opti in itertools.product(LEARNING_RATE, OPTIMIZER):
+            keras.backend.clear_session() # 把舊的 Graph 清掉
+            print("Experiment with LR = %.6f, Optimizer = %s" % (lr, str(opti)))
+            model = build_mlp(input_shape=x_train.shape[1:])
+            model.summary()
+            
+            optimizer = opti(lr=lr)
+            model.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer=optimizer)
+
+            model.fit(x_train, y_train, 
+                    epochs=EPOCHS, 
+                    batch_size=BATCH_SIZE, 
+                    validation_data=(x_test, y_test), 
+                    shuffle=True)
+            
+            # Collect results
+            train_loss = model.history.history["loss"]
+            valid_loss = model.history.history["val_loss"]
+            train_acc = model.history.history["accuracy"]
+            valid_acc = model.history.history["val_accuracy"]
+            
+            exp_name_tag = "exp-lr-%s-optimizer-%s" % (str(lr), str(opti))
+            results[exp_name_tag] = {'train-loss': train_loss,
+                                    'valid-loss': valid_loss,
+                                    'train-acc': train_acc,
+                                    'valid-acc': valid_acc}
+        """
+        Plot results
+        """
+        import matplotlib.pyplot as plt
+        %matplotlib inline
+
+        NUM_COLORS = len(results.keys())
+        cm = plt.get_cmap('gist_rainbow')
+        color_bar = [cm(1.*i/NUM_COLORS) for i in range(NUM_COLORS)]
+
+        plt.figure(figsize=(8,6))
+        for i, cond in enumerate(results.keys()):
+            plt.plot(range(len(results[cond]['train-loss'])),results[cond]['train-loss'], '-', label=cond, color=color_bar[i])
+            plt.plot(range(len(results[cond]['valid-loss'])),results[cond]['valid-loss'], '--', label=cond, color=color_bar[i])
+        plt.title("Loss")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.show()
+
+        plt.figure(figsize=(8,6))
+        for i, cond in enumerate(results.keys()):
+            plt.plot(range(len(results[cond]['train-acc'])),results[cond]['train-acc'], '-', label=cond, color=color_bar[i])
+            plt.plot(range(len(results[cond]['valid-acc'])),results[cond]['valid-acc'], '--', label=cond, color=color_bar[i])
+        plt.title("Accuracy")
+        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.show()
+        ```
+    * 延伸閱讀 :
+        * [优化方法总结](https://blog.csdn.net/u010089444/article/details/76725843)
+            * SGD (mini-batch)
+                * 在單步更新與全局更新的折衷辦法，通常搭配 momentum 穩定收斂方向與結果。
+                * 收斂速度較慢。
+            * RMSprop
+                * 學習率的調整是根據過去梯度的狀況調整，收斂速度快又不易會出現 learning rate 快速下降的狀況。
+            * Adam
+                * 同樣是可以根據過去的梯度自行調整 learning rate，但校正方式考量一、二階矩陣，使其更加平穩。
+            * 在實作過程中，建議先使用 Adam 驗證，若要做最終的優化，則再改用 SGD 找到最佳參數。
+        * [An overview of gradient descent optimization algorithms](https://ruder.io/optimizing-gradient-descent/)
+* **Day_81 : 訓練神經網路的細節與技巧 - Regularization**
+    * 正規化 (Regularization)    
+        * Cost function = Loss + Regularization
+        * 透過 regularization，可以使的模型的weights 變得比較小
+        * wi 較小 
+        $\to$ Δxi 對 $\hat{y}$ 造成的影響(Δ$\hat{y}$)較小
+        $\to$ 對 input 變化比較不敏感 ➔ better generalization
+    * Regularizer 的效果：讓模型參數的數值較小
+        * 使得 Inputs 的改變不會讓 Outputs 有大幅的改變。
+    * 延伸閱讀 :
+        * [Regularization in Machine Learning](https://towardsdatascience.com/regularization-in-machine-learning-76441ddcf99a)
+        ```py
+        from keras.regularizers import l1_l2
+
+        """
+        建立神經網路
+        """
+        def build_mlp(input_shape, output_units=10, num_neurons=[512, 256, 128], l1_ratio=0.0, l2_ratio=0.0):
+            input_layer = keras.layers.Input(input_shape)
+            
+            for i, n_units in enumerate(num_neurons):
+                if i == 0:
+                    x = keras.layers.Dense(units=n_units, 
+                                        activation="relu", 
+                                        name="hidden_layer"+str(i+1), 
+                                        kernel_regularizer=l1_l2(l1=l1_ratio, l2=l2_ratio))(input_layer)
+                else:
+                    x = keras.layers.Dense(units=n_units, 
+                                        activation="relu", 
+                                        name="hidden_layer"+str(i+1),
+                                        kernel_regularizer=l1_l2(l1=l1_ratio, l2=l2_ratio))(x)
+            
+            out = keras.layers.Dense(units=output_units, activation="softmax", name="output")(x)
+            
+            model = keras.models.Model(inputs=[input_layer], outputs=[out])
+            return model
+
+        ## 超參數設定
+        LEARNING_RATE = 1e-3
+        EPOCHS = 10
+        BATCH_SIZE = 256
+        MOMENTUM = 0.95
+        L1_EXP = [1e-2, 1e-4, 1e-8, 1e-12, 0.0]
+        L2_EXP = [1e-2, 1e-4, 1e-8, 1e-12, 0.0]
+
+        results = {}
+        for l1r, l2r in itertools.product(L1_EXP, L2_EXP):
+            keras.backend.clear_session() # 把舊的 Graph 清掉
+            print("Experiment with L1 = %.6f, L2 = %.6f" % (l1r, l2r))
+            model = build_mlp(input_shape=x_train.shape[1:], l1_ratio=l1r, l2_ratio=l2r)
+            model.summary()
+            optimizer = keras.optimizers.SGD(lr=LEARNING_RATE, nesterov=True, momentum=MOMENTUM)
+            model.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer=optimizer)
+
+            model.fit(x_train, y_train, 
+                    epochs=EPOCHS, 
+                    batch_size=BATCH_SIZE, 
+                    validation_data=(x_test, y_test), 
+                    shuffle=True)
+            
+            # Collect results
+            train_loss = model.history.history["loss"]
+            valid_loss = model.history.history["val_loss"]
+            train_acc = model.history.history["accuracy"]
+            valid_acc = model.history.history["val_accuracy"]
+            
+            exp_name_tag = "exp-l1-%s-l2-%s" % (str(l1r), str(l2r))
+            results[exp_name_tag] = {'train-loss': train_loss,
+                                    'valid-loss': valid_loss,
+                                    'train-acc': train_acc,
+                                    'valid-acc': valid_acc}
+        ```
+* **Day_82 : 訓練神經網路的細節與技巧 - Dropout**
+    * 隨機移除 (Dropout)
+        * 在訓練過程中，在原本全連結的前後兩層 layers ，隨機拿掉一些連結(weights 設為 0)
+        * 解釋1：增加訓練的難度 – 當你知道你的同伴中有豬隊友時，你會變得要更努力學習
+        * 解釋2：被視為一種 model 自身的 ensemble 方法，因為 model 可以有 2^n 種 weights combination
+        * 優點 : 強迫模型的每個參數有更強的泛化能力，也讓網路能在更多參數組合的狀態下習得表徵。
+    * 延伸閱讀 :
+        * [理解dropout](https://blog.csdn.net/stdcoutzyx/article/details/49022443)
+        * [Dropout in (Deep) Machine learning](https://medium.com/@amarbudhiraja/https-medium-com-amarbudhiraja-learning-less-to-learn-better-dropout-in-deep-machine-learning-74334da4bfc5)
+        ```py
+        from keras.layers import Dropout
+
+        def build_mlp(input_shape, output_units=10, num_neurons=[512, 256, 128], drp_ratio=0.2):
+            input_layer = keras.layers.Input(input_shape)
+            
+            for i, n_units in enumerate(num_neurons):
+                if i == 0:
+                    x = keras.layers.Dense(units=n_units, 
+                                        activation="relu", 
+                                        name="hidden_layer"+str(i+1))(input_layer)
+                    x = Dropout(drp_ratio)(x)
+                else:
+                    x = keras.layers.Dense(units=n_units, 
+                                        activation="relu", 
+                                        name="hidden_layer"+str(i+1))(x)
+                    x = Dropout(drp_ratio)(x)
+            
+            out = keras.layers.Dense(units=output_units, activation="softmax", name="output")(x)
+            
+            model = keras.models.Model(inputs=[input_layer], outputs=[out])
+            return model
+        ```
+* **Day_83 : 訓練神經網路的細節與技巧 - Batch normalization**
+    * 批次標準化 (Batch normalization)
+        * 對於 Input 的數值，前面提到建議要 re-scale
+            * Weights 修正的路徑比較會在同心圓山谷中往下滑
+            * 只加在輸入層 re-scale 不夠，你可以每一層都 re-scale !!
+        * 每個 input feature 獨立做 normalization
+        * 利用 batch statistics 做 normalization 而非整份資料
+        * 同一筆資料在不同的 batch 中會有些微不同
+        * BN：將輸入經過 t 轉換後輸出
+            * 訓練時：使用 Batch 的平均值
+            * 推論時：使用 Moving Average
+        * 可以解決 Gradient vanishing 的問題
+        * 可以用比較大的 learning rate 加速訓練
+        * 取代 dropout & regularizes
+        * 目前大多數的 Deep neural network 都會加
+
+        **Input** : Values of x over a mini-batch : $B = \{x_{1...m}\}$;
+                    Parameters to be learn : $\gamma, \beta$
+        **Output** : $\{y_i = BN_{\gamma,\beta}(x_i) \}$
+        $$ \mu_B \leftarrow \frac{1}{m} \sum_{i=1}^{m}x_i$$ // mini-batch mean
+        $$ \sigma^2_B \leftarrow \frac{1}{m}\sum_{i=1}^{m}(x_i - \mu_B)^2$$   // mini-batch variance
+        $$\hat{x_i} \leftarrow \frac{x_i - \mu_B}{\sqrt{\sigma^2_B + \epsilon}} $$    // normalize
+        $$y_i \leftarrow \gamma\hat{x_i} + \beta \equiv BN_{\gamma, \beta}(x_i)$$ // scale and shift
+    * 延伸閱讀 :
+        * [為何要批次標準化](https://morvanzhou.github.io/tutorials/machine-learning/ML-intro/3-08-batch-normalization/)
+        * [Batch Normalization 原理与实战](https://zhuanlan.zhihu.com/p/34879333)
+        ```py
+        from keras.layers import BatchNormalization, Activation
+        
+        def build_mlp(input_shape, output_units=10, num_neurons=[512, 256, 128], pre_activate=False):
+            input_layer = keras.layers.Input(input_shape)
+            
+            for i, n_units in enumerate(num_neurons):
+                if i == 0:
+                    x = keras.layers.Dense(units=n_units, 
+                                        name="hidden_layer"+str(i+1))(input_layer)
+                    if pre_activate:
+                        x = BatchNormalization()(x)
+                        x = Activation("relu")(x)
+                    else:
+                        x = Activation("relu")(x)
+                        x = BatchNormalization()(x)
+                else:
+                    x = keras.layers.Dense(units=n_units, 
+                                        name="hidden_layer"+str(i+1))(x)
+                    if pre_activate:
+                        x = BatchNormalization()(x)
+                        x = Activation("relu")(x)
+                    else:
+                        x = Activation("relu")(x)
+                        x = BatchNormalization()(x)
+                        
+            
+            out = keras.layers.Dense(units=output_units, activation="softmax", name="output")(x)
+            
+            model = keras.models.Model(inputs=[input_layer], outputs=[out])
+            return model
+        ```
+* **Day_84 : 正規化/機移除/批次標準化的 組合與比較**
+    * </>
+        ```py
+        import os
+        import keras
+        import itertools
+
+        train, test = keras.datasets.cifar10.load_data()
+
+        ## 資料前處理
+        def preproc_x(x, flatten=True):
+            x = x / 255.
+            if flatten:
+                x = x.reshape((len(x), -1))
+            return x
+
+        def preproc_y(y, num_classes=10):
+            if y.shape[-1] == 1:
+                y = keras.utils.to_categorical(y, num_classes)
+            return y 
+
+        x_train, y_train = train
+        x_test, y_test = test
+
+        # Preproc the inputs
+        x_train = preproc_x(x_train)
+        x_test = preproc_x(x_test)
+
+        # Preprc the outputs
+        y_train = preproc_y(y_train)
+        y_test = preproc_y(y_test)
+
+        from keras.layers import BatchNormalization, Activation, Dropout, regularizers
+
+        def build_mlp(input_shape, 
+                    output_units=10, 
+                    num_neurons=[512, 256, 128],
+                    use_bn=True,
+                    drp_ratio=0.,
+                    l2_ratio=0.):
+            input_layer = keras.layers.Input(input_shape)
+            
+            for i, n_units in enumerate(num_neurons):
+                if i == 0:
+                    x = keras.layers.Dense(units=n_units, 
+                                        kernel_regularizer=regularizers.l2(l2_ratio),
+                                        name="hidden_layer"+str(i+1))(input_layer)
+
+                    if use_bn:
+                        x = BatchNormalization()(x)
+                    x = Activation("relu")(x)
+                    x = Dropout(drp_ratio)(x)
+
+                else:
+                    x = keras.layers.Dense(units=n_units, 
+                                        kernel_regularizer=regularizers.l2(l2_ratio),
+                                        name="hidden_layer"+str(i+1))(x)
+                    if use_bn:
+                        x = BatchNormalization()(x)
+                    x = Activation("relu")(x)
+                    x = Dropout(drp_ratio)(x)
+                    
+            out = keras.layers.Dense(units=output_units, activation="softmax", name="output")(x)
+            model = keras.models.Model(inputs=[input_layer], outputs=[out])
+            return model
+        
+        ## 超參數設定
+        """
+        Set your hyper-parameters
+        """
+        LEARNING_RATE = 1e-3
+        EPOCHS = 3
+        BATCH_SIZE = 128
+
+        """
+        建立實驗組合
+        """
+        USE_BN = [True, False]
+        DRP_RATIO = [0., 0.4, 0.8]
+        L2_RATIO = [0., 1e-6, 1e-8]
+
+        import keras.backend as K
+
+        """
+        以迴圈方式遍歷組合來訓練模型
+        """
+        results = {}
+        for i, (use_bn, drp_ratio, l2_ratio) in enumerate(itertools.product(USE_BN, DRP_RATIO, L2_RATIO)):
+            K.clear_session()
+            print("Numbers of exp: %i, with bn: %s, drp_ratio: %.2f, l2_ratio: %.2f" % (i, use_bn, drp_ratio, l2_ratio))
+            model = build_mlp(input_shape=x_train.shape[1:], use_bn=use_bn, drp_ratio=drp_ratio, l2_ratio=l2_ratio)
+            model.summary()
+            optimizer = keras.optimizers.Adam(lr=LEARNING_RATE)
+            model.compile(loss="categorical_crossentropy", metrics=["accuracy"], optimizer=optimizer)
+
+            model.fit(x_train, y_train, 
+                    epochs=EPOCHS, 
+                    batch_size=BATCH_SIZE, 
+                    validation_data=(x_test, y_test), 
+                    verbose=1,
+                    shuffle=True)
+            
+            # Collect results
+            exp_name_tag = ("exp-%s" % (i))
+            results[exp_name_tag] = {'train-loss': model.history.history["loss"],
+                                    'valid-loss': model.history.history["val_loss"],
+                                    'train-acc': model.history.history["accuracy"],
+                                    'valid-acc': model.history.history["val_accuracy"]}
+        ```
+* **Day_85 : 訓練神經網路的細節與技巧 - 使用 callbacks 函數做 earlystop**
+    * 提前終止 (EarlyStopping)
+        * 假如能夠早點停下來就好
+        * 在 Overfitting 前停下，避免 model weights 被搞爛
+        * 注意：Earlystop 不會使模型得到更好的結果，僅是避免更糟
+    * Callbacks function：在訓練過程中，我們可以透過一些函式來監控/介入訓練
+    * 延伸閱讀 :
+        * [keras的EarlyStopping callbacks的使用与技巧](https://blog.csdn.net/silent56_th/article/details/72845912)
+        ```py
+        """
+        # 載入 Callbacks, 並將 monitor 設定為監控 validation loss
+        """
+        from keras.callbacks import EarlyStopping
+
+        earlystop = EarlyStopping(monitor="val_loss", 
+                                patience=5, 
+                                verbose=1
+                                )
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS, 
+                batch_size=BATCH_SIZE, 
+                validation_data=(x_test, y_test), 
+                shuffle=True,
+                callbacks=[earlystop]
+                )
+        ```
+* **Day_86 : 訓練神經網路的細節與技巧 - 使用 callbacks 函數儲存 model**
+    * Model CheckPoint
+        * 為何要使用 Model Check Point?
+            * ModelCheckPoint：自動將目前最佳的模型權重存下
+        * 假如電腦突然斷線、當機該怎麼辦? 難道我只能重新開始?
+            * 假如不幸斷線 : 可以重新自最佳的權重開始
+            * 假如要做 Inference : 可以保證使用的是對 monitor metric 最佳的權重
+    * 延伸閱讀 :
+        * [莫煩 Python - 儲存與載回模型](https://morvanzhou.github.io/tutorials/machine-learning/keras/3-1-save/)
+        ```py
+        """
+        # 載入 Callbacks, 並將監控目標設為 validation loss, 且只存最佳參數時的模型
+        """
+        from keras.callbacks import ModelCheckpoint
+
+        model_ckpt = ModelCheckpoint(filepath="./tmp.h5", 
+                                    monitor="val_loss", 
+                                    save_best_only=True)
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS, 
+                batch_size=BATCH_SIZE, 
+                validation_data=(x_test, y_test), 
+                shuffle=True,
+                callbacks=[model_ckpt]
+                )
+        
+        model.save("final_model.h5")
+        model.save_weights("model_weights.h5")
+
+        pred_final = model.predict(x_test)
+        # Load back
+        model = keras.models.load_model("./tmp.h5")
+        pred_loadback = model.predict(x_test)
+
+        from sklearn.metrics import accuracy_score
+
+        new_model = build_mlp(input_shape=x_train.shape[1:])
+        new_model_pred = new_model.predict(x_test)
+        new_model_acc = accuracy_score(y_true=y_test.argmax(axis=-1), y_pred=new_model_pred.argmax(axis=-1))
+        print("Accuracy of best weights: %.3f" % new_model_acc)
+
+        new_model.load_weights("./model_weights.h5")
+        new_model_pred = new_model.predict(x_test)
+        new_model_loadback_acc = accuracy_score(y_true=y_test.argmax(axis=-1), y_pred=new_model_pred.argmax(axis=-1))
+        print("Accuracy of best weights: %.3f" % new_model_loadback_acc)
+        ```
+* **Day_87 : 訓練神經網路的細節與技巧 - 使用 callbacks 函數做 reduce learning rate**
+    * Reduce Learning Rate: 隨訓練更新次數，將 Learning rate 逐步減小
+        * 因為通常損失函數越接近谷底的位置，開口越小 – 需要較⼩的 Learning rate 才可以再次下降
+    * 可行的調降方式
+        * 每更更新 n 次後，將 Learning rate 做一次調降 – schedule decay
+        * 當經過幾個 epoch 後，發現 performance 沒有進步 – Reduce on plateau
+    * Reduce learning rate on plateau：模型沒辦法進步的可能是因為學習率太大導致每次改變量太大而無法落入較低的損失平面，透過適度的降低，就有機會得到更好的結果
+    * 因為我們可以透過這樣的監控機制，初始的 Learning rate 可以調得比較高，讓訓練過程與 callback 來做適當的 learning rate 調降。
+    * 延伸閱讀 :
+        * [Callbacks API](https://keras.io/api/callbacks/)
+        * A. LearningRateScheduler
+            1. 在每個 epoch 開始前，得到目前 lr
+            2. 根據 schedule function 重新計算 lr，比如 epoch = n 時， new_lr = lr * 0.1
+            3. 將 optimizer 的 lr 設定為 new_lr
+            4. 根據 shhedule 函式，假設要自訂的話，它應該吃兩個參數：epoch & lr
+        * B. ReduceLR
+            1. 在每個 epoch 結束時，得到目前監控目標的數值
+            2. 如果目標比目前儲存的還要差的話，wait+1；若否則 wait 設為 0，目前監控數值更新的數值
+            3. 如果 wait >= patient，new_lr = lr * factor，將 optimizer 的 lr 設定為 new_lr，並且 wait 設回 0
+        ```py
+        """
+        # 載入 Callbacks, 並設定監控目標為 validation loss
+        """
+        from keras.callbacks import ReduceLROnPlateau
+
+        reduce_lr = ReduceLROnPlateau(factor=0.5, 
+                                    min_lr=1e-12, 
+                                    monitor='val_loss', 
+                                    patience=5, 
+                                    verbose=1)
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS, 
+                batch_size=BATCH_SIZE, 
+                validation_data=(x_test, y_test), 
+                shuffle=True,
+                callbacks=[reduce_lr]
+                )
+        ```
+* **Day_88 : 訓練神經網路的細節與技巧 - 撰寫自己的 callbacks 函數**
+    * Callbacks
+        * Callback 在訓練時的呼叫時機
+            * on_train_begin：在訓練最開始時
+            * on_train_end：在訓練結束時
+            * on_batch_begin：在每個 batch 開始時
+            * on_batch_end：在每個 batch 結束時
+            * on_epoch_begin：在每個 epoch 開始時
+            * on_epoch_end：在每個 epoch 結束時
+        * 在 Keras 中，僅需要實作你想要啟動的部分即可
+        * 舉例來說，假如你想要每個 batch 都記錄 loss 的話
+        ```py
+        from keras.callbacks import Callback
+
+        class My_callback(Callback):
+            def on_train_begin(self, logs={}):
+                return
+            def on_train_end(self, logs={}):
+                return
+            def on_epoch_begin(self, logs={}):
+                return
+            def on_epoch_end(self, logs={}):
+                return
+            def on_batch_begin(self, batch, logs={}):
+                return
+            def on_batch_end(self, batch, logs={}):
+                self.losses.append(logs.get("loss"))
+                return  
+        ```
+    * 延伸閱讀 :
+        * [Keras 中保留 f1-score 最高的模型 (per epoch)](https://zhuanlan.zhihu.com/p/51356820)
+        ```py
+        """
+        # 載入 Callbacks，撰寫一個 f1 score 的 callback function
+        """
+
+        from keras.callbacks import Callback
+        from sklearn.metrics import f1_score
+
+        class f1sc(Callback):
+            def on_train_begin(self, epoch, logs = {}):
+                logs = logs or {}
+                record_items = ["val_f1sc"]
+                for i in record_items:
+                    if i not in self.params['metrics']:
+                        self.params['metrics'].append(i)
+            
+            def on_epoch_end(self, epoch, logs = {}, thres=0.5):
+                logs = logs or {}
+                y_true = self.validation_data[1].argmax(axis = 1)
+                y_pred = self.model.predict(self.validation_data[0])
+                y_pred = (y_pred[:, 1] >= thres) * 1
+                
+                logs["val_f1sc"] = f1_score(y_true = y_true, y_pred = y_pred, average="weighted")
+                
+        log_f1sc = f1sc()
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS, 
+                batch_size=BATCH_SIZE, 
+                validation_data=(x_test, y_test), 
+                shuffle=True,
+                callbacks=[log_f1sc]
+                )
+
+        # 在訓練後，將 f1sc 紀錄調出
+        valid_f1sc = model.history.history['val_f1sc']
+
+        import matplotlib.pyplot as plt
+        %matplotlib inline
+
+        plt.plot(range(len(valid_f1sc)), valid_f1sc, label="valid f1-score")
+        plt.legend()
+        plt.title("F1-score")
+        plt.show()
+        ```
+        ```py
+         # 載入 Callbacks
+        from keras.callbacks import Callback
+
+        # Record_fp_tp
+        class Record_tp_tn(Callback):
+            def on_train_begin(self, epoch, logs = {}):
+                logs = logs or {}
+                record_items = ["val_tp", "val_tn"]
+                for i in record_items:
+                    if i not in self.params['metrics']:
+                        self.params['metrics'].append(i)
+            
+            def on_epoch_end(self, epoch, logs = {}, thres=0.5):
+                logs = logs or {}
+                y_true = self.validation_data[1].argmax(axis = 1)
+                y_pred = self.model.predict(self.validation_data[0])
+                y_pred = (y_pred[:, 1] >= thres) * 1
+                
+                val_tp = sum(y_true*y_pred)
+                val_tn = sum((y_true==0) & (y_pred==0))
+                
+                logs["val_tp"] = val_tp
+                logs["val_tn"] = val_tn
+                
+        rec_tptn = Record_tp_tn()
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS, 
+                batch_size=BATCH_SIZE, 
+                validation_data=(x_test, y_test), 
+                shuffle=True,
+                callbacks=[rec_tptn]
+                )
+        
+        valid_tp = model.history.history['val_tp']
+        valid_tn = model.history.history['val_tn']
+        ```
+* **Day_89 : 訓練神經網路的細節與技巧 - 撰寫自己的 Loss function**
+    * 在 Keras 中，除了使用官方提供的 Loss function 外，亦可以自行定義/修改 loss function 所定義的函數
+        * 最內層函式的參數輸入須根據 output tensor 而定，舉例來說，在分類模型中需要有 y_true, y_pred
+        * 需要使用 tensor operations – 即在 tensor 上運算而非在 numpy array 上進行運算
+        * 回傳的結果是一個 tensor
+        ```py
+        import keras.backend as K
+
+        def dice_coef(y_true, y_pred, smooth):
+            # 皆須使用 tensor operations
+            y_pred = y_pred >= 0.5
+            y_true_f = K.flatten(y_true)
+            y_pred_f = K.flatten(y_pred)
+            intersection = K.sum(y_true_f * y_pred_f)
+
+            return (2. * intersection + smooth) / (K.sum(y_true_f) + K.sum(y_pred_f) + smooth)
+        
+        def dice_loss(smooth, thresh):
+            # 最內層的函式 – 在分類問題中，只能有 y_true 與 y_pred，其他調控參數應至於外層函式
+            def dice(y_true, y_pred):
+                return dice_coef(y_true, y_pred):
+            # 輸出為 Tensor
+            return dice
+        ```
+    * 在 Keras 中，我們可以自行定義函式來進行損失的運算。一個損失函數必須：
+        * 有 y_true 與 y_pred 兩個輸入
+        * 必須可以微分
+        * 必須使用 tensor operation，也就是在 tensor 的狀狀態下，進行運算。如 K.sum ...
+    * 延伸閱讀 :
+        * [Keras自定义Loss函数](https://blog.csdn.net/A_a_ron/article/details/79050204)
+        * [focal loss](https://blog.csdn.net/u014380165/article/details/77019084)
+        ```py
+        import tensorflow as tf
+        import keras.backend as K
+
+        """
+        # 撰寫自定義的 loss function: focal loss (https://blog.csdn.net/u014380165/article/details/77019084)
+        """
+        def focal_loss(gamma=2., alpha=4.):
+            gamma = float(gamma)
+            alpha = float(alpha)
+            def focal_loss_fixed(y_true, y_pred):
+                """Focal loss for multi-classification
+                FL(p_t)=-alpha(1-p_t)^{gamma}ln(p_t)
+                """
+                epsilon = 1e-8
+                y_true = tf.convert_to_tensor(y_true, tf.float32)
+                y_pred = tf.convert_to_tensor(y_pred, tf.float32)
+
+                model_out = tf.add(y_pred, epsilon)
+                ce = tf.multiply(y_true, -tf.log(model_out))
+                weight = tf.multiply(y_true, tf.pow(tf.subtract(1., model_out), gamma))
+                fl = tf.multiply(alpha, tf.multiply(weight, ce))
+                reduced_fl = tf.reduce_max(fl, axis=1)
+                return tf.reduce_mean(reduced_fl)
+            return focal_loss_fixed
+
+        model = build_mlp(input_shape=x_train.shape[1:])
+        model.summary()
+        optimizer = keras.optimizers.SGD(lr=LEARNING_RATE, nesterov=True, momentum=MOMENTUM)
+        """
+        # 在 compile 時，使用自定義的 loss function
+        """
+        model.compile(loss=focal_loss(), metrics=["accuracy"], optimizer=optimizer)
+
+        model.fit(x_train, y_train, 
+                epochs=EPOCHS,
+                batch_size=BATCH_SIZE,
+                validation_data=(x_test, y_test), 
+                shuffle=True
+                )
+        ```
+        ```py
+        # 自行定義一個 loss function, 為 0.3 * focal loss + 0.7 cross-entropy
+        import tensorflow as tf
+        import keras.backend as K
+
+        def combined_loss(gamma=2., alpha=4., ce_weights=0.7, fcl_weights=0.3):
+            gamma = float(gamma)
+            alpha = float(alpha)
+            def CE_focal_loss(y_true, y_pred):
+                """Focal loss for multi-classification
+                FL(p_t)=-alpha(1-p_t)^{gamma}ln(p_t)
+                """
+                epsilon = 1e-8
+                y_true = tf.convert_to_tensor(y_true, tf.float32)
+                y_pred = tf.convert_to_tensor(y_pred, tf.float32)
+
+                model_out = tf.add(y_pred, epsilon)
+                ce = tf.multiply(y_true, -tf.log(model_out))
+                weight = tf.multiply(y_true, tf.pow(tf.subtract(1., model_out), gamma))
+                fl = tf.multiply(alpha, tf.multiply(weight, ce))
+                reduced_fl = tf.reduce_max(fl, axis=1)
+                
+                ce_loss = keras.losses.categorical_crossentropy(y_true, y_pred)
+                return (ce_weights*ce_loss) + (fcl_weights*tf.reduce_mean(reduced_fl) )
+            return CE_focal_loss
+
+        ce_weights_list = [0., 0.3, 0.5, 0.7, 1]
+
+        import itertools
+        results = {}
+
+        for i, ce_w in enumerate(ce_weights_list):
+            print("Numbers of exp: %i, ce_weight: %.2f" % (i, ce_w))
+
+            model = build_mlp(input_shape=x_train.shape[1:])
+            model.summary()
+            optimizer = keras.optimizers.SGD(lr=LEARNING_RATE, nesterov=True, momentum=MOMENTUM)
+            model.compile(loss=combined_loss(ce_weights=ce_w, fcl_weights=1.-ce_w), 
+                        metrics=["accuracy"], optimizer=optimizer)
+
+            model.fit(x_train, y_train, 
+                    epochs=EPOCHS, 
+                    batch_size=BATCH_SIZE, 
+                    validation_data=(x_test, y_test), 
+                    shuffle=True
+                    )
+        ```
+* **Day_90 : 傳統電腦視覺與影像辨識**
+    * 影像辨識的傳統方法是特徵描述及檢測，需要辦法把影像素量化為特徵（特徵工程），然後把特徵丟給我們之前學過的機器學習算法來做分類或回歸。
+    * 為了有更直觀的理解，這裡介紹一種最簡單提取特徵的方法
+        * 如何描述顏色？
+            * 顏色直方圖 : 顏色直方圖是將顏色信息轉化為特徵一種⽅方法，將顏色值 RGB 轉為直方圖值，來描述色彩和強度的分佈情況。舉例來說，一張彩色圖有 3 個channel， RGB，顏色值都介於 0-255 之間，最小可以去統計每個像素值出現在圖片的數量，也可以是一個區間如 (0 - 15)、(16 - 31)、...、(240 - 255)。
+            * 在要辨認顏色的場景就會非常有用，但可能就不適合用來做邊緣檢測的任務，因為從顏色的分佈沒有考量到空間上的信息。
+            * 不同的任務，我們就要想辦法針對性地設計特徵來進行後續影像辨識的任務。
+            ```py
+            import os
+            import keras
+            import cv2 # 載入 cv2 套件
+            import matplotlib.pyplot as plt
+
+            train, test = keras.datasets.cifar10.load_data()
+
+            image = train[0][0] # 讀取圖片
+            # 把彩色的圖片轉為灰度圖
+            gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+
+            ''' 調用 cv2.calcHist 函數，回傳值就是 histogram
+            images (list of array)：要分析的圖片
+            channels：產生的直方圖類型。例：[0]→灰度圖，[0, 1, 2]→RGB三色。
+            mask：optional，若有提供則僅計算 mask 部份的直方圖。
+            histSize：要切分的像素強度值範圍，預設為256。每個channel皆可指定一個範圍。例如，[32,32,32] 表示RGB三個channels皆切分為32區段。
+            ranges：像素的範圍，預設為[0,256]，表示<256。
+            '''
+            hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
+            plt.figure()
+            plt.title("Grayscale Histogram")
+            plt.xlabel("Bins")
+            plt.ylabel("# of Pixels")
+            plt.plot(hist)
+            plt.xlim([0, 256])
+            plt.show()
+
+            chans = cv2.split(image) # 把圖像的 3 個 channel 切分出來
+            colors = ("r", "g", "b")
+            plt.figure()
+            plt.title("'Flattened' Color Histogram")
+            plt.xlabel("Bins")
+            plt.ylabel("# of Pixels")
+
+            # 對於所有 channel
+            for (chan, color) in zip(chans, colors):
+                # 計算該 channel 的直方圖
+                hist = cv2.calcHist([chan], [0], None, [256], [0, 256])
+            
+                # 畫出該 channel 的直方圖
+                plt.plot(hist, color = color)
+                plt.xlim([0, 256])
+            plt.show()
+            ```
+    * 延伸閱讀 :
+        * [图像分类|深度学习PK传统机器学习](https://cloud.tencent.com/developer/article/1111702)
+        * [OpenCv - 直方圖](https://chtseng.wordpress.com/2016/12/05/opencv-histograms%E7%9B%B4%E6%96%B9%E5%9C%96/)
+        * [OpenCv - 教學文檔](https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_tutorials.html)
+        * [Introduction to Computer Vision](https://www.udacity.com/course/introduction-to-computer-vision--ud810)
+* **Day_91 : 傳統電腦視覺與影像辨識 </>**        
+    * 靠人工設計的特徵在簡單的任務上也許是堪用，但複雜的情況，比如說分類的類別多起來，就能明顯感覺到這些特徵的不足之處，體會這一點能更幫助理解接下來的卷積神經網路的意義。
+    * 延伸閱讀 :
+        * [索伯算子](https://zh.wikipedia.org/wiki/%E7%B4%A2%E8%B2%9D%E7%88%BE%E7%AE%97%E5%AD%90)
+        * [基于传统图像处理的目标检测与识别(HOG+SVM附代码)](https://www.cnblogs.com/zyly/p/9651261.html)
+        * [支持向量机（SVM）是什么](https://www.zhihu.com/question/21094489)
+        ```py
+        import os
+        import keras
+        import tensorflow as tf
+        import numpy as np
+        import cv2 # 載入 cv2 套件
+        import matplotlib.pyplot as plt
+
+        train, test = keras.datasets.cifar10.load_data()
+        x_train, y_train = train
+        x_test, y_test = test
+        y_train = y_train.astype(int)
+        y_test = y_test.astype(int)
+
+        # 產生直方圖特徵的訓練資料
+        x_train_histogram = []
+        x_test_histogram = []
+
+        # 對於所有訓練資料
+        for i in range(len(x_train)):
+            chans = cv2.split(x_train[i]) # 把圖像的 3 個 channel 切分出來
+            # 對於所有 channel
+            hist_feature = []
+            for chan in chans:
+                # 計算該 channel 的直方圖
+                hist = cv2.calcHist([chan], [0], None, [16], [0, 256]) # 切成 16 個 bin
+                hist_feature.extend(hist.flatten())
+            # 把計算的直方圖特徵收集起來
+            x_train_histogram.append(hist_feature)
+
+        # 對於所有測試資料也做一樣的處理
+        for i in range(len(x_test)):
+            chans = cv2.split(x_test[i]) # 把圖像的 3 個 channel 切分出來
+            # 對於所有 channel
+            hist_feature = []
+            for chan in chans:
+                # 計算該 channel 的直方圖
+                hist = cv2.calcHist([chan], [0], None, [16], [0, 256]) # 切成 16 個 bin
+                hist_feature.extend(hist.flatten())
+            x_test_histogram.append(hist_feature)
+
+        x_train_histogram = np.array(x_train_histogram)
+        x_test_histogram = np.array(x_test_histogram)
+
+        # 產生 HOG 特徵的訓練資料
+        bin_n = 16 # Number of bins
+
+        def hog(img):
+            img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+            gx = cv2.Sobel(img, cv2.CV_32F, 1, 0)
+            gy = cv2.Sobel(img, cv2.CV_32F, 0, 1)
+            mag, ang = cv2.cartToPolar(gx, gy)
+            bins = np.int32(bin_n*ang/(2*np.pi))    # quantizing binvalues in (0...16)
+            bin_cells = bins[:10,:10], bins[10:,:10], bins[:10,10:], bins[10:,10:]
+            mag_cells = mag[:10,:10], mag[10:,:10], mag[:10,10:], mag[10:,10:]
+            hists = [np.bincount(b.ravel(), m.ravel(), bin_n) for b, m in zip(bin_cells, mag_cells)]
+            hist = np.hstack(hists)     # hist is a 64 bit vector
+            return hist.astype(np.float32)
+
+        x_train_hog = np.array([hog(x) for x in x_train])
+        x_test_hog = np.array([hog(x) for x in x_test])
+
+        # 用 histogram 特徵訓練 SVM 模型
+        SVM_hist = cv2.ml.SVM_create()
+        SVM_hist.setKernel(cv2.ml.SVM_LINEAR)
+        SVM_hist.setGamma(5.383)
+        SVM_hist.setType(cv2.ml.SVM_C_SVC)
+        SVM_hist.setC(2.67)
+
+        #training
+        SVM_hist.train(x_train_histogram, cv2.ml.ROW_SAMPLE, y_train)
+
+        # prediction
+        _, y_hist_train = SVM_hist.predict(x_train_histogram)
+        _, y_hist_test = SVM_hist.predict(x_test_histogram)
+
+        # 用 HOG 特徵訓練 SVM 模型
+        SVM_hog = cv2.ml.SVM_create()
+        SVM_hog.setKernel(cv2.ml.SVM_LINEAR)
+        SVM_hog.setGamma(5.383)
+        SVM_hog.setType(cv2.ml.SVM_C_SVC)
+        SVM_hog.setC(2.67)
+
+        #training
+        SVM_hog.train(x_train_hog, cv2.ml.ROW_SAMPLE, y_train)
+
+        # prediction
+        _, y_hog_train = SVM_hog.predict(x_train_hog)
+        _, y_hog_test = SVM_hog.predict(x_test_hog)
+
+        # accuracy
+        acc_hist_train = (sum(y_hist_train == y_train) / len(y_hist_train))[0] * 100
+        acc_hog_train = (sum(y_hog_train == y_train) / len(y_hog_train))[0] * 100
+        acc_hist_test = (sum(y_hist_test == y_test) / len(y_hist_test))[0] * 100
+        acc_hog_test = (sum(y_hog_test == y_test) / len(y_hog_test))[0] * 100
+
+        import numpy as np
+
+        labels = ['training', 'testing']
+        hist_acc = [acc_hist_train, acc_hist_test]
+        hog_acc = [acc_hog_train, acc_hog_test]
+
+        x = np.arange(len(labels))  # the label locations
+        width = 0.35  # the width of the bars
+
+        fig, ax = plt.subplots()
+        rects1 = ax.bar(x - width/2, hist_acc, width, label='histogram')
+        rects2 = ax.bar(x + width/2, hog_acc, width, label='HOG')
+
+        # Add some text for labels, title and custom x-axis tick labels, etc.
+        ax.set_ylabel('accuracy %')
+        ax.set_title('cifar10 by SVM with different features')
+        ax.set_ylim(0,30)
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels)
+        ax.legend()
+
+
+        def autolabel(rects):
+            """Attach a text label above each bar in *rects*, displaying its height."""
+            for rect in rects:
+                height = rect.get_height()
+                ax.annotate('{0:.3f}'.format(height),
+                            xy=(rect.get_x() + rect.get_width() / 2, height),
+                            xytext=(0, 3),  # 3 points vertical offset
+                            textcoords="offset points",
+                            ha='center', va='bottom')
+
+
+        autolabel(rects1)
+        autolabel(rects2)
+
+        fig.tight_layout()
+
+        plt.show()
+        ```
+### 深度學習應用卷積神經網路
+* **Day_92 : 卷積神經網路(Convolution Neural Network, CNN) 簡介**
+    * ImageNet Challenge 是電腦視覺的競賽，需要對影像進行 1000 個類別的預測，在 CNN 出現後首次有超越⼈人類準確率的模型
+    * 卷積是甚麼？
+        * 卷積其實只是簡單的數學乘法與加法
+        * 利用濾波器 (filter) 對圖像做卷積來找尋規則
+        * 卷積是將影像與 filter 的值相乘後再進行加總，即可得到特徵圖(Feature Map)
+    * 卷積的目的
+        * 透過卷積，我們可以找出圖像上與濾波器具有相同特徵的區域
+    * 濾波器 (filter)
+        * 濾波器是用來找圖像上是否有同樣特徵
+        * 那濾波器 (filter) 中的數字是怎麼得來的呢?
+            * 其實是透過資料學習而來的! 這也就是 CNN 模型中的參數 (或叫權重 weights)
+            * CNN 會自動從訓練資料中學習出適合的濾波器來完成你的任務 (分類、偵測等)
+        * 濾波器 (Filter) 視覺化
+            * 透過一層又一層的神經網路疊加，可以看到底層的濾波器在找線條與顏色的特徵，中層則是輪輪廓與形狀 (輪胎)，高層的則是相對完整的特徵 (如車窗、後照鏡等)
+* **Day_93 : 卷積神經網路架構細節**
+    * 卷積神經網路跟深度網路  
+        * 傳統的 DNN（即 Deep neural network）最大問題在於它會忽略資料的形狀。
+            * 例如，輸入影像的資料時，該 data 通常包含了水平、垂直、color channel 等三維資訊，但傳統 DNN 的輸入處理必須是平面的、也就是須一維的資料。
+            * 一些重要的空間資料，只有在三維形狀中才能保留下來。
+            * RGB 不同的 channel 之間也可能具有某些關連性、而遠近不同的像素彼此也應具有不同的關聯性
+        * 深度學習（Deep learning）中的 CNN 較傳統的 DNN 多了了Convolutional（卷積）及池化（Pooling）兩層 layer，用以維持形狀資訊並且避免參數大幅增加。
+        * Convolution 原理是透過一個指定尺寸的window，由上而下依序滑動取得圖像中各局部特徵作為下一層的輸入，這個 sliding window 在 CNN 中稱為 Convolution kernel 利用此方式來取得圖像中各局部的區域加總計算後，透過 ReLU activation function 輸出為特徵值再提供給下一層使用
+    * 池化層(Pooling Layer)
+        * Pooling layer 稱為池化層，它的功能很單純，就是將輸入的圖片尺寸縮小（大部份為縮小一半）以減少每張 feature map 維度並保留重要的特徵，其好處有：
+            * 特徵降維，減少後續 layer 需要參數。
+            * 具有抗干擾的作用：圖像中某些像素在鄰近區域有微小偏移或差異時，對 Pooling layer 的輸出影響不大，結果仍是不變的。
+            * 減少過度擬合 over-fitting 的情況。與卷積層相同，池化層會使用 kernel 來取出各區域的值並運算，但最後的輸出並不透過 Activate function（卷積層使用的 function是 ReLU）
+    * 卷積網路的組成
+        * Convolution Layer 卷積層
+        * Pooling Layer 池化層
+        * Flatten Layer 平坦層
+        * Fully connection Layer 全連接層
+    * Flatten – 平坦層
+        * Flatten：將特徵資訊丟到 Full connected layer 來進行分類，其神經元只與上一層 kernel 的像素連結，而且各連結的權重在同層中是相同且共享的
+    * Fully connected layers - 全連接層
+        * 卷積和池化層，其最主要的目的分別是提取特徵及減少圖像參數，然後將特徵資訊丟到 Full connected layer 來進行分類，其神經元只與上一層 kernel 的像素連結，而且各連結的權重在同層中是相同且共享的
+        ```py
+        #導入相關模組
+        import keras
+        from keras import layers
+        from keras import models
+        from keras.models import Sequential
+        from keras.layers import Conv2D, Activation, MaxPooling2D, Flatten, Dense
+
+        #建立一個序列模型
+        model = models.Sequential()
+
+        #建立一個卷績層, 32 個內核, 內核大小 3x3, 
+        #輸入影像大小 28x28x1
+        model.add(layers.Conv2D(32, (3, 3), input_shape=(28, 28, 1)))
+        #建立第二個卷績層,
+        #請注意, 不需要再輸入 input_shape
+        model.add(layers.Conv2D(25, (3, 3)))
+
+        #新增平坦層
+        model.add(Flatten())
+
+        #建立一個全連接層
+        model.add(Dense(units=100))
+        model.add(Activation('relu'))
+
+        #建立一個輸出層, 並採用softmax
+        model.add(Dense(units=10))
+        model.add(Activation('softmax'))
+
+        #輸出模型的堆疊
+        model.summary()
+        ```
+* **Day_94 : 卷積神經網路 - 卷積(Convolution)層與參數調整**
+    * 卷積 (Convolution) 的超參數 (Hyper parameter)
+        * 卷積內核 (kernel)
+        * Depth (kernels的總數)
+        * Padding (是否加一圈 0 值的 pixel)
+        * Stride (選框每次移動的步數)
+    * 填充或移動步數 (Padding/Stride) 的用途
+        * RUN 過 CNN，兩個問題
+            * 是不是卷積計算後，卷積後的圖是不是就一定只能變小?
+                * 可以選擇維持一樣大
+            * 卷積計算是不是一次只能移動一格?
+        * 控制卷積計算的圖大小 - Valid and Same convolutions
+            * padding = ‘VALID’ 等於最一開始敘述的卷積計算，圖根據 filter 大小和 stride 大小而變小
+            * new_height = new_width = (W-F + 1) / S
+            * padding = ‘ Same’的意思是就是要讓輸入和輸出的大小是一樣的
+            * pad=1，表示圖外圈額外加 1 圈 0，假設 pad=2，圖外圈額外加 2 圈 0，以此類推
+    * 舉例
+        `Model.add(Convolution2D(32, 3, 3), input_shape=(1, 28, 28), strides=2, padding='valid’)`
+        * 這代表卷積層 filter 數設定為 32，filter 的 kernel size 是 3，步伐 stride 是 2，pad 是1。
+            * pad = 1，表示圖外圈額外加 1 圈 0，假設 pad = 2，圖外圈額外加 2 圈 0，以此類推
+                1. kernel size 是 3 的時候，卷積後圖的寬高不要變，pad 就要設定為 1
+                2. kernel size 是 5 的時候，卷積後圖的寬高不要變，pad 就要設定為 2
+    * 延伸閱讀 :
+        * [An Intuitive Explanation of Convolutional Neural Networks](https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/)
+* **Day_95 : 卷積神經網路 - 池化(Pooling)層與參數調整**
+    * 池化層 (Pooling Layer) 如何調用
+        `keras.layers.MaxPooling2D(pool_size=(2, 2), strides=None, padding='valid', data_format=None)`
+        * pool_size：整數，沿（垂直，水平）方向縮小比例的因數。
+            * (2，2)會把輸入張量的兩個維度都縮小一半
+        * strides：整數，2 個整數表示的元組，或者是”None”。表示步長值。
+            * 如果是 None，那麼默認值是 pool_size。
+            * padding："valid"或者"same"（區分大小寫）。
+            * data_format：channels_last(默認)或 channels_first 之一。表⽰\示輸入各維度的順序
+                * channels_last 代表尺寸是 (batch, height, width, channels) 的輸入張量。
+                * channels_first 代表尺寸是 (batch, channels, height, width) 的輸入張量。
+    * 池化層 (Pooling Layer) 超參數
+        * 前端輸入 feature map 維度：W1×H1×D1 有兩個 hyperparameters：
+            * Pooling filter 的維度 - F,
+            * 移動的步數S,
+        * 所以預計生成的輸出是 W2×H2×D2:
+            * W2=(W1−F)/S+1
+            * H2=(H1−F)/S+1
+            * D2=D1
+    * 池化層 (Pooling Layer ) 常用的類型
+        * Max pooling (最大池化)
+        * Average pooling (平均池化)
+    * 卷積神經網路 (CNN) 特性
+        * 適合用在影像上
+            * 因為 fully-connected networking (全連接層) 如果用在影像辨識上，會導致參數過多(因為像素很多)，導致 over-fitting (過度擬合)
+            * CNN 針對影像辨識的特性，特別設計過，來減少參數
+            * Convolution(卷積) : 學出 filter 比對原始圖片，產生出 feature map (特徵圖, 也當成image)
+            * Max Pooling (最大池化)：將 feature map 縮小
+            * Flatten (平坦層)：將每個像素的 channels (有多少個 filters) 展開成 fully connected feedforward network (全連接的前行網路) 
+        * AlphaGo 也用了 CNN，但是沒有用 Max Pooling (所以不問題需要不同 model)
+    * Pooling Layer (池化層) 適用的場景
+        * 特徵提取的誤差主要來自兩個方面：
+            1. 鄰域大小受限造成的估計值方差增大；
+            2. 卷積層超參數與內核造成估計均值的偏移
+        * 一般來來說，
+            * average-pooling 能減小第一種誤差，更多的保留圖像的背景信息
+            * max-pooling 能減小第二種誤差，更多的保留紋理信息
+    * 延伸閱讀 :
+        * [基于Keras的卷积神经网络（CNN）可视化](https://blog.csdn.net/weiwei9363/article/details/79112872)
+        ```py
+        # GRADED FUNCTION: zero_pad
+        def zero_pad(X, pad):
+            """
+            對image X 做 zero-padding. 
+            參數定義如下:
+            X -- python numpy array, 呈現維度 (m, n_H, n_W, n_C), 代表一批 m 個圖像
+                n_H: 圖高, n_W: 圖寬, n_C: color channels 數
+            pad -- 整數, 加幾圈的 zero padding.
+            Returns:
+            X_pad -- image of shape (m, n_H + 2*pad, n_W + 2*pad, n_C) 做完zero-padding 的結果
+            """
+            ### Code 起始位置
+            X_pad = np.pad(X, ((0, 0), (pad, pad), (pad, pad), (0, 0)), 'constant', constant_values=(0, 0))
+            
+            return X_pad
+
+        # GRADED FUNCTION: pool_forward
+        def pool_forward(A_prev, hparameters, mode = "max"):
+            """
+            設計一個前行網路的池化層
+            參數定義如下:
+            A_prev -- 輸入的numpy 陣列, 維度 (m, n_H_prev, n_W_prev, n_C_prev)
+            hparameter 超參數 --  "f" and "stride" 所形成的python 字典
+            mode -- 池化的模式: "max" or "average"
+            
+            返回:
+                A -- 輸出的池化層, 維度為 (m, n_H, n_W, n_C) 的 numpy 陣列
+                cache -- 可以應用在 backward pass pooling layer 資料, 包含 input and hparameter
+            """
+
+            # 檢索尺寸 from the input shape
+            (m, n_H_prev, n_W_prev, n_C_prev) = A_prev.shape
+
+            # 檢索超參數 from "hparameters"
+            f = hparameters["f"]
+            stride = hparameters["stride"]
+
+            # 定義輸出的dimensions
+            n_H = int(1 + (n_H_prev - f) / stride)
+            n_W = int(1 + (n_W_prev - f) / stride)
+            n_C = n_C_prev
+
+            # 初始化輸出的 matrix A
+            A = np.zeros((m, n_H, n_W, n_C))
+
+            ### 程式起始位置 ###
+            for i in range(m): # 訓練樣本的for 迴圈
+                for h in range(n_H): # 輸出樣本的for 迴圈, 針對vertical axis
+                    for w in range(n_W): #  輸出樣本的for 迴圈, 針對 horizontal axis
+                        for c in range (n_C): #  輸出樣本的for 迴圈, 針對channels
+
+                            # 找出特徵圖的寬度跟高度四個點
+                            vert_start = h * stride
+                            vert_end = h * stride+ f
+                            horiz_start = w * stride
+                            horiz_end = w * stride + f
+
+                            # 定義第i個訓練示例中
+                            a_prev_slice = A_prev[i, vert_start:vert_end, horiz_start:horiz_end,c]
+
+                            # 計算輸入data 的池化結果. 使用 if statment 去做分類
+                            if mode == "max":
+                                A[i, h, w, c] = np.max(a_prev_slice)
+                            elif mode == "average":
+                                A[i, h, w, c] = np.mean(a_prev_slice)
+
+                                ### 程式結束 ###
+            
+            # 儲存輸入的特徵圖跟所設定的超參數, 可以用在 pool_backward()
+            cache = (A_prev, hparameters)
+            
+            # 確認輸出的資料維度
+            assert(A.shape == (m, n_H, n_W, n_C))
+            
+            return A, cache
+        ```
+* **Day_96 : Keras 中的 CNN layers**
+    * 卷積層 Convolution layer
+        * 卷積神經網路就是透過疊起一層又一層的卷積層、池化層產生的。
+        * 影像經過卷積後稱作特徵圖 (feature map)，經過多次卷積層後，特徵圖的尺寸 (width, height) 會越來越小，但是通道數 (Channel) 則會越來越大
+    * Keras 中的 CNN layers - Conv2D
+        ```py
+        from keras.layers import Conv2D
+        feature_maps = Conv2D(filters=128, kernel_size=(3,3), input_shape=input_image.shape)(input_image)
+        ```
+        * 上方的程式碼先 import Keras 中的 Conv2D，接下來對 input_image 進行2D 卷積，即可得到我們的特徵圖 feature maps
+        * Conv2D 中的參數意義
+            * filters: 濾波器的數量。此數字會等於做完卷積後特徵圖的通道數，通常設定為 2 的 n 次⽅方
+            * kernel_size: 濾波器的大小。通常都是使⽤用 3x3 或是 5x5
+            * input_shape: 只有對影像做第一次卷積時要指定，之後 Keras 會自動計算input_shape
+            * strides: 做卷積時，濾波器移動的步長。[此處](https://cdn-images-1.medium.com/max/1600/1*ZCjPUFrB6eHPRi4eyP6aaA.gif)的 stirides 就是 1 (一次移動一格)
+            * padding: 是否要對輸入影像的邊緣補值。[此處](https://cdn-images-1.medium.com/max/666/1*noYcUAa_P8nRilg3Lt_nuA.png)的 padding=same 則是邊緣補一層 0，稱為 same 的原因是因為做完 padding 再卷積後，輸出的特徵圖尺寸與輸入影像的尺寸不會改變
+    * Keras 中的 CNN layers - SeparableConv2D
+        * 全名稱做 Depthwise Separable Convolution，與常用的 Conv2D 效果類似，但是參數量可以大幅減少，減輕對硬體的需求
+        * 對影像做兩次卷積
+            * 第一次稱為 DetphWise Conv，對影像的三個通道獨立做卷積，得到三張特徵圖；
+            * 第二次稱為 PointWise Conv，使用 1x1 的 filter 尺寸做卷積。
+            * 兩次卷積結合起來可以跟常用的卷積達到接近的效果，但參數量卻遠少於常見的卷積更多資訊可參考[連結](http://www.icode9.com/content-4-93052.html)
+        * SeparableConv2D 中的參數意義
+            * filters, kernel_size, strides, padding 都與 Conv2D 相同
+            * depth_multiplier : 在做 DepthWise Conv 時，輸出的特徵圖 Channel 數量會是 filters * depth_multiplier，預設為 1
+        ```py
+        from keras.layers import Conv2D, SeparableConv2D, Input
+        from keras.models import Model, Sequential
+
+        input_image = Input((224, 224, 3))
+        feature_maps = Conv2D(filters=32, kernel_size=(3,3))(input_image)
+        feature_maps2 = Conv2D(filters=64, kernel_size=(3,3))(feature_maps)
+        model = Model(inputs=input_image, outputs=feature_maps2)
+        model.summary()
+        '''
+        _________________________________________________________________
+        Layer (type)                 Output Shape              Param #   
+        =================================================================
+        input_5 (InputLayer)         (None, 224, 224, 3)       0         
+        _________________________________________________________________
+        conv2d_5 (Conv2D)            (None, 222, 222, 32)      896       
+        _________________________________________________________________
+        conv2d_6 (Conv2D)            (None, 220, 220, 64)      18496     
+        =================================================================
+        Total params: 19,392
+        Trainable params: 19,392
+        Non-trainable params: 0
+        _________________________________________________________________
+        '''
+        input_image = Input((224, 224, 3))
+        feature_maps = SeparableConv2D(filters=32, kernel_size=(3,3))(input_image)
+        feature_maps2 = SeparableConv2D(filters=64, kernel_size=(3,3))(feature_maps)
+        model = Model(inputs=input_image, outputs=feature_maps2)
+        model.summary()
+        '''
+        _________________________________________________________________
+        Layer (type)                 Output Shape              Param #   
+        =================================================================
+        input_6 (InputLayer)         (None, 224, 224, 3)       0         
+        _________________________________________________________________
+        separable_conv2d_1 (Separabl (None, 222, 222, 32)      155       
+        _________________________________________________________________
+        separable_conv2d_2 (Separabl (None, 220, 220, 64)      2400      
+        =================================================================
+        Total params: 2,555
+        Trainable params: 2,555
+        Non-trainable params: 0
+        _________________________________________________________________
+        
+        # 可以看到使用 Seperable Conv2D，即使模型設置都一模一樣，但是參數量明顯減少非常多！
+        '''
+        ```
+* **Day_97 : 使用 CNN 完成 CIFAR-10 資料集 </>**
+    * Cifar-10
+        * 如同先前課程中的 Scikit-learn.datasets，深度學習的影像資料集以 MNIST (手寫數字辨識) 與 Cifar-10 (自然影像分類) 作為常見
+        * Cifar-10 是 10 個類別，影像大小為 32x32 的一個輕量資料集，非常適合拿來做深度學習的練習
+    * CNN 相比 DNN，更適合用來來處理影像的資料集
+        ```py
+        import keras
+        from keras.datasets import cifar10
+        from keras.models import Sequential
+        from keras.layers import Dense, Dropout, Activation, Flatten
+        from keras.layers import Conv2D, MaxPooling2D
+        from keras.optimizers import RMSprop, Adam
+
+        batch_size = 128 # batch 的大小，如果出現 OOM error，請降低這個值
+        num_classes = 10 # 類別的數量，Cifar 10 共有 10 個類別
+        epochs = 10 # 訓練的 epochs 數量
+
+        # 讀取資料並檢視
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+
+        # 對 label 進行 one-hot encoding (y_trian 原本是純數字)
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        # 首先我們使用一般的 DNN (MLP) 來訓練
+        # 由於 DNN 只能輸入一維的資料，我們要先將影像進行攤平，若 (50000, 32, 32, 3) 的影像，攤平後會變成 (50000, 32x32x3) = (50000, 3072)
+
+        # 將資料攤平成一維資料
+        x_train = x_train.reshape(50000, 3072) 
+        x_test = x_test.reshape(10000, 3072)
+
+        # 將資料變為 float32 並標準化
+        x_train = x_train.astype('float32')
+        x_test = x_test.astype('float32')
+        x_train /= 255
+        x_test /= 255
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+
+        model = Sequential()
+        model.add(Dense(512, activation='relu', input_shape=(3072,)))
+        model.add(Dropout(0.2))
+        model.add(Dense(512, activation='relu'))
+        model.add(Dropout(0.2))
+        model.add(Dense(num_classes, activation='softmax'))
+
+        model.summary()
+
+        model.compile(loss='categorical_crossentropy',
+                    optimizer=RMSprop(),
+                    metrics=['accuracy'])
+
+        history = model.fit(x_train, y_train,
+                            batch_size=batch_size,
+                            epochs=epochs,
+                            verbose=1,
+                            validation_data=(x_test, y_test))
+        score = model.evaluate(x_test, y_test, verbose=0)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+
+        # 接下來我們使用 CNN 來訓練神經網路
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+        x_train = x_train.astype('float32')
+        x_test = x_test.astype('float32')
+        x_train /= 255
+        x_test /= 255
+
+        # Convert class vectors to binary class matrices.
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        model = Sequential()
+        model.add(Conv2D(32, (3, 3), padding='same',
+                        input_shape=x_train.shape[1:]))
+        model.add(Activation('relu'))
+        model.add(Conv2D(32, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(512))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(num_classes))
+        model.add(Activation('softmax'))
+        model.summary()
+
+        model.compile(loss='categorical_crossentropy',
+                    optimizer=RMSprop(),
+                    metrics=['accuracy'])
+
+        history = model.fit(x_train, y_train,
+                            batch_size=batch_size,
+                            epochs=epochs,
+                            verbose=1,
+                            validation_data=(x_test, y_test))
+        score = model.evaluate(x_test, y_test, verbose=0)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+        ```
+* **Day_98 : 訓練卷積神經網路的細節與技巧 - 處理大量數據**
+    * 大數據？
+        * Cifar-10 資料集相對於常用到的影像來說是非常小，所以可以先把資料集全部讀進記憶體裡面，要使用時直接從記憶體中存取，速度會相當快
+        * 但是如果我們要處理的資料集超過電腦記憶體的容量呢？桌上電腦的記憶體多為 32, 64, 128 GB，當處理超大圖片、3D 影像或影片時，就可能遇到 Out of Memory error
+    * 批次 (batch) 讀取
+        * 如同訓練神經網路時，Batch (批次) 的概念一樣。我們可以將資料一批一批的讀進記憶體，當從 GPU/CPU 訓練完後，將這批資料從記憶體釋出，在讀取下一批資料
+    * 如何用 Python 撰寫批次讀取資料的程式碼
+        * 使用 Python 的 generator 來幫你完成這個任務！
+        * Generator 可以使用 next(your_generator) 來執行下一次循環
+        * 假設有一個 list，其中有 5 個數字，我們可以撰寫一個 generator，用 next(generator) 會自動吐出 list 的第一個數字，再用第二次 next 則會吐出第二個數字，以此類推
+        * 將原本 Python function 中的 return 改為 yield，這樣 Python 就知道這是一個 Generator 囉
+        ```py
+        from keras.datasets import cifar10
+
+        (x_train, x_test), (y_train, y_test) = cifar10.load_data()
+
+        def cifar_generator(image_array, batch_size=32):
+            while True:
+                for indexs in range(0, len(image_array), batch_size):
+                    images = image_array[indexs: indexs+batch_size]
+                    yield images, labels
+
+        cifar_gen = cifar_generator(x_train)
+        images, labels = next(cifar_gen)
+        ```
+        ```py
+        import keras
+        from keras.datasets import cifar10
+        from keras.models import Sequential
+        from keras.layers import Dense, Dropout, Activation, Flatten
+        from keras.layers import Conv2D, MaxPooling2D
+        from keras.optimizers import RMSprop, Adam
+
+        batch_size = 128 # batch 的大小，如果出現 OOM error，請降低這個值
+        num_classes = 10 # 類別的數量，Cifar 10 共有 10 個類別
+        epochs = 10 # 訓練的 epochs 數量
+
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+        x_train = x_train.astype('float32')
+        x_test = x_test.astype('float32')
+        x_train /= 255
+        x_test /= 255
+
+        # Convert class vectors to binary class matrices.
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        model = Sequential()
+        model.add(Conv2D(32, (3, 3), padding='same',
+                        input_shape=x_train.shape[1:]))
+        model.add(Activation('relu'))
+        model.add(Conv2D(32, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(512))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(num_classes))
+        model.add(Activation('softmax'))
+        model.summary()
+
+        model.compile(loss='categorical_crossentropy',
+                    optimizer=RMSprop(),
+                    metrics=['accuracy'])
+
+        from sklearn.utils import shuffle
+        def my_generator(x, y, batch_size):
+            while True:
+                for idx in range(0, len(x), batch_size): # 讓 idx 從 0 開始，一次增加 batch size。假設 batch_size=32, idx = 0, 32, 64, 96, ....
+                    batch_x, batch_y = x[idx:idx+batch_size], y[idx:idx+batch_size]
+                    yield batch_x, batch_y
+                x, y = shuffle(x, y) # loop 結束後，將資料順序打亂再重新循環
+        
+        train_generator = my_generator(x_train, y_train, batch_size) # 建立好我們寫好的 generator
+    
+        history = model.fit_generator(train_generator,
+                            steps_per_epoch=int(len(x_train)/batch_size), # 一個 epochs 要執行幾次 update，通常是資料量除以 batch size
+                            epochs=epochs,
+                            verbose=1,
+                            validation_data=(x_test, y_test))
+        score = model.evaluate(x_test, y_test, verbose=0)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+        ```
+* **Day_99 : 訓練卷積神經網路的細節與技巧 - 處理小量數據**    
+    * ⼩數據？
+        * 實務上進⾏各種機器學習專案時，我們經常會遇到資料量不⾜的情形，常⾒原因：
+            * 資料搜集困難或是成本極⾼
+            * 資料標註不易
+            * 資料品質不佳
+        * 除了繼續搜集資料以外，資料增強 (Data augmentation) 是很常⾒的⽅法之⼀
+    * 資料增強 (Data augmentation) 
+        * 其實就是對影像進⾏⼀些隨機的處理如翻轉、平移、旋轉、改變亮度等各樣的影像操作，藉此將⼀張影像增加到多張   
+    * 資料增強並非萬靈丹！
+        * 適度的資料增強通常都可以提升準確率。選⽤的增強⽅法則須視資料集⽽定
+            * 例如⼈臉辨識就不太適合⽤上下翻轉，因為實際使⽤時不會有上下顛倒的臉部
+            * 另外需特別注意要先對資料做 train/test split 後再做資料增強！否則其實都是同樣的影像，誤以為模型訓練得非常好
+    * 延伸閱讀 :
+        * [Keras ImageDataGenerator 範例與介紹](https://zhuanlan.zhihu.com/p/30197320)
+        * [imgaug](https://github.com/aleju/imgaug)
+    * 常見問題 :
+        * Q: 跑資料增強時程式碼好像都會出錯？
+        * A: 要特別注意，資料增強應該要在圖像標準化之
+        前完成 (e.g. 除以 255、減去平均值)！因為多數資
+        料增強的函數多是以圖像為 int32 的 RGB 影像來
+        設計的，若已經先經過標準化，有可能造成程式
+        碼錯誤
+        ```py
+        import keras
+        from keras.datasets import cifar10
+        from keras.preprocessing.image import ImageDataGenerator
+        from keras.models import Sequential
+        from keras.layers import Dense, Dropout, Activation, Flatten
+        from keras.layers import Conv2D, MaxPooling2D
+        from keras.optimizers import RMSprop, Adam
+
+        batch_size = 128 # batch 的大小，如果出現 OOM error，請降低這個值
+        num_classes = 10 # 類別的數量，Cifar 10 共有 10 個類別
+        epochs = 10 # 訓練的 epochs 數量
+
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+        x_train = x_train.astype('float32')
+        x_test = x_test.astype('float32')
+        x_train /= 255
+        x_test /= 255
+
+        # Convert class vectors to binary class matrices.
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        model = Sequential()
+        model.add(Conv2D(32, (3, 3), padding='same',
+                        input_shape=x_train.shape[1:]))
+        model.add(Activation('relu'))
+        model.add(Conv2D(32, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Conv2D(64, (3, 3), padding='same'))
+        model.add(Activation('relu'))
+        model.add(Conv2D(64, (3, 3)))
+        model.add(Activation('relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.25))
+
+        model.add(Flatten())
+        model.add(Dense(512))
+        model.add(Activation('relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(num_classes))
+        model.add(Activation('softmax'))
+        model.summary()
+
+        model.compile(loss='categorical_crossentropy',
+                    optimizer=RMSprop(),
+                    metrics=['accuracy'])
+
+        augment_generator = ImageDataGenerator(rotation_range=10, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True)
+
+        history = model.fit_generator(augment_generator.flow(x_train, y_train, batch_size=batch_size),
+                            steps_per_epoch=int(len(x_train)/batch_size), # 一個 epochs 要執行幾次 update，通常是資料量除以 batch size
+                            epochs=epochs,
+                            verbose=1,
+                            validation_data=(x_test, y_test))
+        score = model.evaluate(x_test, y_test, verbose=0)
+        print('Test loss:', score[0])
+        print('Test accuracy:', score[1])
+        ```
+* **Day_100 : 訓練卷積神經網路的細節與技巧 - 轉移學習 (Transfer learning)** 
+    * 遷移學習，Transfer Learning
+        * 資料量不足時，遷移學習也是很常見的方法
+        * 神經網路訓練前的初始參數是隨機產生的，不具備任何意義
+        * 透過其他龐大資料集上訓練好的模型參數，我們使用這個參數當成起始點，改用在自己的資料集上訓練！
+    * 為何可以用遷移學習？
+        * 前面 CNN 的課程有提到，CNN 淺層的過濾器 (filter) 是用來偵測線條與顏色等簡單的元素。因此不管圖像是什麼類型，基本的組成應該要是一樣的
+        * 大型資料集 (如 ImageNet) 訓練好的參數具有完整的顏色、線條 filters，從此參數開始訓練我們既自己的資料集，逐步把 filters 修正為適合自己資料集的結果。
+    * 參考大神們的網路架構
+        * 許多學者們研究了許多架構與多次調整超參數，並在大型資料集如 ImageNet 上進行測試得到準確性高並容易泛化的網路架構，我們可以從這樣的架構開始！
+    * Transfer learning in Keras: ResNet-50
+        ```py
+        from keras.applications.resnet50 import ResNet50
+
+        resnet_model = ResNet50(input_shape=(224,224,3), weights='imagenet', pooling='avg'), include_top=False)
+
+        last_featuremaps = resnet_model.output
+        flatten_featuremap = Flatten()(last_featuremaps)
+        output = Dense(num_classes)(flatten_featuremap)
+
+        New_resnet_model = Model(inputs=resnet_model.input, outputs=output)
+        ```
+        * 我們使用了 ResNet50 網路結構，其中可以看到 weight='imagenet'，代表我們使用從 imagenet 訓練好的參數來初始化，並指定輸入的影像大小為 (224,224,3)
+        * pooling='avg' 代表最後一層使用 [Global Average pooling](https://blog.csdn.net/Losteng/article/details/51520555)，把 feature maps 變成一維的向量
+        * include_top=False 代表將原本 Dense layer 拔掉，因為原本這個網路是用來做 1000 個分類模型，我們必須替換成自己的 Dense layer 來符合我們自己資料集的類別數量
+        * 我們將模型設定成沒有 Dense layers，且最後一層做 GAP，使用 resnet_model.output 我們就可以取出最後一層的 featuremaps
+        * 將其使用 Flatten 攤平後，在接上我們的 Dense layer，神經元數量與資料集的類別數量一致，重建立模型，就可以得到一個新的 ResNet-50 模型，且參數是根據 ImageNet 大型資料集育訓練好的
+        * [整體流程參考](https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/5.3-using-a-pretrained-convnet.ipynb)，我們保留 Trained convolutional base，並建立 New classifier (Dense 部分)，最後 convolutional base 是否要 frozen (不訓練)，則是要看資料集與育訓練的 ImageNet 是否相似，如果差異很大則建議訓練時不要 frozen，讓 CNN 的參數可以繼續更新
+    * 重要知識複習
+        * 遷移學習是透過預先再大型資料集訓練好的權重，再根據自己的資料及進行微調 (finetune) 的一種學習方法
+        * Keras 中的模型，只要指定權重 weights='imagenet' 即可使用遷移學習
+    * 延伸閱讀 :
+        * [簡單使用 Keras 完成 Transfer learning](https://ithelp.ithome.com.tw/articles/10190971)
+        * [Keras 作者教你用 pre-trained CNN 模型](https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/5.3-using-a-pretrained-convnet.ipynb)
+        * [Keras 以 ResNet-50 預訓練模型建立狗與貓辨識程式](https://blog.gtwang.org/programming/keras-resnet-50-pre-trained-model-build-dogs-cats-image-classification-system/)
+        ```py
+        """
+        #Trains a ResNet on the CIFAR10 dataset.
+
+        ResNet 共有兩個版本，此處解答我們使用 v1 來做訓練。
+        ResNet v1:
+        [Deep Residual Learning for Image Recognition
+        ](https://arxiv.org/pdf/1512.03385.pdf)
+        ResNet v2:
+        [Identity Mappings in Deep Residual Networks
+        ](https://arxiv.org/pdf/1603.05027.pdf)
+        """
+
+        import keras
+        from keras.layers import Dense, Conv2D, BatchNormalization, Activation
+        from keras.layers import AveragePooling2D, Input, Flatten
+        from keras.optimizers import Adam
+        from keras.callbacks import ModelCheckpoint, LearningRateScheduler
+        from keras.callbacks import ReduceLROnPlateau
+        from keras.preprocessing.image import ImageDataGenerator
+        from keras.regularizers import l2
+        from keras import backend as K
+        from keras.models import Model
+        from keras.datasets import cifar10
+        import numpy as np
+        import os
+
+        # 訓練用的超參數
+        batch_size = 128  
+        epochs = 200
+        data_augmentation = True
+        num_classes = 10
+
+        # 資料標準化的方式，此處使用減去所有影像的平均值
+        subtract_pixel_mean = True
+
+        # Model parameter
+        # ----------------------------------------------------------------------------
+        #           |      | 200-epoch | Orig Paper| 200-epoch | Orig Paper| sec/epoch
+        # Model     |  n   | ResNet v1 | ResNet v1 | ResNet v2 | ResNet v2 | GTX1080Ti
+        #           |v1(v2)| %Accuracy | %Accuracy | %Accuracy | %Accuracy | v1 (v2)
+        # ----------------------------------------------------------------------------
+        # ResNet20  | 3 (2)| 92.16     | 91.25     | -----     | -----     | 35 (---)
+        # ResNet32  | 5(NA)| 92.46     | 92.49     | NA        | NA        | 50 ( NA)
+        # ResNet44  | 7(NA)| 92.50     | 92.83     | NA        | NA        | 70 ( NA)
+        # ResNet56  | 9 (6)| 92.71     | 93.03     | 93.01     | NA        | 90 (100)
+        # ResNet110 |18(12)| 92.65     | 93.39+-.16| 93.15     | 93.63     | 165(180)
+        # ResNet164 |27(18)| -----     | 94.07     | -----     | 94.54     | ---(---)
+        # ResNet1001| (111)| -----     | 92.39     | -----     | 95.08+-.14| ---(---)
+        # ---------------------------------------------------------------------------
+        n = 9 # 使用 ResNet-56 的網路架構
+
+        # 使用的 ResNet 模型版本
+        # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
+        version = 1
+
+        # 計算不同 ResNet 版本對應的網路深度，此處都是根據 paper 的定義來計算
+        depth = n * 6 + 2
+
+        # 模型的名稱
+        model_type = 'ResNet%dv%d' % (depth, version)
+
+        # 讀取 Cifar-10 資料集
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+
+        # 影像輸入的維度
+        input_shape = x_train.shape[1:]
+
+        # 先把影像縮放到 0-1 之間
+        x_train = x_train.astype('float32') / 255
+        x_test = x_test.astype('float32') / 255
+
+        # 再減去所有影像的平均值
+        if subtract_pixel_mean:
+            x_train_mean = np.mean(x_train, axis=0)
+            x_train -= x_train_mean 
+            x_test -= x_train_mean # 此處要注意！測試資料也是減去訓練資料的平均值來做標準化，不可以減測試資料的平均值 (因為理論上你是不能知道測試資料的平均值的！)
+
+        print('x_train shape:', x_train.shape)
+        print(x_train.shape[0], 'train samples')
+        print(x_test.shape[0], 'test samples')
+        print('y_train shape:', y_train.shape)
+
+        # 對 label 做 one-hot encoding
+        y_train = keras.utils.to_categorical(y_train, num_classes)
+        y_test = keras.utils.to_categorical(y_test, num_classes)
+
+        # 學習率動態調整。當跑到第幾個 epcoh 時，根據設定修改學習率。這邊的數值都是參考原 paper
+        def lr_schedule(epoch):
+            """Learning Rate Schedule
+            Learning rate is scheduled to be reduced after 80, 120, 160, 180 epochs.
+            Called automatically every epoch as part of callbacks during training.
+            # Arguments
+                epoch (int): The number of epochs
+            # Returns
+                lr (float32): learning rate
+            """
+            lr = 1e-3
+            if epoch > 180:
+                lr *= 0.5e-3
+            elif epoch > 160:
+                lr *= 1e-3
+            elif epoch > 120:
+                lr *= 1e-2
+            elif epoch > 80:
+                lr *= 1e-1
+            print('Learning rate: ', lr)
+            return lr
+
+        # 使用 resnet_layer 來建立我們的 ResNet 模型
+        def resnet_layer(inputs,
+                        num_filters=16,
+                        kernel_size=3,
+                        strides=1,
+                        activation='relu',
+                        batch_normalization=True,
+                        conv_first=True):
+            """2D Convolution-Batch Normalization-Activation stack builder
+            # Arguments
+                inputs (tensor): input tensor from input image or previous layer
+                num_filters (int): Conv2D number of filters
+                kernel_size (int): Conv2D square kernel dimensions
+                strides (int): Conv2D square stride dimensions
+                activation (string): activation name
+                batch_normalization (bool): whether to include batch normalization
+                conv_first (bool): conv-bn-activation (True) or
+                    bn-activation-conv (False)
+            # Returns
+                x (tensor): tensor as input to the next layer
+            """
+            # 建立卷積層
+            conv = Conv2D(num_filters,
+                        kernel_size=kernel_size,
+                        strides=strides,
+                        padding='same',
+                        kernel_initializer='he_normal',
+                        kernel_regularizer=l2(1e-4))
+
+            # 對輸入進行卷機，根據 conv_first 來決定 conv. bn, activation 的順序
+            x = inputs
+            if conv_first:
+                x = conv(x)
+                if batch_normalization:
+                    x = BatchNormalization()(x)
+                if activation is not None:
+                    x = Activation(activation)(x)
+            else:
+                if batch_normalization:
+                    x = BatchNormalization()(x)
+                if activation is not None:
+                    x = Activation(activation)(x)
+                x = conv(x)
+            return x
+
+        # Resnet v1 共有三個 stage，每經過一次 stage，影像就會變小一半，但 channels 數量增加一倍。ResNet-20 代表共有 20 層 layers，疊越深參數越多
+        def resnet_v1(input_shape, depth, num_classes=10):
+            """ResNet Version 1 Model builder [a]
+            Stacks of 2 x (3 x 3) Conv2D-BN-ReLU
+            Last ReLU is after the shortcut connection.
+            At the beginning of each stage, the feature map size is halved (downsampled)
+            by a convolutional layer with strides=2, while the number of filters is
+            doubled. Within each stage, the layers have the same number filters and the
+            same number of filters.
+            Features maps sizes:
+            stage 0: 32x32, 16
+            stage 1: 16x16, 32
+            stage 2:  8x8,  64
+            The Number of parameters is approx the same as Table 6 of [a]:
+            ResNet20 0.27M
+            ResNet32 0.46M
+            ResNet44 0.66M
+            ResNet56 0.85M
+            ResNet110 1.7M
+            # Arguments
+                input_shape (tensor): shape of input image tensor
+                depth (int): number of core convolutional layers
+                num_classes (int): number of classes (CIFAR10 has 10)
+            # Returns
+                model (Model): Keras model instance
+            """
+            if (depth - 2) % 6 != 0:
+                raise ValueError('depth should be 6n+2 (eg 20, 32, 44 in [a])')
+            # 模型的初始設置，要用多少 filters，共有幾個 residual block （組成 ResNet 的單元）
+            num_filters = 16
+            num_res_blocks = int((depth - 2) / 6)
+            
+            # 建立 Input layer
+            inputs = Input(shape=input_shape)
+            
+            # 先對影像做第一次卷機
+            x = resnet_layer(inputs=inputs)
+            
+            # 總共建立 3 個 stage
+            for stack in range(3):
+                # 每個 stage 建立數個 residual blocks (數量視你的層數而訂，越多層越多 block)
+                for res_block in range(num_res_blocks):
+                    strides = 1
+                    if stack > 0 and res_block == 0:  # first layer but not first stack
+                        strides = 2  # downsample
+                    y = resnet_layer(inputs=x,
+                                    num_filters=num_filters,
+                                    strides=strides)
+                    y = resnet_layer(inputs=y,
+                                    num_filters=num_filters,
+                                    activation=None)
+                    if stack > 0 and res_block == 0:  # first layer but not first stack
+                        # linear projection residual shortcut connection to match
+                        # changed dims
+                        x = resnet_layer(inputs=x,
+                                        num_filters=num_filters,
+                                        kernel_size=1,
+                                        strides=strides,
+                                        activation=None,
+                                        batch_normalization=False)
+                    x = keras.layers.add([x, y]) # 此處把 featuremaps 與 上一層的輸入加起來 (欲更了解結構需閱讀原論文)
+                    x = Activation('relu')(x)
+                num_filters *= 2
+
+            # 建立分類
+            # 使用 average pooling，且 size 跟 featuremaps 的 size 一樣 （相等於做 GlobalAveragePooling）
+            x = AveragePooling2D(pool_size=8)(x)
+            y = Flatten()(x)
+            
+            # 接上 Dense layer 來做分類
+            outputs = Dense(num_classes,
+                            activation='softmax',
+                            kernel_initializer='he_normal')(y)
+
+            # 建立模型
+            model = Model(inputs=inputs, outputs=outputs)
+            return model
+
+        # 建立 ResNet v1 模型
+        model = resnet_v1(input_shape=input_shape, depth=depth)
+
+        # 編譯模型，使用 Adam 優化器並使用學習率動態調整的函數，０代表在第一個 epochs
+        model.compile(loss='categorical_crossentropy',
+                    optimizer=Adam(lr=lr_schedule(0)),
+                    metrics=['accuracy'])
+        model.summary()
+        print(model_type)
+
+        # 使用動態調整學習率
+        lr_scheduler = LearningRateScheduler(lr_schedule)
+
+        # 使用自動降低學習率 (當 validation loss 連續 5 次沒有下降時，自動降低學習率)
+        lr_reducer = ReduceLROnPlateau(factor=np.sqrt(0.1),
+                                    cooldown=0,
+                                    patience=5,
+                                    min_lr=0.5e-6)
+        # 設定 callbacks
+        callbacks = [lr_reducer, lr_scheduler]
+
+
+        print('Using real-time data augmentation.')
+        datagen = ImageDataGenerator(
+            # set input mean to 0 over the dataset
+            featurewise_center=False,
+            # set each sample mean to 0
+            samplewise_center=False,
+            # divide inputs by std of dataset
+            featurewise_std_normalization=False,
+            # divide each input by its std
+            samplewise_std_normalization=False,
+            # apply ZCA whitening
+            zca_whitening=False,
+            # epsilon for ZCA whitening
+            zca_epsilon=1e-06,
+            # randomly rotate images in the range (deg 0 to 180)
+            rotation_range=0,
+            # randomly shift images horizontally
+            width_shift_range=0.1,
+            # randomly shift images vertically
+            height_shift_range=0.1,
+            # set range for random shear
+            shear_range=0.,
+            # set range for random zoom
+            zoom_range=0.,
+            # set range for random channel shifts
+            channel_shift_range=0.,
+            # set mode for filling points outside the input boundaries
+            fill_mode='nearest',
+            # value used for fill_mode = "constant"
+            cval=0.,
+            # randomly flip images
+            horizontal_flip=True,
+            # randomly flip images
+            vertical_flip=False,
+            # set rescaling factor (applied before any other transformation)
+            rescale=None,
+            # set function that will be applied on each input
+            preprocessing_function=None,
+            # image data format, either "channels_first" or "channels_last"
+            data_format=None,
+            # fraction of images reserved for validation (strictly between 0 and 1)
+            validation_split=0.0)
+
+        # 將資料送進 ImageDataGenrator 中做增強
+        datagen.fit(x_train)
+
+        # 訓練模型囉！
+        model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
+                            steps_per_epoch=int(len(x_train)//batch_size),
+                            validation_data=(x_test, y_test),
+                            epochs=epochs, verbose=1, workers=4,
+                            callbacks=callbacks)
+
+        # 評估我們的模型
+        scores = model.evaluate(x_test, y_test, verbose=1)
+        print('Test loss:', scores[0])
+        print('Test accuracy:', scores[1])
+        ```
+### Kaggle 期末考
+* **Day_101~103 : 影像辨識**
+    * [機器學習百日馬拉松期末考 - 花朵辨識](https://www.kaggle.com/c/4th-cupoy-ml-100-marathon-finalexam)
+### 進階補充 - 電腦視覺實務延伸
+* **Day_104 : 互動式網頁神經網路視覺化**
+    * 何謂 ConvNetJS?
+        * ConvNetJS 是一個 Javascript 庫，用於完全在您的瀏覽器中訓練深度學習模型（神經網路）
+        * [線上網址](https://cs.stanford.edu/people/karpathy/convnetjs/)
+* **Day_105 : CNN 卷積網路演進和應用**
+    * 卷積網路 CNN 的進展簡圖
+        ```flow
+        st1=>start: Perception
+        st2=>start: Neocognition
+        st3=>start: LeNet
+        st4=>condition: AlexNet
+        a1=>start: MIN
+        a2=>start: Inception V1
+        a3=>start: Inception V2
+        a4=>start: Inception V3
+        b1=>start: VGG
+        b2=>start: MSRANet
+        b3=>start: ResNet
+        b4=>start: ResNet V2
+        e=>start: Inception ResNet V2
+        st1->st2->st3->st4
+        st4(yes)->a1->a2->a3->a4->e
+        st4(no)->b1->b2->b3->b4->e
+        ```
+    * 卷積網路架構回顧
+        * 卷積網路的優點：
+            * 局部感知與權重共享，藉由卷積核抽取影像的局部特徵，並且讓影像各區域共享這個卷積核
+        * 兩大部分：
+            * 影像特徵提取：CNN_Layer1+Pooling_1+CNN_Layer2+Pooling_2 的處理
+            * Fully Connected Layer：包含 Flatten Layer, Hidden Layer, Output Layer
+    * CNN 圖像處理上有不同的模型
+        * 主要的元素：ROI, CNN feature map, anchor boxes, mask
+    * 有趣延伸應用 :
+        * 無人商店 : 貨架掃描機器人
+            * 主要功能 :   
+                * 利用電腦視覺導航，避免撞上顧客或推車
+                * 缺貨補上
+                * 價格標錯校正
+                * 價格缺標校正
+        * 說圖人 (Image Caption)
+            * Activity Recognition : CNNs + LSTM
+            * Image Description : CNN + LSTM
+            * Vedio Description : CRF + LSTM
+        * R-CNN (Regional CNN)
+            * R-CNN，它把物體檢測技術拓展到提供像素級別的分割。
+                * R-CNN：https://arxiv.org/abs/1311.2524
+            * R-CNN 的目標是：導入一張圖片，通過方框正確識別主要物體在圖像的哪個地方。
+                * 輸入：圖像
+                * 輸出：方框 + 每個物體的標籤
+            * 但怎麼知道這些方框應該在哪裡呢？
+                * R-CNN 的處理方式 — 在圖像中搞出一大堆方框，看看是否有任何一個與某個物體重疊
+                * 生成這些邊框、或者說是推薦局域，R-CNN 採用的是一項名為 Selective Search 的流程
+                    * Selective Search 通過不同尺寸的窗口來查看圖像
+                    * 對於每一個尺寸，它通過紋理、色彩或密度把相鄰像素劃為一組，來進行物體識別。
+                    * 當邊框方案生成之後，R-CNN 把選取區域變形為標準的方形
+                    * 在 CNN 的最後一層，R-CNN 加入了一個支持向量機，它要做的事很簡單：對這是否是一個物體進行分類，如果是，是什麼物體。
+                * 是否能縮小邊框，讓它更符合物體的三維尺寸？
+                    * 答案是肯定的，這是 R-CNN 的最後一步。
+                * R-CNN 在推薦區域上運行一個簡單的線性回歸，生成更緊的邊框坐標以得到最終結果。
+                    * 回歸模型的輸入和輸出：
+                        * 輸入：對應物體的圖像子區域
+                        * 輸出：針對該物體的新邊框系統
+            * 概括下來，R-CNN 只是以下這幾個步驟：
+                * 生成對邊框的推薦
+                * 在預訓練的 AlexNet 上運行方框裡的物體。用支持向量機來看邊框裡的物體是什麼。
+                * 在線性回歸模型上跑該邊框，在物體分類之後輸出更緊的邊框的座標
+* **Day_106 : 電腦視覺常用公開資料集**
+    * 搜集與標注資料是耗時勞力的工作
+    * 若專案的目標相近，網路上是有非常多公開且標注好的資料集可以使用！
+        * Kaggle
+        * ImageNet dataset
+        * COCO dataset
+    * Kaggle
+        * 各式各樣的影像辨識題目，例如[數海獅數量](https://zhuanlan.zhihu.com/p/29096434)
+    * ImageNet
+        * 由史丹佛李飛飛教授團隊收集，共 1400 萬張影像，1000 個類別要分類，其中類別非常細緻，需要區分各種鳥類、瓶子與車輛等
+        * 目前分類模型的 benchmark 幾乎都是跑在 ImageNet
+    * COCO dataset
+        * 常見的 80 個類別，是目前最完整標註的資料集，包含分割、偵測、文字描述。
+        * 偵測模型、分割模型的 benchmark 都會使用在 COCO dataset 上
+* **Day_107 : 電腦視覺應用介紹 - 影像分類, 影像分割, 物件偵測**
+    * 電腦視覺中，有許多不同的應用，比如：
+        * 影像分類
+        * 影像分割
+        * 物件偵測
+        * 人臉偵測
+        * 關鍵點偵測
+        * 實例分割
+    * 這些應用多半有大型且標注好的資料集作為評估 (benchmark)
+    * 影像分類 Image Classification
+        * 最常見的有
+            * 手寫數字辨識 (MNIST)、
+            * Cifar-10、
+            * Cifar-100、
+            * ImageNet (1,000 個類別分類)、
+            * ImageNet-10k (10,000 個類別分類)
+    * 影像分割 Image Segmentation
+        * 將影像中的類別輪廓分割出來，可以得到每個類別的輪廓，常見的有
+            * Pascal VOC dataset
+            * cityscapes dataset
+    * 物件偵測 Object Detection
+        * 將影像中的類別座標偵測出來，可以得到每個類別涵蓋的範圍，可以進行數量計算，常見的有
+            * COCO dataset
+            * Home objects dataset
+    * 人臉偵測 Face Detection
+        * 將影像中的人臉位置找出，並進行分類。常見的臉部資料集有
+            * CelebFaces, 
+            * Labeled Face in the wilds
+    * 關鍵點偵測 Keypoint Detection
+        * 將影像中人物的關鍵點偵測出來，後續可做姿勢預測或是步態辨別等應用。
+            * COCO dataset
+    * 實例分割 Instance Segmentation 
+        * 與物件偵測非常類似，但除了物件的框框以外，需要將輪廓也一併偵測出來。
+            * COCO dataset 
+
+
