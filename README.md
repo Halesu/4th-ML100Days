@@ -4,21 +4,21 @@
 * **Day_01 : 資料介紹與評估指標**
     * 探索流程 : 找到問題 -> 初探 -> 改進 -> 分享 -> 練習 -> 實戰
     * 思考關鍵點 :
-        * 為什麼這個問題重要
-        * 資料從何而來
-        * 資料型態是什麼
-        * 回答問題的關鍵指標是什麼
+        * 為什麼這個問題重要？
+        * 資料從何而來？
+        * 資料型態是什麼？
+        * 回答問題的關鍵指標是什麼？
 * **Day_02 : 機器學習概論**
-    * 機器學習範疇 : 深度學習(Deep Learning) ⊂ 機器學習(Machine Learning) ⊂ 人工智慧 (Artificial Intelligence)
+    * 機器學習範疇 : **深度學習 (Deep Learning)** ⊂ **機器學習 (Machine Learning)** ⊂ **人工智慧 (Artificial Intelligence)**
     * 機器學習是什麼 :
-        * 讓機器從資料找尋規律與趨勢不需要給定特殊規則
+        * 讓機器從資料找尋規律與趨勢，不需要給定特殊規則
         * 給定目標函數與訓練資料，學習出能讓目標函數最佳的模型參數
     * 機器學習總類 :
-        * 監督是學習(Supervised Learning) : 圖像分類(Classification)、詐騙偵測(Fraud detection)，需成對資料(x,y)
-        * 非監督是學習(Unsupervised Learning) : 降維(Dimension Reduction)、分群(Clustering)、壓縮，只需資料(x)
-        * 強化學習(Reinforcement Learning) : 下圍棋、打電玩，透過代理機器人(Agent)與環境(Environment)互動，學習如何獲取最高獎勵(Reward)，例如 Alpha GO
+        * **監督是學習 (Supervised Learning)** : 圖像分類 (Classification)、詐騙偵測 (Fraud detection)，需成對資料 (x,y)
+        * **非監督是學習 (Unsupervised Learning)** : 降維 (Dimension Reduction)、分群 (Clustering)、壓縮，只需資料 (x)
+        * **強化學習 (Reinforcement Learning)** : 下圍棋、打電玩，透過代理機器人 (Agent) 與環境 (Environment) 互動，學習如何獲取最高獎勵 (Reward)，例如 Alpha GO
 * **Day_03 : 機器學習流程與步驟**
-    * 資料蒐集、前處理
+    * **資料蒐集、前處理**
         * 政府公開資料、Kaggle 資料
             * 結構化資料 : Excel 檔、CSV 檔
             * 非結構化資料 : 圖片、影音、文字
@@ -29,7 +29,7 @@
             * 缺失值填補
             * 離群值處理
             * 標準化
-    * 定義目標與評估準則
+    * **定義目標與評估準則**
         * 回歸問題？分類問題？
         * 預測目標是什麼？(target or y)
         * 用什麼資料進行預測？(predictor or x)
@@ -38,25 +38,25 @@
             * 驗證集，validation set
             * 測試集，test set
         * 評估指標
-            * 回歸問題(預測值為實數)
+            * 回歸問題 (預測值為實數)
                 * RMSE : Root Mean Squeare Error
                 * MAE : Mean Absolute Error
                 * R-Square
-            * 分類問題(預測值為類別)
+            * 分類問題 (預測值為類別)
                 * Accuracy
                 * [F1-score](https://en.wikipedia.org/wiki/F1_score)
                 * [AUC](https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF)，Area Under Curve
-    * 建立模型與調整參數
+    * **建立模型與調整參數**
         * Regression，回歸模型
         * Tree-base model，樹模型
         * Neural network，神經網路
         * Hyperparameter，根據對模型了解和訓練情形進行調整
-    * 導入
+    * **導入**
         * 建立資料蒐集、前處理(Preprocessing)等流程
         * 送進模型進行預測
         * 輸出預測結果
         * 視專案需求調整前後端
-* **Day_04 : 讀取資料與分析流程(EDA，Exploratory Data Analysis)**   
+* **Day_04 : 讀取資料與分析流程 (EDA，Exploratory Data Analysis)**   
     * 透過視覺化和統計工具進行分析
         * 了解資料 : 獲取資料包含的資訊、結構、特點
         * 發現 outlier 或異常數值 : 檢查資料是否有誤
@@ -71,7 +71,7 @@
         df = pd.read_csv('example.csv') # sep=','
         df = pd.read_table('example.csv') # sep='\t'
         ```
-    * 文本(txt)
+    * 文本 (txt)
         ```py
         with open('example.txt','r') as f:
             data = f.readlines()
@@ -84,12 +84,12 @@
             data = json.load(f)
         print(data)
         ```
-    * 矩陣檔(mat)
+    * 矩陣檔 (mat)
         ```py
         import scipy.io as sio
         data = sio.load('example.mat')
         ```
-    * 圖像檔(PNG/JPG...)
+    * 圖像檔 (PNG/JPG...)
         ```py
         import cv2
         image = cv2.imread('example.jpg') # Cv2 會以 GBR 讀入
@@ -100,7 +100,7 @@
         import numpy as np
         arr = np.load('example.npy')
         ```    
-    * Picke(pkl)
+    * Picke (pkl)
         ```py
         import pickle
         with open('example.pkl','rb') as f:
@@ -130,7 +130,7 @@
     * 二元型特徵 : True/False，可當類別或數值處理
     * 排序型特徵 : 有大小關係時當數值型特徵處理
     * 時間型特徵 : 可當數值或類別處理，但會失去週期性，需特別處理
-* **Day_08 : EDA之資料分佈**
+* **Day_08 : EDA 之資料分佈**
     * 以單變量進行分析
         * 計算集中趨勢
             * 平均數，`mean()`
@@ -159,8 +159,9 @@
             sns.set_style('whitegrid')  # 變更其他風格
             sns.axes_style(...) # 更詳細的設定
             ```
-    * 延伸閱讀 : [敘述統計與機率分佈](http://www.hmwu.idv.tw/web/R_AI_M/AI-M1-hmwu_R_Stat&Prob_v2.pdf)
-* **Day_09 : 離群值(Outlier)及其處理**
+    * 延伸閱讀 : 
+        * [敘述統計與機率分佈](http://www.hmwu.idv.tw/web/R_AI_M/AI-M1-hmwu_R_Stat&Prob_v2.pdf)
+* **Day_09 : 離群值 (Outlier) 及其處理**
     * 異常值出現可能原因
         * 未知值隨意填補或約定成俗代入
         * 錯誤紀錄/手誤/系統性錯誤
@@ -181,10 +182,11 @@
         * 取代補植 : 中位數、平均數等
         * 另建欄位 : 標示異常(Y/N)
         * 整欄不用
-    * 延伸閱讀 : [辨識異常值](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)、[IQR](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)
-* **Day_10 : 數值特徵-去除離群值**
-    * 方法一 : 去除離群值，可能刪除掉重要資訊，但不刪除會造
-    成特徵縮放(標準化/最大最小化)有很大問題
+    * 延伸閱讀 : 
+        * [辨識異常值](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)
+        * [IQR](https://machinelearningmastery.com/how-to-use-statistics-to-identify-outliers-in-data/)
+* **Day_10 : 數值特徵 - 去除離群值**
+    * 方法一 : 去除離群值，可能刪除掉重要資訊，但不刪除會造成特徵縮放 (標準化/最大最小化) 有很大問題
         ```py
         mask = df[col] > threshold_lower & df[col] < threshold_upper
         df = df[mask]
@@ -195,14 +197,14 @@
         ```
 * **Day_11 : 數值填補與連續數值標準化**
     * 常用於填補的統計值
-        * 中位數(median) : `np.median(df[col])`
-        * 分位數(quantiles) : `np.quantile(df[col],q=...)`
-        * 眾數(mode) : 
+        * 中位數 (median) : `np.median(df[col])`
+        * 分位數 (quantiles) : `np.quantile(df[col],q=...)`
+        * 眾數 (mode) : 
             ```py
             from scipy.stats import mode
             mode(df[col])
             ```
-        * 平均數(mean) : `np.mean(df[col])`
+        * 平均數 (mean) : `np.mean(df[col])`
     * 連續型數值[標準化](https://blog.csdn.net/pipisorry/article/details/52247379)
         * 為何要標準化 : 每個變數 x 對 y 的影響力不同
         * 是否要做標準化 : 對於權重敏感或損失函數平滑有幫助者
@@ -217,12 +219,12 @@
 * **Day_12 : 數值型特徵 - 補缺失值與標準化**
     * [缺失值處理](https://juejin.im/post/5b5c4e6c6fb9a04f90791e0c) : 最重要的是欄位領域知識與欄位中的非缺數值，須注意不要破壞資料分佈
         * 填補統計值 :
-            * 填補平均數(mean) : 數值型欄位，偏態不明顯
-            * 填補中位數(meadian) : 數值型欄位，偏態明顯
-            * 填補重數(mode) : 類別型欄位
+            * 填補平均數 (mean) : 數值型欄位，偏態不明顯
+            * 填補中位數 (meadian) : 數值型欄位，偏態明顯
+            * 填補重數 (mode) : 類別型欄位
         * 填補指定值 : 須對欄位領域知識已有了解
             * 補 0 : 空缺原本就有零的含意
-            * 補不可能出現的數值 : 類別型欄位，但不是合用眾數時
+            * 補不可能出現的數值 : 類別型欄位，但不適合用眾數時
             ```py
             df.fillna(0)
             df.fillna(-1)
@@ -232,9 +234,9 @@
             * 若填補範圍廣，且是重要的特徵欄位時可用本方式
             * 須提防 overfitting : 可能退化成其他特徵組合
         * 標準化 : 以合理的方式平衡特徵間的影響力
-            * 標準化(Standard Scaler) : 假設數值為常態分
+            * 標準化 (Standard Scaler) : 假設數值為常態分
             佈，適用本方式平衡特徵，不易受極端值影響
-            * 最大最小化(MinMax Scaler) : 假設數值為均勻分布，適用本方式平衡特徵，易受極端值影響
+            * 最大最小化 (MinMax Scaler) : 假設數值為均勻分布，適用本方式平衡特徵，易受極端值影響
                 ```py
                 from sklearn.preprocessing import MinMaxScaler, StandardScaler
                 df_temp = MinMaxScaler().fit_transform(df)
@@ -350,7 +352,7 @@
         df.plot(x='X',y='y',kind='scatter')
         df.boxplot(column=['X'], by=['y'])
         ```
-* **Day_16 : 繪圖與樣式＆Kernel Density Estimation (KDE)**
+* **Day_16 : 繪圖與樣式 ＆ Kernel Density Estimation (KDE)**
     * 繪圖風格 : 用已經被設計過的風格，讓觀看者更清楚明瞭，包含色彩選擇、線條、樣式等。
         ```py
         plt.style.use('default') # 不需設定就會使用預設
@@ -417,12 +419,14 @@
         # 繪製目標值平均與分組組別的長條圖
         plt.bar(range(len(age_groups.index)), age_groups['TARGET'])
         # 加上 X, y 座標說明, 以及圖表的標題
-        plt.xticks(range(len(age_groups.index)), age_groups.index, rotation = 75); plt.xlabel('Age Group (years)'); plt.ylabel('Average Failure to Repay')
+        plt.xticks(range(len(age_groups.index)), age_groups.index, rotation = 75)
+        plt.xlabel('Age Group (years)')
+        plt.ylabel('Average Failure to Repay')
         plt.title('Failure to Repay by Age Group')
         ```
 * **Day_19 : Subplot**
     * 使用時機 :
-        * 有很多相似的資料要呈現時(如不同組別)
+        * 有很多相似的資料要呈現時 (如不同組別)
         * 同一組資料，想要同時用不同的圖呈現
         * 適時的使用有助於資訊傳達，但過度使用會讓重點混淆
     * subplot 坐標系 (列-欄-位置)
@@ -450,17 +454,17 @@
         * [複雜版 subplot 寫法](https://jakevdp.github.io/PythonDataScienceHandbook/04.08-multiple-subplots.html)
         * [另類⼦子圖 Seaborn.jointplot](https://seaborn.pydata.org/generated/seaborn.jointplot.html)
 * **Day_20 : Heatmap & Grid-plot**
-    * heatmap
+    * `heatmap`
         * 常用於呈現變數間的相關性
         * 也可以用於呈現不同條件下的數量關係
-        * 常用於呈現混淆矩陣(Confusion matrix)
+        * 常用於呈現**混淆矩陣 (Confusion matrix)**
         ```py
         plt.figure(figsize = (8, 6))
         # 繪製相關係數 (correlations) 的 Heatmap
         sns.heatmap(df.corr(), cmap = plt.cm.RdYlBu_r, vmin = -1.0, annot = True, vmax = 1.0)
         plt.title('Correlation Heatmap')
         ```
-    * pairplot
+    * `pairplot`
         * 對角線 : 該變數的分布(distribution)
         * 非對角線 : 倆倆變數間的散佈圖
         ```py
@@ -468,7 +472,7 @@
         iris = sns.load_dataset("iris")
         g = sns.pairplot(iris)
         ```
-    * PairGrid
+    * `PairGrid`
         * 可以自訂對角線和非對角線的繪圖類型
         ```py
         g = sns.PairGrid(iris, hue="species")
@@ -506,8 +510,8 @@
         ```
 ### 資料科學與特徵工程技術 Data Science & Feature Engineering
 * **Day_22 : 特徵工程簡介**
-    * 資料工程是將**事實**對應到**分數**的**轉換**
-    * 由於資料包含類別特徵(文字)和數值特徵，所以最小的特徵工程至少包含一種**類別編碼**(例如:標籤編碼)和**特徵縮放**方法(例如:最小最大化)
+    * 資料工程是**將事實對應到分數的轉換**
+    * 由於資料包含類別特徵 (文字) 和數值特徵，所以最小的特徵工程至少包含一種**類別編碼** (例如:標籤編碼)和**特徵縮放**方法 (例如:最小最大化)
         ```py
         from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 
@@ -519,11 +523,12 @@
                 df[c] = LEncoder.fit_transform(list(df[c].values))
             df[c] = MMEncoder.fit_transform(df[c].values.reshape(-1, 1))
         ```
-    * 延伸閱讀 : [特徵工程是什麼](https://www.zhihu.com/question/29316149)
+    * 延伸閱讀 : 
+        * [特徵工程是什麼](https://www.zhihu.com/question/29316149)
 * **Day_23 : 數值型特徵 - 去除偏態**
-    * 當**離群值**資料比例太高，或者**平均值沒有代表性**時，可以考慮去除偏態
-    * 去除偏態包含 : 對數去偏(log1p)、方根去偏(sqrt)、分布去偏(boxcox)
-    * 使用 box-cox 分不去偏時，除了注意 $\lambda$ 參數要藉於 0 到 0.5 之間，並且要注意轉換前的數值不可小於等於 0
+    * 當**離群值資料比例太高**，或者**平均值沒有代表性**時，可以考慮去除偏態
+    * 去除偏態包含 : 對數去偏 (log1p)、方根去偏 (sqrt)、分布去偏 (boxcox)
+    * 使用 box-cox 分布去偏時，除了注意 $\lambda$ 參數要界於 0 到 0.5 之間，並且要注意轉換前的數值不可小於等於 0
         ```py
         # 對數去偏
         df_fixed['Fare'] = np.log1p(df_fixed['Fare'])
@@ -536,9 +541,10 @@
         df_fixed['Fare'] = df_fixed['Fare'] + 1
         df_fixed['Fare'] = stats.boxcox(df_fixed['Fare'])[0]
         ```
-    * 延伸閱讀 : [偏度與峰度](https://blog.csdn.net/u013555719/article/details/78530879)
+    * 延伸閱讀 : 
+        * [偏度與峰度](https://blog.csdn.net/u013555719/article/details/78530879)
 * **Day_24 : 類別型特徵 - 基礎處理**
-    * 類別型特徵有**標籤編碼**(Label Encoding)與**獨熱編碼**(One Hot Encoding)兩種基礎編碼方式
+    * 類別型特徵有**標籤編碼 (Label Encoding)** 與**獨熱編碼 (One Hot Encoding)** 兩種基礎編碼方式
     * 標籤編碼將特徵依序轉為代碼，若特徵沒有大小順序之別，則大小順序沒有意義，常用於非深度學習模型，深度學習模型主要依賴倒傳導，標籤編碼不易收斂
     * 當特徵重要性高且可能值少時，可考慮獨熱編碼
         ```py
@@ -557,9 +563,10 @@
         # 獨熱編碼
         df_temp = pd.get_dummies(df)
         ```
-    * 延伸閱讀 : [標籤編碼與獨熱編碼](https://blog.csdn.net/u013555719/article/details/78530879)
+    * 延伸閱讀 : 
+        * [標籤編碼與獨熱編碼](https://blog.csdn.net/u013555719/article/details/78530879)
 * **Day_25 : 類別型特徵 - 均值編碼**
-    * 均值編碼(Mean Encoding) : 使用目標值的平均值取代原本類別型特徵
+    * **均值編碼 (Mean Encoding)** : 使用目標值的平均值取代原本類別型特徵
     * 當類別特徵與目標明顯相關時，該考慮採用均值編碼
     * 樣本數少時可能是極端值，平均結果可能誤差很大，需使用平滑公式來調整
         * 當平均值可靠度低則傾向相信總平均
@@ -577,18 +584,18 @@
         data = data.drop(['target'] , axis=1)
         ```
 * **Day_26 : 類別型特徵 - 其他進階處理**
-    * 計數編碼(Counting) : 計算類別在資料中出現次數，當目前平均值與類別筆數呈現正/負相關時，可以考慮使用
+    * **計數編碼 (Counting)** : 計算類別在資料中出現次數，當目前平均值與類別筆數呈現正/負相關時，可以考慮使用
         ```py
         count_df = df.groupby(['Ticket'])['Name'].agg({'Ticket_Count':'size'}).reset_index()
         df = pd.merge(df, count_df, on=['Ticket'], how='left')
         ```
-    * 雜湊編碼 : 將類別由雜湊函數對應到一組數字
+    * **雜湊編碼** : 將類別由雜湊函數對應到一組數字
         * 調整雜湊函數對應值的數量，在計算空間/時間與鑑別度間取折衷
         * 提高訊息密度並減少無用的標籤
         ```py
         df_temp['Ticket_Hash'] = df['Ticket'].map(lambda x:hash(x) % 10)
         ```
-    * 雜湊編碼也不佳時可使用嵌入式編碼(Embedding)，但需要基於深度學習前提下
+    * 雜湊編碼也不佳時可使用**嵌入式編碼 (Embedding)**，但需要基於深度學習前提下
     * 延伸閱讀 :
         * [特徵哈希](https://blog.csdn.net/laolu1573/article/details/79410187)
         * [文本特徵抽取](https://www.jianshu.com/p/063840752151)
@@ -651,19 +658,21 @@
         latitude_factor = math.cos(latitude_average/180*math.pi)
         df['distance_real'] = ((df['longitude_diff']*latitude_factor)**2 + df['latitude_diff']**2)**0.5
         ```
-    * 機器學習的關鍵是特徵工程，能有效地提升模型預測能力            
-    * 延伸閱讀 : [特徵交叉](https://segmentfault.com/a/1190000014799038)
+    * **機器學習的關鍵是特徵工程**，能有效地提升模型預測能力            
+    * 延伸閱讀 : 
+        * [特徵交叉](https://segmentfault.com/a/1190000014799038)
 * **Day_29 : 特徵組合 - 類別與數值組合**
-    * 群聚編碼(Group by Encoding) : 類別特徵與數值特徵可以使用群聚編碼組合出新的特徵
+    * **群聚編碼 (Group by Encoding)** : 類別特徵與數值特徵可以使用群聚編碼組合出新的特徵
         * 常見的組合方式有 `mean`,`mdian`,`mode`,`max`,`min`,`count`
-        * 與均值編碼(Mean Encoding)的比較
+        * 與均值編碼 (Mean Encoding) 的比較
             | 名稱                  | 均值編碼 Encoding | 群聚編碼 Group by Encoding |
             |-----------------------|------------------|---------------------------|
             | 平均對象                | 目標值           | 其他數值型特徵                |
-            | 過擬合\(Overfitting\)  | 容易            | 不容易                    |
-            | 對均值平滑化\(Smoothing\) | 需要            | 不需要                    |
+            | 過擬合 (Overfitting)  | 容易            | 不容易                    |
+            | 對均值平滑化 (Smoothing) | 需要            | 不需要                    |
         * 機器學習的特徵是 **寧爛勿缺** 的，以前非樹狀模型為了避免共線性，會希望類似特徵不要太多，但現在強力模型大多是樹狀模型，所以通通做成~~雞精~~特徵
-    * 延伸閱讀 : [數據聚合與分組](https://zhuanlan.zhihu.com/p/27590154)
+    * 延伸閱讀 : 
+        * [數據聚合與分組](https://zhuanlan.zhihu.com/p/27590154)
         ```py
         # 取船票票號(Ticket), 對乘客年齡(Age)做群聚編碼
         df['Ticket'] = df['Ticket'].fillna('None')
@@ -690,13 +699,13 @@
         | 4     | 110813 | 60\.000000 | 60\.000000 | 60\.000000  | 60\.0    | 60\.000000 |
 * **Day_30 : 特徵選擇**
     * 特徵需要適當的增加與減少，以提升精確度並減少計算時間
-        * 增加特徵 : 特徵組合(Day_28)，群聚編碼(Day_29)
-        * 減少特徵 : 特徵選擇(Day_30)
+        * 增加特徵 : 特徵組合 (Day_28)，群聚編碼 (Day_29)
+        * 減少特徵 : 特徵選擇 (Day_30)
     * 特徵選擇有三大類方法
-        * 過濾法(Filter) : 選定統計值與設定門檻，刪除低於門檻的特徵
-        * 包裝法(Wrapper) : 根據目標函數，逐步加入特徵或刪除特徵
-        * 嵌入法(Embedded) : 使用機器學習模型，根據擬合後的係數，刪除係數低餘門檻的特徵
-    * 相關係數過濾法
+        * **過濾法 (Filter)** : 選定統計值與設定門檻，刪除低於門檻的特徵
+        * **包裝法 (Wrapper)** : 根據目標函數，逐步加入特徵或刪除特徵
+        * **嵌入法 (Embedded)** : 使用機器學習模型，根據擬合後的係數，刪除係數低餘門檻的特徵
+    * **相關係數過濾法**
         ```py
         # 計算df整體相關係數, 並繪製成熱圖
         import seaborn as sns
@@ -710,7 +719,7 @@
         # 刪除目標欄位
         high_list.pop(-1)
         ```
-    * Lasso(L1)嵌入法
+    * **Lasso (L1) 嵌入法**
         * 使用 Lasso Regression 時，調整不同的正規化程度，就會自然使得一部分特徵係數為 0，因此刪除係數是 0 的特徵，不須額外指定門檻，但需調整正規化程度
         ```py
         from sklearn.linear_model import Lasso
@@ -726,7 +735,7 @@
         L1_mask = list((L1_Reg.coef_>0) | (L1_Reg.coef_<0))
         L1_list = list(compress(list(df), list(L1_mask)))   # list type
         ```
-    * GDBT(梯度提升樹)嵌入法
+    * **GDBT (梯度提升樹) 嵌入法**
         * 使用梯度提升樹擬合後，以特徵在節點出現的頻率當作特徵重要性，以此刪除重要性低於門檻的特徵
 
             |           | 計算時間 | 共線性  | 特徵穩定性 |
@@ -754,16 +763,16 @@
         |----------------|--------------|------|-------|--------------|
         | 分支次數           | weight       | 最快   | 最低    | O            |
         | 分支覆蓋度          | cover        | 快    | 中     | X            |
-        | 損失降低量\(資訊增益度\) | gain         | 較慢   | 最高    | X            |
+        | 損失降低量 (資訊增益度) | gain         | 較慢   | 最高    | X            |
     * 機器學習的優化循環
         1. 原始特徵
         2. 進階版 GDBT 模型擬合
         3. 用特徵重要性增刪特徵
             * 特徵選擇(刪除) : 挑選門檻，刪除一部分重要性較低的特徵
             * 特徵組合(增加) : 依領域知識，對前幾名的特徵做特徵組合或群聚編碼，形成更強力特徵
-        4. 交叉驗證(cross validation)，確認特徵效果是否改善
-    * 排序重要性(Permutation Importance)
-        * 雖然特徵重要性相當食用，然而計算原理必須基於樹狀模型，於是有了可延伸至非樹狀模型的排序重要性
+        4. 交叉驗證 (cross validation)，確認特徵效果是否改善
+    * 排序重要性 (Permutation Importance)
+        * 雖然特徵重要性相當實用，然而計算原理必須基於樹狀模型，於是有了可延伸至非樹狀模型的排序重要性
         * 排序重要性是打散單一特徵的資料排序，再用原本模型重新預測，觀察打散前後誤差變化有多少
 
             |        | 特徵重要性 Feature Importance | 排序重要性 Permutation Importance |
@@ -813,23 +822,24 @@
             * 不同參數模型會產生不同的 $\hat{y}$
             * 希望產生出來的 $\hat{y}$ 與真實答案 $y$ 越接近越好
             * 找出一組參數讓模型產生的 $\hat{y}$ 與真正的 $y$ 很接近，這個過程有點像是學習的概念。
-    * 評估模型好壞 : 定義一個**目標函數**(objective function)也可稱為**損失函數**(Loss function)，來衡量模型好壞
+    * 評估模型好壞 : 定義一個**目標函數 (objective function)** 也可稱為**損失函數 (Loss function)**，來衡量模型好壞
         * 例如線性回歸可以使用**均方差**(mean square error)來衡量
             $$ MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y_i})^2$$
         * Loss 越大代表模型預測愈不准，代表不該選擇這個參數
-    * 找出最佳參數 : 可以使用爆力法、梯度下降(Gradient Descent)、增量訓練(Addtive Training)等方式
-        * 過擬合(over-fitting) : 訓練過程學習到了噪音導致在實際應用失準
-        * 欠擬合(under-fitting) : 模型無法好好的擬合訓練數據
+    * 找出最佳參數 : 可以使用爆力法、梯度下降 (Gradient Descent)、增量訓練 (Addtive Training) 等方式
+        * **過擬合 (over-fitting)** : 訓練過程學習到了噪音導致在實際應用失準
+        * **欠擬合 (under-fitting)** : 模型無法好好的擬合訓練數據
             * 如何知道 : 觀察訓練資料與測試資料的誤差趨勢
             * 如何改善 :
                 * 過擬合 : 
                     * 增加資料量
                     * 降低模型複雜度
-                    * 使用正規化(Regularization)
+                    * 使用正規化 (Regularization)
                 * 欠擬合 :
                     * 增加模型複雜度
                     * 減輕或不使用正規化
-    * 延伸閱讀 : [學習曲線與 bias/variance trade-off](http://bangqu.com/yjB839.html)
+    * 延伸閱讀 : 
+        * [學習曲線與 bias/variance trade-off](http://bangqu.com/yjB839.html)
 * **Day_34 : 訓練與測試集切分**
     * 為何需要切分 :
         * 機器學習模型需要資料訓練
@@ -853,7 +863,8 @@
             y_train, y_test = y[train_index], y[test_index]
         ```
     * 驗證集與測試集差異 : 驗證集常用來評估不同超參數或不同模型的結果，測試集則是預先保留的資料，在專案開發過程中都不使用，最終在拿來做測試
-    * 延伸閱讀 : [訓練、驗證與測試集的意義](https://www.youtube.com/watch?v=D_S6y0Jm6dQ&feature=youtu.be&t=1948)
+    * 延伸閱讀 : 
+        * [訓練、驗證與測試集的意義](https://www.youtube.com/watch?v=D_S6y0Jm6dQ&feature=youtu.be&t=1948)
 * **Day_35 : Regression & Classification**
     * 機器學習主要分為**回歸**問題與**分類**問題
         * 回歸問題 : 預測目標值為實數($-\infty$至$\infty$)(continuous)
@@ -870,19 +881,20 @@
         * [回歸與分類比較](http://zylix666.blogspot.com/2016/06/supervised-classificationregression.html)
         * [Multi-class vs. Multi-label ](https://medium.com/coinmonks/multi-label-classification-blog-tags-prediction-using-nlp-b0b5ee6686fc)
 * **Day_36 : 評估指標選定**
-    * 設定各項指標來評估模型的準確性，最常見的為準確率(**Accuracy**) = 正確認類樣本數/總樣本數
+    * 設定各項指標來評估模型的準確性，最常見的為**準確率 (Accuracy) = 正確分類樣本數/總樣本數**
     * 不同的評估指標有不同的評估準則與面向，衡量的重點有所不同
-    * 評估指標 - 回歸 : 觀察預測值(prediction)與實際值(ground truth)的**差距**
-        * MAE(mean absolute error)，範圍[0,inf]
-        * MSE(mean square error)，範圍[0,inf]
-        * R-square，範圍[0,1]
-    * 評估指標 - 分類 : 觀察預測值與實際值的**正確程度**
-        * AUC(area under curve)，範圍[0,1]
-        * F1-score(precision, recall)，範圍[0,1]
-        * 混淆矩陣(Confusion Matrix)
+    * 評估指標
+        * 回歸 : 觀察預測值 (prediction) 與實際值 (ground truth) 的**差距**
+            * **MAE (mean absolute error)**，範圍[0,inf]
+            * **MSE (mean square error)**，範圍[0,inf]
+            * **R-square**，範圍[0,1]
+        * 分類 : 觀察預測值與實際值的**正確程度**
+            * **AUC (area under curve)**，範圍[0,1]
+            * **F1-score (precision, recall)**，範圍[0,1]
+            * **混淆矩陣 (Confusion Matrix)**
     * 回歸問題可透過 R-square 快速了解準確度，二元分類問題通常使用 AUC 評估，希望哪個類別不要分錯則可使用 F1-score 並觀察 precision 與 recall 數值，多分類問題則可使用 top-k accuracy，例如 ImageNet 競賽通常採用 top-5 accuracy
     * Q&A :
-        * AUC 計算怪怪的，AUC 的 y_pred 的值填入每個樣本預測機率(probility)而非分類結果
+        * AUC 計算怪怪的，AUC 的 y_pred 的值填入每個樣本**預測機率 (probility)** 而非分類結果
         * F1-score 計算則填入每個樣本分類結果，如機率 >= 0.5 則視為 1，而非填入機率值
         ```py
         from sklearn import metrics, datasets
@@ -939,23 +951,23 @@
         print("Accuracy: ", accuracy_score(y_test, y_pred))
         ```
     * Logistic Regression 參數
-        * Penalty : 使用 "L1" or "L2" 正則化參數
-        * C : 正則化的強度，數字越小模型越簡單
-        * Solver : 對損失函數的優化方法，詳細參考[連結](https://blog.csdn.net/lc574260570/article/details/82116197)
-        * Multi-class : 選擇 one-vs-rest 或 multi-nominal 分類方式，若有 10 class， ovr 是訓練 10 個二分類模型，第一個模型負責分類 (class1, non-class1)；第二個負責(class2, non-class2)，以此類推。multi-nominal 是直接訓練多分類模型。詳細參考[連結](https://www.quora.com/What-is-the-difference-between-one-vs-all-binary-logistic-regression-and-multinomial-logistic-regression)
+        * *Penalty* : 使用 "L1" or "L2" 正則化參數
+        * *C* : 正则化系数 **$\lambda$ 的倒数**，數字越小模型越簡單
+        * *Solver* : 對損失函數的優化方法，詳細參考[連結](https://blog.csdn.net/lc574260570/article/details/82116197)
+        * *Multi-class* : 選擇 one-vs-rest 或 multi-nominal 分類方式，若有 10 class， ovr 是訓練 10 個二分類模型，第一個模型負責分類 (class1, non-class1)；第二個負責(class2, non-class2)，以此類推。multi-nominal 是直接訓練多分類模型。詳細參考[連結](https://www.quora.com/What-is-the-difference-between-one-vs-all-binary-logistic-regression-and-multinomial-logistic-regression)
     * 延伸閱讀 :
         * [更多 Linear regression 和 Logistic regression 範例](https://github.com/trekhleb/homemade-machine-learning)
         * [深入了解 multi-nominal Logistic Regresson 原理](http://dataaspirant.com/2017/05/15/implement-multinomial-logistic-regression-python/)
 * **Day_39 : LASSO, Ridge regression**
     * 機器學習模型的目標函數有兩個非常重要的元素
-        * 損失函數 (Loss function) : 衡量實際值與預測值差異，讓模型往正確方向學習
-        * 正則化 (Regularization) : 避免模型過於複雜，造成過擬合
-        * 為了避免過擬合我們把正則化加入目標函數，目標函數 = 損失函數 + 正則化
+        * **損失函數 (Loss function)** : 衡量實際值與預測值差異，讓模型往正確方向學習
+        * **正則化 (Regularization)** : 避免模型過於複雜，造成過擬合
+        * 為了避免過擬合我們把正則化加入目標函數，**目標函數 = 損失函數 + 正則化**
         * 正則化可以懲罰模型的複雜度，當模型越大其值越大
     * 正則化函數 : 用來衡量模型的複雜度
         * L1 : $\alpha\sum|weight|$
         * L2 : $\alpha\sum(weight)^2$
-        * 這兩種都是希望模型的參數數值不要太大，原因是參參數的數值變小，噪音對最終輸出的結果影響越小，提升模型的泛化能力，但也讓模型的擬合能力下降
+        * 這兩種都是希望模型的參數數值不要太大，原因是參數的數值變小，噪音對最終輸出的結果影響越小，提升模型的泛化能力，但也讓模型的擬合能力下降
     * LASSO 為 Linear Regression 加上 L1
     * Ridge 為 Linear Regression 加上 L2
     * 其中有個超參數 $\alpha$ 可以調整正則化強度 
@@ -991,16 +1003,16 @@
     print(ridge.coef_)
     ```
 * **Day_41 : 決策樹 Decision Tree**
-    * 決策樹 (Decision Tree) : 透過一系列的是非問題，幫助我們將資料切分，可是視覺化每個切分過程，是個具有非常高解釋性的模型
-        * 從訓練資料中找出規則，讓每一次決策使訊息增益 (information Gain) 最大化
+    * **決策樹 (Decision Tree)** : 透過一系列的**是非問題**，幫助我們將資料切分，可視覺化每個切分過程，是個具有非常高解釋性的模型
+        * 從訓練資料中找出規則，讓每一次決策使**訊息增益 (information Gain)** 最大化
         * 訊息增益越大代表切分後的兩群，群內相似度越高，例如使用健檢資料來預測性別，若使用頭髮長度 50 公分進行切分，則切分後的兩群資料很有可能多數為男生或女生(相似程度高)，這樣頭髮長度就是個好 feature
     * 如何衡量相似程度
-        * 吉尼係數(不純度) (gini-index)
+        * **吉尼係數 (gini-index)** (不純度)
             $$Gini = 1 - \sum_jp_j^2$$
-        * 熵 (entropy)
+        * **熵 (entropy)**
             $$Entropy = -\sum_jp_jlog_2p_j$$
     * 決策樹的特徵重要性
-        * 我們可以從構建樹的過程中，透過 feature 被⽤用來切分的次數，來得知哪些 features 是相對有用的
+        * 我們可以從構建樹的過程中，透過 feature 被用來切分的次數，來得知哪些 features 是相對有用的
         * 所有 feature importance 的總和為 1
         * 實務上可以使用 feature importance 來了解模型如何進行分類
     * 延伸閱讀 :
@@ -1009,19 +1021,23 @@
 * **Day_42 : 決策樹 </>**
     * 機器學習的建模步驟 :
         1. 讀取和檢查資料
-            * 使用 pandas 讀取 .csv 檔 : pd.read_csv
-            * 使用 numpy 讀取 txt 檔 : np.loadtxt
-            * 使用 sklearn 內建資料集 : sklearn.datasets.load_xxx
-            * 檢查資料數量 : data.shape
+            * 使用 pandas 讀取 .csv 檔 : `pd.read_csv`
+            * 使用 numpy 讀取 txt 檔 : `np.loadtxt`
+            * 使用 sklearn 內建資料集 : `sklearn.datasets.load_xxx`
+            * 檢查資料數量 : `data.shape`
         2. 將資料切分為訓練 (train) 與測試集 (test)
-            * train_test_split(data)
+            * `train_test_split(data)`
         3. 建立模型開始訓練 (fit)
-            * clf = DecisionTreeClassifier()
-            * clf.fit(x_train, y_train)
-        4. 將測試資料放進訓練好的模型進行預測 (predict)，並測試資料的 label (y_test) 做評估
-            * clf.predict(x_test)
-            * accuracy_score(y_test, y_pred)
-            * f1_score(y_test, y_pred)
+            ```py
+            clf = DecisionTreeClassifier()
+            clf.fit(x_train, y_train)
+            ```
+        4. 將測試資料放進訓練好的模型進行預測 (predict)，並和測試資料的 label (y_test) 做評估
+            ```py
+            clf.predict(x_test)
+            accuracy_score(y_test, y_pred)
+            f1_score(y_test, y_pred)
+            ```
     * 根據回歸/分類問題建立不同的 Classifier
         ```py
         from sklearn.tree_model import DecisionTreeRegressor
@@ -1043,24 +1059,25 @@
         print("Feature importance: ", clf.feature_importances_)
         ```
     * 決策樹的超參數
-        * Criterion: 衡量資料相似程度的 metric
-        * Max_depth: 樹能生長的最深限制
-        * Min_samples_split: 至少要多少樣本以上才進行切分
-        * Min_samples_lear: 最終的葉子(節點)上至少要有多少樣本
-        ```py
-        clf = DecisionTreeClassifier(
-                criterion = 'gini',
-                max_depth = None,
-                min_samples_split = 2,
-                min_samples_left = 1,
-        )
-        ```
-    * 延伸閱讀 : [Creating and Visualizing Decision Trees with Python](https://medium.com/@rnbrown/creating-and-visualizing-decision-trees-with-python-f8e8fa394176)
+        * *Criterion*: 衡量資料相似程度的 metric
+        * *Max_depth*: 樹能生長的最深限制
+        * *Min_samples_split*: 至少要多少樣本以上才進行切分
+        * *Min_samples_lear*: 最終的葉子(節點)上至少要有多少樣本
+            ```py
+            clf = DecisionTreeClassifier(
+                    criterion = 'gini',
+                    max_depth = None,
+                    min_samples_split = 2,
+                    min_samples_left = 1,
+            )
+            ```
+    * 延伸閱讀 : 
+        * [Creating and Visualizing Decision Trees with Python](https://medium.com/@rnbrown/creating-and-visualizing-decision-trees-with-python-f8e8fa394176)
 * **Day_43 : 隨機森林樹 Random Forest**
     * 決策樹缺點 :
-        * 若不對決策樹進行限制(樹深度、葉子上至少要有多少樣本等)，決策樹非常容易 over-fitting
+        * 若不對決策樹進行限制 (樹深度、葉子上至少要有多少樣本等)，決策樹非常容易 over-fitting
     * 集成模型 - 隨機森林 (Random Forest)
-        * 集成 (Ensemble) : 將多個模型的結果組合在一起，透過**投票**或是**加權**的方式獲得最終結果
+        * **集成 (Ensemble)** : 將多個模型的結果組合在一起，透過**投票**或是**加權**的方式獲得最終結果
         * 每棵樹使用部分訓練資料與特徵進行訓練而成
     * 延伸閱讀 :
         * [隨機森林](http://hhtucode.blogspot.com/2013/06/ml-random-forest.html)
@@ -1070,6 +1087,7 @@
     ```py
     from sklearn.ensemble import RandomForestClassifier
     from sklearn.ensemble import RandomForestRegressor
+    
     clf = RandomForestClassifier(
             n_estimators=10, #決策樹的數量量
             criterion="gini",
@@ -1094,12 +1112,12 @@
 * **Day_45 : 梯度提升機 Gradient Boosting Machine**
     * 隨機森林使用的方法為 Bagging (Bootstrap Aggregating)，用抽樣資料與特徵生成每一棵樹，最後在取平均
     * Boosting 是另一種集成方法，希望由後面生成的樹來修正前面學不好的地方
-    * Bagging :
+    * **Bagging** :
         * 透過抽樣 (sampling) 方式生成每一棵樹，樹與樹之間是獨立的
         * 降低 over-fitting
         * 減少 variance
         * Independent classifiers
-    * Boosting :
+    * **Boosting** :
         * 透過序列 (additive) 方式生成每一棵樹，每棵樹與前面的樹關聯
         * 可能會 over-fitting
         * 減少 bias 和 variance
@@ -1125,7 +1143,8 @@
     y_pred = clf.predict(x_test)
     print("Acuuracy: ", metrics.accuracy_score(y_test, y_pred))
     ```
-    * 延伸閱讀 : [Complete Machine Learning Guide to Parameter Tuning in Gradient Boosting](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
+    * 延伸閱讀 : 
+        * [Complete Machine Learning Guide to Parameter Tuning in Gradient Boosting](https://www.analyticsvidhya.com/blog/2016/02/complete-guide-parameter-tuning-gradient-boosting-gbm-python/)
 ### 機器學習調整參數
 * **Day_47 : 超參數調整**
     * 機器學習中的超參數
@@ -1133,11 +1152,11 @@
         * 決策樹 : 樹的深度、節點最小樣本數
         * 隨機森林 : 樹的數量
     * 超參數會影響模型訓練的結果，建議先使用預設再慢慢進行調整
-    * 超參數會影響結果但提升效果有限，資料清理和特徵工程才能最有效的提升準確率
+    * 超參數會影響結果但提升效果有限，**資料清理**和**特徵工程**才能最有效的提升準確率
     * 超參數的調整方法
-        * 窮舉法 (Grid Search) : 直接指定超參數的範圍組合，每一組參數都訓練完成，再根據驗證集的結果選擇最佳參數
-        * 隨機搜尋 (Random Search) : 指定超參數範圍，用均勻分布進行參數抽樣，用抽到的參數進行訓練，再根據驗證集的結果選擇最佳參數，[隨機搜尋](https://medium.com/rants-on-machine-learning/smarter-parameter-sweeps-or-why-grid-search-is-plain-stupid-c17d97a0e881)通常能獲得較好的結果
-    * 正確的超參數調整步驟 : 若使用同意分驗證集 (validation) 來調參，可能讓模型過於擬合驗證集，正確步驟是使用 Cross-validation 確保模型的泛化性
+        * **窮舉法 (Grid Search)** : 直接指定超參數的範圍組合，每一組參數都訓練完成，再根據驗證集的結果選擇最佳參數
+        * **隨機搜尋 (Random Search)** : 指定超參數範圍，用均勻分布進行參數抽樣，用抽到的參數進行訓練，再根據驗證集的結果選擇最佳參數，[隨機搜尋](https://medium.com/rants-on-machine-learning/smarter-parameter-sweeps-or-why-grid-search-is-plain-stupid-c17d97a0e881)通常能獲得較好的結果
+    * 正確的超參數調整步驟 : 若使用同一份驗證集 (validation) 來調參，可能讓模型過於擬合驗證集，正確步驟是使用 Cross-validation 確保模型的泛化性
         1. 將資料切分為訓練/測試集，測試集先保留不用
         2. 將剛切好的訓練集，再使用 Cross-validation 切成 K 份訓練/驗證集
         3. 用 gird/random search 的超參數進行訓練與評估
@@ -1147,11 +1166,18 @@
         from sklearn import datasets, metrics
         from sklearn.model_selection import train_test_split, KFold, GridSearchCV
         from sklearn.ensemble import GradientBoostingRegressor
+        
+        # 讀取手寫辨識資料集
+        boston = datasets.load_boston()
+        # 切分訓練集/測試集
+        x_train, x_test, y_train, y_test = train_test_split(boston.data, boston.target, test_size=0.25, random_state=42)
+        # 建立模型
+        clf = GradientBoostingRegressor(random_state=7)
         # 設定要訓練的超參數組合
         n_estimators = [100, 200, 300]
         max_depth = [1, 3, 5]
         param_grid = dict(n_estimators=n_estimators, max_depth=max_depth)
-        ## 建立搜尋物件，放入模型及參數組合字典 (n_jobs=-1 會使用全部 cpu 平行運算)
+        # 建立搜尋物件，放入模型及參數組合字典 (n_jobs=-1 會使用全部 cpu 平行運算)
         grid_search = GridSearchCV(clf, param_grid, scoring="neg_mean_squared_error", n_jobs=-1, verbose=1)
         # 開始搜尋最佳參數
         grid_result = grid_search.fit(x_train, y_train)
@@ -1185,9 +1211,9 @@
         * **裝袋法 (Bagging)** : 將資料放入袋中抽取，每回合結束後重新放回袋中重抽，在搭配弱分類器取平均或多數決結果，例如隨機森林
         * **提升法 (Boosting)** : 由之前模型的預測結果，去改便資料被抽到的權重或目標值
         * 將錯判的資料機率放大，正確的縮小，就是**自適應提升(AdaBoost, Adaptive Boosting)**
-        * 如果是依照估計誤差的殘差項調整新目標值，則就是**梯度提升機 (Gradient Boosting Machine)** 的作法，只是梯度提升機還加上⽤用梯度來選擇決策樹分支
+        * 如果是依照估計誤差的殘差項調整新目標值，則就是**梯度提升機 (Gradient Boosting Machine)** 的作法，只是梯度提升機還加上用梯度來選擇決策樹分支
         * Bagging/Boosting : 使用不同資料、相同模型，多次估計的結果合成最終預測
-        * Voting/Blending/Stacking : 使用同一自料不同模型，合成出不同預測結果
+        * Voting/Blending/Stacking : 使用同一資料不同模型，合成出不同預測結果
     * 混合泛化 (Blending)
         * 將不同模型的預測值加權合成，權重和為1如果取預測的平均 or 一人一票多數決(每個模型權重相同)，則又稱為投票泛化(Voting)
         * 容易使用且有效
@@ -1214,7 +1240,7 @@
         * Q1：能不能新舊特徵一起用，再用模型預測呢?
             * A1：可以，這裡其實有個有趣的思考，也就是 : 這樣不就可以一直一直無限增加特徵下去? 這樣後面的特徵還有意義嗎? 不會 Overfitting 嗎?...其實加太多次是會 Overfitting 的，必需謹慎切分 Fold 以及新增次數
         * Q2：新的特徵，能不能再搭配模型創特徵，第三層第四層...一直下去呢?
-            * A2：可以，但是每多一層，模型會越複雜 : 因此泛化(⼜又稱為魯棒性)會做得更好，精準度也會下降，所以除非第一層的單模調得很好，否則兩三層就不需要繼續往下了
+            * A2：可以，但是每多一層，模型會越複雜 : 因此泛化 (又稱為魯棒性) 會做得更好，精準度也會下降，所以除非第一層的單模調得很好，否則兩三層就不需要繼續往下了
         * Q3：既然同層新特徵會 Overfitting，層數加深會增加泛化，兩者同時用是不是就能把缺點互相抵銷呢?
             * A3：可以!!而且這正是 Stacking 最有趣的地方，但真正實踐時，程式複雜，運算時間又要再往上一個量級，之前曾有大神寫過 StackNet 實現這個想法，用JVM 加速運算，但實際上使用時調參困難，後繼使用的人就少了
         * Q4 : 實際上寫 Stacking 有這麼困難嗎?
@@ -1224,7 +1250,7 @@
         * Q6 : Stacking 可以做參數調整嗎?
             * A6 : 可以，請參考 mlxtrend 的[調參範例](http://rasbt.github.io/mlxtend/user_guide/classifier/StackingCVClassifier/)，主要差異是參數名稱寫法稍有不同
         * Q7 : 還有其他做 Stacking 時需要注意的事項嗎?
-            * A7 :「分類問題」的 Stacking 要注意兩件事：記得加上 use_probas=True(輸出特徵才會是機率值)，以及輸出的總特徵數會是：模型數量*分類數量(回歸問題特徵數=模型數量量)
+            * A7 :「分類問題」的 Stacking 要注意兩件事：記得加上 use_probas=True (輸出特徵才會是機率值)，以及輸出的總特徵數會是：模型數量*分類數量 (回歸問題特徵數=模型數量量)
             ```py
             from mlxtend.classifier import StackingClassifier
 
@@ -1245,10 +1271,10 @@
         * 清楚的說明文件讓別人了解你的成果
 ### 非監督式機器學習
 * **Day_54 : 非監督式機器學習簡介**
-    * 非監督學習允許我們在對結果無法預知時接近問題。非監督學習演算法只基於輸入資料找出模式。當我們無法確定尋找內容，或無標記 (y) 資料時，通常會用這個演算法，幫助我們了了解資料模式
+    * 非監督學習允許我們在對結果無法預知時接近問題。非監督學習演算法只基於輸入資料找出模式。當我們無法確定尋找內容，或無標記 (y) 資料時，通常會用這個演算法，幫助我們了解資料模式
     * 非監督學習算法概要
-        * 聚類分析 : 尋找資料的隱藏模式
-        * 降低維度 : 特徵數太大且特徵間相關性高，以此方式縮減特徵維度
+        * **聚類分析** : 尋找資料的隱藏模式
+        * **降低維度** : 特徵數太大且特徵間相關性高，以此方式縮減特徵維度
         * 其他 : 關聯法則 (購物籃分析)、異常值偵測、探索性資料分析等
     * 應用案例 :
         * 客戶分群 : 在資料沒有任何標記，或是問題還沒定義清楚前，可用分群的方式幫助理清資料特性。
@@ -1264,9 +1290,9 @@
     * Unsupervised learning : 目標在找出資料結構
     * Why clustering ?
         * 在資料還沒有標記、問題還沒定義清楚時，聚類算法可以幫助我們理理解資料特性，評估機器學習問題方向等，也是一種呈現資料的方式
-    * K-means 聚類算法
+    * **K-means 聚類算法**
         * 把所有資料點分成 k 個 cluster，使得相同 cluster 中的所有資料點彼此儘量相似，而不同 cluster 的資料點儘量不同。
-        * 距離測量量（e.g. 歐⽒氏距離）用於計算資料點的相似度和相異度。每個 cluster 有一個中心點。中心點可理解為最能代表 cluster 的點。
+        * 距離測量（e.g. 歐氏距離）用於計算資料點的相似度和相異度。每個 cluster 有一個中心點。中心點可理解為最能代表 cluster 的點。
         * 算法流程 :
             1. 隨機取 K 個點 (cluster centroid)
             2. 對每一個 training example 根據它距離哪一個 cluster centroid 較近，標記爲其中之一 (cluster assignment)
@@ -1292,18 +1318,18 @@
     * 分群模型的評估
         * 困難點 : 非監督模型因為沒有目標值，因此無法使用目標值與預測值的差距來衡量優劣
         * 評估方式類型
-            * 有目標值的分群 : 如果資料有目標值，只是先忽略略目標值做非監督學習，則只要微調後，就可以使用原本監督的測量函數評估準確性
+            * 有目標值的分群 : 如果資料有目標值，只是先忽略目標值做非監督學習，則只要微調後，就可以使用原本監督的測量函數評估準確性
             * 無目標值的分群 : 通常沒有目標值/目標值非常少才會用非監督模型，這種情況下，只能使用資料本身的分布資訊，來做模型的評估
-    * 輪廓分析(Silhouette analysis)
+    * 輪廓分析 (Silhouette analysis)
         * 歷史 : 最早由 Peter J. Rousseeuw 於 1986 提出。它同時考慮了群內以及相鄰群的距離，除了可以評估資料點分群是否得當，也可以用來來評估不同分群方式對於資料的分群效果
-        * 設計精神 : 同一群的資料點應該很近，不同群的資料點應該很遠，所以設計一種當同群資料點越近 / 不同群資料點越遠時越⼤大的分數，當資料點在兩群交界附近，希望分數接近 0
+        * 設計精神 : 同一群的資料點應該很近，不同群的資料點應該很遠，所以設計一種當同群資料點越近 / 不同群資料點越遠時越大的分數，當資料點在兩群交界附近，希望分數接近 0
         * 單點輪廓值 : 
             * 對任意單一資料點 i，「與 i 同一群」的資料點，距離 i 的平均稱為 ai
-            * 「與 i 不同群」的資料點中，不同群距離 i 平均中，最近的稱為bi ( 其實就是要取第二靠近 i 的那一群平均，滿足交界上分數為 0 的設計) 
-            * i 點的輪廓分數 si : (bi-ai) / max{bi, ai} 其實只要不是刻意分錯，bi 通常會⼤大於等於 ai，所以上述公式在此條件下可以化簡為 1 - ai / bi
+            * 「與 i 不同群」的資料點中，不同群距離 i 平均中，最近的稱為 bi ( 其實就是要取第二靠近 i 的那一群平均，滿足交界上分數為 0 的設計) 
+            * i 點的輪廓分數 si : (bi-ai) / max{bi, ai} 其實只要不是刻意分錯，bi 通常會大於等於 ai，所以上述公式在此條件下可以化簡為 1 - ai / bi
         * 整體輪廓分析 : 
-            * 分組觀察，依照不同的類別，將同類別的輪廓分數排序後顯示，發現兩組的輪廓值大多在平均以下，且比例例上接近 0 的點也比較多，這些情況都表示這兩組似乎沒分得那麼開
-            * 平均值觀察，計算分群的輪廓分數總平均，分的群數越多應該分數越小，如果總平均值沒有隨著分群數增加而變小，，就說明了那些分群數較不洽當
+            * 分組觀察，依照不同的類別，將同類別的輪廓分數排序後顯示，發現兩組的輪廓值大多在平均以下，且比例\例上接近 0 的點也比較多，這些情況都表示這兩組似乎沒分得那麼開
+            * 平均值觀察，計算分群的輪廓分數總平均，分的群數越多應該分數越小，如果總平均值沒有隨著分群數增加而變小，就說明了那些分群數較不洽當
             ```py
             from sklearn.cluster import KMeans
             from sklearn.metrics import silhouette_samples, silhouette_score
@@ -1323,8 +1349,8 @@
 * **Day_57 : 階層分群法**
     * 階層式分析 : 一種構建 cluster 的層次結構的算法。該算法從分配給自己 cluster 的所有資料點開始。然後，兩個距離最近的 cluster 合併為同一個 cluster。最後，當只剩下一個 cluster 時，該算法結束。
     * K-means vs. 階層分群 :
-        * K-means : 需要定義群數(n of clusters)
-        * 階層分群 : 可根據定義距離來分群(bottom-up)，也可以決定群數做分群(top-down)
+        * K-means : 需要定義群數 (n of clusters)
+        * 階層分群 : 可根據定義距離來分群 (bottom-up)，也可以決定群數做分群 (top-down)
     * 階層分群演算法流程 : 不指定分群數量
         1. 每筆資料為一個 cluster
         2. 計算每兩群之間的距離
@@ -1332,7 +1358,7 @@
         4. 重覆步驟 2、3，直到所有資料合併成同一 cluster
     * 階層分群距離計算方式 :
         * single-link : 群聚與群聚間的距離可以定義為不同群聚中最接近兩點間的距離。
-        * complete-link : 群聚間的距離定義為不同群聚中最遠兩點間的距離，這樣可以保證這兩個集合合併後, 任何一對的距離不會⼤大於 d。
+        * complete-link : 群聚間的距離定義為不同群聚中最遠兩點間的距離，這樣可以保證這兩個集合併後，任何一對的距離不會大於 d。
         * average-link : 群聚間的距離定義為不同群聚間各點與各點間距離總和的平均。
     * 階層分群的優劣分析 :
         * 優點 : 概念簡單，易於呈現，不需指定群數
@@ -1357,11 +1383,10 @@
             labels = est.labels_
         ```
 * **Day_58 : 階層分群法 觀察 : 2D 樣版資料集**
-    * 資料集用途 : 通常這樣的資料集，是用來讓人眼評估非監督模型的好壞，因為非監督模型的任務包含分群(對應於監督的分類)與流形還原(對應監督的迴歸)，所以 2D 樣板資料集在設計上也包含這兩種類型的資料集
+    * 資料集用途 : 通常這樣的資料集，是用來讓人眼評估非監督模型的好壞，因為非監督模型的任務包含分群 (對應於監督的分類) 與流形還原 (對應監督的迴歸)，所以 2D 樣板資料集在設計上也包含這兩種類型的資料集
     * sklearn 的 2D 樣版資料集 : 
-        * sklearn 的資料集主要分為兩種 : 載入式 (Loaders) 與⽣生成式 (Samples generator)，載入式的是固定資料，生成式的則是先有既定模式，在模式下有限度的隨機生成每次使用的資料集
-        * 2D 樣版資料集屬於生成式資料集，使用不同分布，用以顯⽰示各種非監督模型的優缺點，提供使用者參考
-
+        * sklearn 的資料集主要分為兩種 : 載入式 (Loaders) 與生成式 (Samples generator)，載入式的是固定資料，生成式的則是先有既定模式，在模式下有限度的隨機生成每次使用的資料集
+        * 2D 樣版資料集屬於生成式資料集，使用不同分布，用以顯示各種非監督模型的優缺點，提供使用者參考
     * 2D 樣板資料集很多套件都有，也不限於只有 Python 上使用的套件 : 如 sklearn / mathworks / mlbench 都有對應的資料集
         ```py
         from sklearn import cluster, datasets
@@ -1391,17 +1416,17 @@
         no_structure = np.random.rand(n_samples, 2), None
         ```
 * **Day_59 : 降維方法 - 主成分分析**
-    * 為甚麼需要降低維度 (Dimension reduction)
+    * 為甚麼需要**降低維度 (Dimension reduction)**
         * 減少 RAM or disk space 使用，有助於加速 learning algorithm
-        * 影像壓縮 : 原始影像維度爲 512, 在降低維度到 16 的情況下 , 圖片雖然有些許模糊 , 但依然保有明顯的輪廓和特徵
+        * 影像壓縮 : 原始影像維度爲 512，在降低維度到 16 的情況下，圖片雖然有些許模糊，但依然保有明顯的輪廓和特徵
         * 壓縮資料可進而組合出新的、抽象化的特徵，減少冗餘的資訊
-        * 特徵太多時，很難 visualize data, 不容易觀察資料。把資料維度 (特徵) 降到 2 到 3 個 , 則能夠用一般的 2D 或 3D 圖表呈現資料
-    * 主成分分析 (PCA) : 透過計算 eigen value, eigen vector, 可以將原本的 features 降維至特定的維度
+        * 特徵太多時，很難 visualize data，不容易觀察資料。把資料維度 (特徵) 降到 2 到 3 個，則能夠用一般的 2D 或 3D 圖表呈現資料
+    * **主成分分析 (PCA)** : 透過計算 eigen value，eigen vector，可以將原本的 features 降維至特定的維度
         * 原本資料有 100 個 features，透過 PCA，可以將這 100 個 features 降成 2 個 features
         * 新 features 為舊 features 的線性組合，且彼此不相關
         * 在維度太大發生 overfitting 的情況下，可以嘗試用PCA 組成的特徵來做監督式學習
-        * 不建議在早期時做 , 否則可能會丟失重要的 features 而 underfitting         
-        * 可以在 optimization 階段時 , 考慮 PCA , 並觀察運用了了 PCA 後對準確度的影響
+        * 不建議在早期時做，否則可能會丟失重要的 features 而 underfitting         
+        * 可以在 optimization 階段時，考慮 PCA ，並觀察運用了 PCA 後對準確度的影響
     * 延伸閱讀 :
         * [Unsupervised Learning](https://www.youtube.com/watch?v=ipyxSYXgzjQ)
         * [Further Principal Components](https://www.youtube.com/watch?v=dbuSGWCgdzw)
@@ -1415,8 +1440,8 @@
         X = pca.transform(X)
         ```
 * **Day_60 : PCA 觀察 : 使用手寫辨識資料集**
-    * 手寫辨識資料集的來源 : 手寫辨識資料集 (MNIST, Modified National Institute of Standards and Technology databas) 原始來源的NIST，應該是來自於美國人口普查局的員工以及學生手寫所得，其中的 Modified 指的是資料集為了了適合機器學習做了了一些調整 : 將原始圖案一律轉成黑底白字，做了對應的抗鋸齒的調整，最後存成 28x28 的灰階圖案，成為了目前最常聽到的基礎影像資料集
-    * sklearn 中的手寫辨識資料集 : 與完整的MNIST不同，sklearn為了方便非深度學習的計算，再一次將圖片的大⼩小壓縮到 8x8 的大小，雖然仍是灰階，但就形狀上已經有點難以用肉眼辨識，但壓縮到如此大小時，每張手寫圖就可以當作 64 (8x8=64) 個特徵的一筆資料，搭配一般的機器學習模型做出學習與預測
+    * 手寫辨識資料集的來源 : 手寫辨識資料集 (MNIST, Modified National Institute of Standards and Technology databas) 原始來源的 NIST，應該是來自於美國人口普查局的員工以及學生手寫所得，其中的 Modified 指的是資料集為了適合機器學習做了一些調整 : 將原始圖案一律轉成黑底白字，做了對應的抗鋸齒的調整，最後存成 28x28 的灰階圖案，成為了目前最常聽到的基礎影像資料集
+    * sklearn 中的手寫辨識資料集 : 與完整的 MNIST 不同，sklearn 為了方便非深度學習的計算，再一次將圖片的大小壓縮到 8x8 的大小，雖然仍是灰階，但就形狀上已經有點難以用肉眼辨識，但壓縮到如此大小時，每張手寫圖就可以當作 64 (8x8=64) 個特徵的一筆資料，搭配一般的機器學習模型做出學習與預測
     * 為什麼挑 MNIST 檢驗 PCA 的降維效果 :
         * 高維度、高複雜性、人可理解的資料集
         * 由於 PCA 的強大，如果資料有意義的維度太低，則前幾個主成分就可以將資料解釋完畢
@@ -1478,14 +1503,14 @@
         ```
 * **Day_61 : 降維方法 - t-SNE**
     * PCA 的問題
-        * 求共變異數矩陣進⾏行奇異值分解，因此會被資料的差異性影響，無法很好的表現相似性及分佈。
-        * PCA 是一種線性降維方式，特徵間爲非線性關係時 (e.g. ⽂文字、影像資料)，PCA 很容易 underfitting
+        * 求共變異數矩陣進行奇異值分解，因此會被資料的差異性影響，無法很好的表現相似性及分佈。
+        * PCA 是一種線性降維方式，特徵間爲非線性關係時 (e.g. 文字、影像資料)，PCA 很容易 underfitting
     * t-SNE
-        * t-SNE 也是一種降維方式，但它用了更複雜的公式來來表達⾼高維和低維之間的關係。
+        * t-SNE 也是一種降維方式，但它用了更複雜的公式來表達高維和低維之間的關係。
         * 主要是將高維的資料用 gaussian distribution 的機率密度函數近似，而低維資料的部分用 t 分佈來來近似，在用 KL divergence 計算相似度，再以梯度下降 (gradient descent) 求最佳解。
         * t-SNE 優劣
             * 優點 : 
-                * 當特數量過多時，使用 PCA 可能會造成降維後的 underfitting，這時可以考慮使用t-SNE 來降維，
+                * 當特數量過多時，使用 PCA 可能會造成降維後的 underfitting，這時可以考慮使用 t-SNE 來降維，
                 * t-SNE 對於特徵非線性資料有更好的降維呈現能力
             * 缺點 : 
                 * t-SNE 的需要比較多的時間執行
@@ -1521,8 +1546,8 @@
         ```
 ### 深度學習理論與實作
 * **Day_63 : 深度學習簡介**
-    * 類神經網路路 (Neural Network)
-        * 在1956年的達特茅斯會議中誕⽣生，以數學模擬神經傳導輸出預測，在初期人工智慧領域中就是重要分支
+    * 類神經網路 (Neural Network)
+        * 在1956年的達特茅斯會議中誕生，以數學模擬神經傳導輸出預測，在初期人工智慧領域中就是重要分支
         * 因層數一多計算量就大幅增加等問題，過去無法解決，雖不斷有學者試圖改善，在歷史中仍不免大起大落
         * 直到近幾年在**算法**、**硬體能力**與**巨量資料**的改善下，多層的類神經網路才重新成為當前人工智慧的應用主流
     * 類神經網路與深度學習的比較
@@ -1637,7 +1662,7 @@
     * Keras 是什麼?
         * 易學易懂的深度學習套件
             * Keras 設計出發點在於容易上手，因此隱藏了很多實作細節，雖然自由度稍嫌不夠，但很適合教學
-            * Keras 實作並優化了各式經典組件，因此即使是同時熟悉TensorFlow 與 Keras 的老手，開發時也會兩者並用互補
+            * Keras 實作並優化了各式經典組件，因此即使是同時熟悉 TensorFlow 與 Keras 的老手，開發時也會兩者並用互補
         * Keras 包含的組件有哪些?
             * Keras 的組件很貼近直覺，因此我們可以用 TensorFlow PlayGround 體驗所學到的概念，分為兩大類來理解 ( 非一一對應 )
             * 模型形狀狀類
@@ -1647,9 +1672,9 @@
                 * 直覺概念：學習速率 / 批次大小 / 正規化
                 * Keras 組件 : Optimier / Reguliarizes / Callbacks
         * 深度學習寫法封裝
-            * TensorFlow 將深度學習中的 GPU/CPU 指令封裝起來來，減少語法差異，Keras 則是將前者更近一步封裝成單⼀一套件，用少量的程式便能實現經典模型
+            * TensorFlow 將深度學習中的 GPU/CPU 指令封裝來來，減少語法差異，Keras 則是將前者更近一步封裝成單一套件，用少量的程式便能實現經典模型
         * Keras 的後端
-            * Keras 的實現，實際上完全依賴 TensorFlow 的語法完成，這種情形我們稱 TensorFlow 是 Keras 的一種後端(Backend)
+            * Keras 的實現，實際上完全依賴 TensorFlow 的語法完成，這種情形我們稱 TensorFlow 是 Keras 的一種後端 (Backend)
         * Keras/TensorFlow 的比較
 
             |      | Keras        | Tensorflow                     |
@@ -1657,16 +1682,16 @@
             | 學習難度 | 低            | 高                              |
             | 模型彈性 | 中            | 高                              |
             | 主要差異 | 處理神經層        | 處理資料流                          |
-            | 代表組件 | Layers/Model | Tensor / Session /<br> Placeholder |
+            | 代表組件 | Layers/Model | Tensor /<br> Session /<br> Placeholder |
     * Keras 安裝流程
         * 安裝分歧點
             * 是否有 GPU : 
                 * 因為有 GPU 則需要先裝 GPU 的指令集，所以有 GPU 則需要 4 個步驟，沒有就只需要 2 步驟
             * 作業系統 : 
-                * 因為不同作業系統間，GPU 的安裝步驟會因介面或指令有所不同，所以我們會分 Windows / Linux (以Ubuntu為例例) / Mac 分別介紹流程
+                * 因為不同作業系統間，GPU 的安裝步驟會因介面或指令有所不同，所以我們會分 Windows / Linux (以Ubuntu為例) / Mac 分別介紹流程
         * Keras 安裝注意事項
             * 是否使用了 Anaconda 虛擬環境 : 
-                * 如果您的 Python 環境是採用Anaconda 安裝，那麼進行後續安裝時，請先切換到你常用的虛擬環境下安裝 (點選 Anaconda / Anaconda Prompt 後再安裝)，以確保安裝與常用環境是同一目錄
+                * 如果您的 Python 環境是採用 Anaconda 安裝，那麼進行後續安裝時，請先切換到你常用的虛擬環境下安裝 (點選 Anaconda / Anaconda Prompt 後再安裝)，以確保安裝與常用環境是同一目錄
             * 軟硬體間版本搭配 :
                 * 由於 GPU 的 CUDA / cuDNN 版本經常升級，因此 TensorFlow / Keras 的版本也需要頻繁更換版本，因此建議以安裝當時的[官網資訊為準](https://www.tensorflow.org/install/gpu)
 
@@ -1687,14 +1712,14 @@
         * Step 4 - 安裝 Keras
             `pip install keras`
         * Step 4-2 - 新增環境變數於 PATH
-            * (只有 Windows 需要, 其他作業系統請跳過) 如果是Win10，可從開始 / 控制台 / 系統開啟視窗後，點選"進階"分頁最下面的按鈕"環境變數"，會跳出下列列視窗，請在下半視窗中尋找"Path"變數，把下列列兩個路徑加入
+            * (只有 Windows 需要, 其他作業系統請跳過) 如果是 Win10，可從開始 / 控制台 / 系統開啟視窗後，點選"進階"分頁最下面的按鈕"環境變數"，會跳出下列列視窗，請在下半視窗中尋找"Path"變數，把下列列兩個路徑加入
                 ```
                 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\bin
                 C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v9.0\libnvvp
                 ```
-                項目間要用分號( ; )隔開 / CUDA 版號請依 Step1 實際安裝版本為準
+                項目間要用分號 `;` 隔開 / CUDA 版號請依 Step1 實際安裝版本為準
         * 驗證安裝
-            * 安裝完後，可以開啟一個 .ipynb 檔輸入下列指令並執行，如果都有順利利執行，就是安裝成功了了!!
+            * 安裝完後，可以開啟一個 .ipynb 檔輸入下列指令並執行，如果都有順利利執行，就是安裝成功了!!
                 ```py
                 import tensorflow
                 import keras
@@ -1717,7 +1742,7 @@
     * Keras 自帶的數據集 : 
         * CIFAR10 小圖像分類
         * CIFAR100 小圖像分類
-        * IMDB電影評論情緒分類
+        * IMDB 電影評論情緒分類
         * 路透社 newswire 話題分類
         * 手寫數字的 MNIST 數據庫
         * 時尚文章的時尚 MNIST 數據庫
@@ -1778,13 +1803,13 @@
             ```
     * 波士頓房屋價格回歸
         * 取自卡內基梅隆大學維護的 StatLib 庫
-        * 20 世紀 70 年代後期，樣本在波士頓郊區的不同位置包含 13 個房屋屬性。目標是一個地點房屋的中位值(單位：k $)
+        * 20 世紀 70 年代後期，樣本在波士頓郊區的不同位置包含 13 個房屋屬性。目標是一個地點房屋的中位值 (單位：k $)
             ```py
             from keras.datasets import boston_housing   
             (x_train, y_train), (x_test, y_test) = boston_housing.load_data()
             ```
     * IMDB 電影評論情緒分類
-        * 來自 IMDB 的 25,000 部電影評論的數據集，標有情緒(正面 / 負面)。評論已經過預處理，每個評論都被編碼為一系列單詞索引(整數)
+        * 來自 IMDB 的 25,000 部電影評論的數據集，標有情緒 (正面 / 負面)。評論已經過預處理，每個評論都被編碼為一系列單詞索引 (整數)
         * 單詞由數據集中的整體頻率索引
             * 整數"3"編碼數據中第 3 個最頻繁的單詞。
             * "0"不代表特定單詞，而是用於編碼任何未知單詞
@@ -1840,9 +1865,9 @@
             model.add(Activation(“relu”))
             ```
     * 指定模型輸入維度
-        * Sequential 的第一層(只有第一層，後面的層會自動匹配)需要知道輸入的 shape
+        * Sequential 的第一層 (只有第一層，後面的層會自動匹配) 需要知道輸入的 shape
             * 在第一層加入一個 input_shape 參數，input_shape 應該是一個 shape 的 tuple 資料類型
-            * input_shape 是一系列整數的 tuple，**某些位置可以為 None**
+            * input_shape 是一系列整數的 tuple，某些位置可以為 None
             * input_shape 中不用指明 batch_size 的數目
             * 2D 的網路層，如 Dense，允許在層的構造函數的 input_dim 中指定輸入的維度。
             * 對於某些 3D 時間層，可以在構造函數中指定 input_dim 和 input_length 來實現。
@@ -1863,7 +1888,8 @@
         * model.fit 模型訓練參數設置+訓練
         * 模型評估
         * 模型預測
-    * 延伸閱讀 : [Getting started with Keras Sequential model](https://keras.io/getting-started/sequential-model-guide/)
+    * 延伸閱讀 : 
+        * [Getting started with Keras Sequential model](https://keras.io/getting-started/sequential-model-guide/)
         ```py
         # 載入必須使用的 Library
         import keras
@@ -1909,10 +1935,10 @@
         ```
 * **Day_69 : Keras Module API 的介紹與應用**
     * 函數式 API
-        * ⽤用戶定義多輸出模型、非循環有向模型或具有共享層的模型等複雜模型的途徑
+        * 用戶定義多輸出模型、非循環有向模型或具有共享層的模型等複雜模型的途徑
         * 定義復雜模型（如多輸出模型、有向無環圖，或具有共享層的模型）的方法。
         * 所有的模型都可調用，就像網絡層一樣
-            * 利用函數式 API，可以輕易地重用訓練好的模型：可以將任何模型看作是一個層，然後通過傳遞一個張量來調用它。注意，在調用模型時，您不僅重用模型的結構，還重用了了它的權重。
+            * 利用函數式 API，可以輕易地重用訓練好的模型：可以將任何模型看作是一個層，然後通過傳遞一個張量來調用它。注意，在調用模型時，您不僅重用模型的結構，還重用了它的權重。
     * 函數式 API 與順序模型
         * 模型需要多於一個的輸出，那麼你總應該選擇函數式模型。
             * 函數式模型是最廣泛的一類模型，序貫模型（Sequential）只是它的一種特殊情況。
@@ -1922,7 +1948,8 @@
             * 這樣的模型可以被像 Keras 的 Sequential 一樣被訓練。
     * 如何配置
         * 使用函數式模型的一個典型場景是搭建多輸入、多輸出的模型
-    * 延伸閱讀 : [Getting started with the Keras function API](https://keras.io/guides/functional_api/)
+    * 延伸閱讀 : 
+        * [Getting started with the Keras function API](https://keras.io/guides/functional_api/)
 
         ```py
         from keras.layers import Input, Embedding, LSTM, Dense
@@ -1984,15 +2011,15 @@
     * Multi-layer Perceptron (MLP) 多層感知器 :
         * 為一種監督式學習的演算法
         * 此算法將可以使用非線性近似將資料分類或進行迴歸運算
-        * 多層感知機是一種前向傳遞類神經網路，至少包含三層結構(輸入層、隱藏層和輸出層)，並且利用到「倒傳遞」的技術達到學習(model learning)的監督式學習，以上是傳統的定義。
-        * 現在深度學習的發展，其實 MLP 是深度神經網路路(deep neural network, DNN)的一種 special case，概念基本上一樣，DNN 只是在學習過程中多了一些手法和層數會更多更深。
-        * 若每個神經元的激活函數都是線性函數，那麼，任意層數的 MLP 都可被約簡成一個等價的單層感知器
+        * 多層感知機是一種前向傳遞類神經網路，至少包含三層結構 (輸入層、隱藏層和輸出層)，並且利用到「倒傳遞」的技術達到學習 (model learning) 的監督式學習，以上是傳統的定義。
+        * 現在深度學習的發展，其實 MLP 是深度神經網路(deep neural network, DNN) 的一種 special case，概念基本上一樣，DNN 只是在學習過程中多了一些手法和層數會更多更深。
+        * 若每個神經元的激活函數都是線性函數，那麼任意層數的 MLP 都可被約簡成一個等價的單層感知器
     * MLP 優點：
         * 有能力建立非線性的模型
-        * 可以使⽤用 partial_fit 建立 real-time 模型
-    * MLP缺點 :
+        * 可以使用 partial_fit 建立 real-time 模型
+    * MLP 缺點 :
         * 擁有大於一個區域最小值，使用不同的初始權重，會讓驗證時的準確率浮動
-        * MLP模型需要調整每層神經元數、層數、疊代次數
+        * MLP 模型需要調整每層神經元數、層數、疊代次數
         * 對於特徵的預先處理很敏感
         ```py
         from keras.utils import np_utils
@@ -2059,20 +2086,20 @@
         ```
 * **Day_71 : 損失函數的介紹與應用**
     * 損失函數
-        * 機器學習中所有的算法都需要最大化或最小化一個函數，這個函數被稱為「目標函數」。其中，我們一般把最小化的一類函數，稱為「損失函數」。它能根據預測結果，衡量出模型預測能力的好壞
-        * 損失函數大致可分為：分類問題的損失函數和回歸問題的損失函數
+        * 機器學習中所有的算法都需要最大化或最小化一個函數，這個函數被稱為「**目標函數**」。其中，我們一般把**最小化**的一類函數，稱為「**損失函數**」。它能根據預測結果，衡量出模型預測能力的好壞
+        * 損失函數大致可分為：**分類問題**的損失函數和**回歸問題**的損失函數
     * 損失函數為什麼是最小化
         * 期望：希望模型預測出來的東西可以跟實際的值一樣
         * 損失函數中的損失就是「實際值和預測值的落差」
         * 預測出來的東西基本上跟實際值都會有落差
-        * 在回歸問題稱為「殘差(residual)」
-        * 在分類問題稱為「錯誤率(error rate)」
+        * 在回歸問題稱為「**殘差 (residual)**」
+        * 在分類問題稱為「**錯誤率 (error rate)**」
         * $y$ 表示實際值，$\hat{y}$ 表示預測值
         $$ loss/residual = y - \hat{y}$$
         $$ error\_rate = \frac{\sum_{i=1}^n sign(y_i\neq \hat{y_i})}{n}$$
     * 損失函數的分類介紹
-        * 均方誤差(mean_squared_error)：
-            * 就是最小平方法(Least Square) 的目標函數 -- 預測值與實際值的差距之平均值。還有其他變形的函數, 如 mean_absolute_error、mean_absolute_percentage_error、mean_squared_logarithmic_error
+        * **均方誤差 (mean_squared_error)**：
+            * 就是最小平方法 (Least Square) 的目標函數 -- 預測值與實際值的差距之平均值。還有其他變形的函數, 如 mean_absolute_error、mean_absolute_percentage_error、mean_squared_logarithmic_error
             $$ MSE = \frac{\sum{(\hat{y}-y)^2}}{N} $$
             * 使用時機：
                 * n 個樣本的預測值（$y$）與（$\hat{y}$）的差距
@@ -2083,10 +2110,10 @@
             #其中，包含 y_true， y_pred 的傳遞，函數是表達如下：
             keras.losses.mean_squared_error(y_true, y_pred)
             ```
-        * Cross Entropy
+        * **Cross Entropy**
             * 當預測值與實際值愈相近，損失函數就愈小，反之差距很大，就會更影響損失函數的值
-            * 要⽤用 Cross Entropy 取代 MSE，因為，在梯度下時，Cross Entropy 計算速度較快
-            * 使⽤用時機：
+            * 要用 Cross Entropy 取代 MSE，因為在梯度下時，Cross Entropy 計算速度較快
+            * 使用時機：
                 * 整數目標：Sparse categorical_crossentropy
                 * 分類目標：categorical_crossentropy
                 * 二分類目標：binary_crossentropy
@@ -2096,18 +2123,18 @@
             #其中, 包含y_true， y_pred的傳遞, 函數是表達如下：
             keras.losses.categorical_crossentropy(y_true, y_pred)
             ```
-        * Hinge Error (hinge)
+        * **Hinge Error (hinge)**
             * 是一種單邊誤差，不考慮負值同樣也有多種變形，squared_hinge、categorical_hinge
             $$ l(y) = max(0,1-t．y)$$
             * 使用時機：
-                * 適用於『支援向量機』(SVM)的最大間隔分類法(maximum-margin classification)
+                * 適用於『支援向量機』(SVM) 的最大間隔分類法 (maximum-margin classification)
             ```py
             from keras import losses
             model.compile(loss= ‘hinge‘, optimizer='sgd’)
             #其中，包含 y_true，y_pred 的傳遞, 函數是表達如下
             keras.losses.hinge(y_true, y_pred)
             ```
-        * 自定義損失函數
+        * **自定義損失函數**
             * 根據問題的實際情況，定制合理的損失函數
             * 舉例：預測果汁日銷量問題，如果預測銷量大於實際銷量量則會損失成本；如果預測銷量小於實際銷量則會損失利潤。
             * 考慮重點：製造一盒果汁的成本和銷售一盒果汁的利潤不是等價的
@@ -2122,53 +2149,53 @@
         * [losses function](https://keras.io/losses/)
 * **Day_72 : 啟動函數的介紹與應用**   
     * 何謂啟動函數
-        * 啟動函數定義了每個節點(神經元)的輸出和輸入的關係的函數，為神經元提供規模話非線性能力，讓神經網路具備了強大的擬合能力
+        * **啟動函數**定義了每個節點(神經元)的**輸出和輸入的關係的函數**，為神經元提供規模化**非線性能力**，讓神經網路具備了強大的擬合能力
         * 輸出值的範圍 :
             * 當輸出值範圍是有限的時候，基於梯度的優化方法會更加穩定，因為特徵的表現受有限的權值的影響更為顯著
             * 當輸出值範圍是無限的時候，模型的訓練會更加高效
     * 啟動函數的作用
         * 深度學習的基本原理是基於人工神經網路，信號從一個神經元進入，經過非線性的 activation function，如此循環往復直到輸出層，正是由於這些非線性函數的反覆疊加，層使得神經往復有足夠的能力來抓取複雜的 pattern
-        * 啟動函數的最大作用就是**非線性化**
+        * 啟動函數的最大作用就是非線性化
             * 如果不用啟動函數，無論神經網路有多少層，輸出都是輸入的線性組合
         * 啟動函數的另一個特徵是
             * 他應該可以區分前行網路和反向式傳播網路的網路參數更新，然後相應的使用梯度下降或其他優化技術優化權重以減少誤差
     * 常用的啟動函數介紹
-        * Sigmoid
+        * **Sigmoid**
         $$ f(z) = \frac{1}{1+exp(-z)} $$
             * 特點是會把輸出限在 0~1 之間，當 x < 0，輸出就是 0，當 x > 0，輸出就是 1，這樣使得輸出在傳遞過程中不容易發散
             * 兩個主要缺點
                 * 容易過飽和，丟失梯度。這樣在反向傳播時，很容易出現梯度消失的情況，導致訓練無法完整
                 * 輸出均值不是 0
-        * Softmax
+        * **Softmax**
         $$ \sigma(z)_j = \frac{e^{z_j}}{\sum_{k=1}^Ke^{z_k}} $$
             * 把一個 k 維的 real value 向量 (a1, a2, a3, ...) 映射成一個 (b1, b2, b3, ...) 其中 bi 是一個 0~1 的常數，輸出神經元之和為 1.0，所以可以拿來做多分類預測
             * 為什麼要取指數
                 * 模擬 max 行為，要讓大者更大
                 * 需要一個可導函數
-        * Tanh
+        * **Tanh**
         $$ tanh(x) = 2\sigma(2x) - 1$$
         $$tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$$
             * Tanh 讀做 Hyperbolic tangent
             * 稱為雙正切函數，取值範圍 [-1, 1]
             * 在特徵相差明顯時的效果很好，在循環過程中不斷擴大特徵效果
-        * ReLU
+        * **ReLU**
         $$ f(x) = max(0, x)$$
             * 修正線性單元 (Rectified linear unit)
             * 在 x > 0，導數恆為 1
-            * 在 x < 0，梯度恆為 0，這時候他也會出現飽和現象，甚至使神經元直接無效，從而齊權重無法得到更新(這種情況下通常稱為 dying ReLU)
+            * 在 x < 0，梯度恆為 0，這時候他也會出現飽和現象，甚至使神經元直接無效，從而齊權重無法得到更新 (這種情況下通常稱為 dying ReLU)
             * Leak ReLU 和 PReLU 的提出正是為了解決這一問題
-        * ELU
+        * **ELU**
         $$ f(x))= \begin{cases} x & \text {, if $x > 0$} \\ a(e^x-1) & \text{, if $x \leq 0$} \end{cases} $$
             * ELU 是針對 ReLU 的一個改進型，相比於 ReLU 函數，在輸入為負的情況下，是有一定的輸出的
             * 這樣可以消除 ReLU 死掉的問題
             * 還是有梯度飽和和指數運算的問題
-        * PReLU
+        * **PReLU**
         $$ f(x) = max(ax, x)$$
             * 參數化修正線性單元 (Parameteric Rectified linear unit)
             * Leaky ReLU，當 $a = 0.1$ 時，我們叫 PReLU 為 Leaky ReLU
             * PReLU 和 Leaky ReLU 有一些共點，即為負值輸入添加了一個線性項
-        * Maxout
-        $$ f(x) = max(wT1x + b1, wT2x + b2)$$
+        * **Maxout**
+        $$ f(x) = max(w^T_1x + b_1, w^T_2x + b_2)$$
             * Maxout 是深度學習網路中的一層網路，就像池化層、卷積層依樣，可以看成是網路的啟動層
             * Maxout 神經元的啟動函數是取得所有「函數層」中的最大值 
             * 擬合力非常強，優點是簡單設計，不會過飽和，同時又沒有 ReLU 的缺點
@@ -2201,21 +2228,25 @@
         * [CS231N Lecture](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture6.pdf)
         ```py
         import numpy as np
+
         #sigmoid 數學函數表示方式
         def sigmoid(x):
             return (1 / (1 + np.exp(-x)))
         #Sigmoid 微分
         def dsigmoid(x):
             return (x * (1 - x))
+
         #Softmax 數學函數表示方式
         def softmax(x):
             return np.exp(x) / float(sum(np.exp(x)))
+
         #tanh 數學函數表示方式
         def tanh(x):
             return(np.exp(x) - np.exp(-x))/(np.exp(x) + np.exp(-x))
         #tanh 微分
         def dtanh(x):
             return 1 - np.square(x)
+
         #ReLU 數學函數表示方式
         def ReLU(x):
             return abs(x) * (x > 0)
@@ -2224,11 +2255,11 @@
             return (1 * (x > 0))
         ```
 * **Day_73 : 梯度下降 Gradient Descent 簡介** 
-    * 機器學習算法當中，優化算法的功能，是通過改善訓練方式，來最⼩小化(或最大化)損失函數
+    * 機器學習算法當中，優化算法的功能，是通過改善訓練方式，來最小化 (或最大化) 損失函數
     * 最常用的優化算法是**梯度下降**
         * 通過尋找最小值，控制方差，更新模型參數，最終使模型收斂
         * $w_{i+1} = w_i - d_i·η_i , i=0,1,...$
-        * 參數 $η$ 是學習率。這個參數既可以設置為固定值，也可以用一維優化方法沿著訓練的方向逐步更新計算
+        * 參數 $η$ 是**學習率**。這個參數既可以設置為固定值，也可以用一維優化方法沿著訓練的方向逐步更新計算
         * 參數的更新分為兩步：第一步計算梯度下降的方向，第二步計算合適的學習
     * 學習率對梯度下降的影響
         * 學習率定義了每次疊代中應該更改的參數量。換句話說，它控制我們應該收斂到最低的速度。小學習率可以使迭代收斂，大學習率可能超過最小值
@@ -2236,10 +2267,10 @@
         $$ w \leftarrow w - \eta\frac{\partial{L}}{\partial{w}} $$
     * 梯度下降法的過程
         * 首先需要設定一個初始參數值，通常情況下將初值設為零 (w=0)，接下來需要計算成本函數 cost 
-        * 然後計算函數的導數(某個點處的斜率值)，並設定學習效率參數 (lr) 的值。
+        * 然後計算函數的導數 (某個點處的斜率值)，並設定學習效率參數 (lr) 的值。
         * 重複執行上述過程，直到參數值收斂，這樣我們就能獲得函數的最優解
     * 怎麼確定到極值點了呢？
-        * $η$ 又稱學習率，是一個挪動步長的基數，df(x)/dx 是導函數，當離得遠的時候導數大，移動的就快，當接近極值時，導數非常小，移動的就非常小，防止跨過極值點
+        * $η$ 又稱學習率，是一個挪動步長的基數，$\frac{df(x)}{dx}$ 是導函數，當離得遠的時候導數大，移動的就快，當接近極值時，導數非常小，移動的就非常小，防止跨過極值點
         * Gradient descent never guarantee global minima
         * Different initial point will be caused reach different minima, so different results
         * avoid local minima
@@ -2253,7 +2284,7 @@
                 | decay\_rate             | 衰減率      |
                 | global\_step            | 當前的 step |
                 | decay\_steps            | 衰減週期     |
-        * 使用 momentum，是梯度下降法中一種常用的加速技術。
+        * 使用 **momentum**，是梯度下降法中一種常用的加速技術。
             * Gradient Descent 的實現：SGD, 對於一般的SGD，其表達式為
             $x ← x\ −\ \alpha\ ∗\ dx$ (x沿負梯度⽅方向下降)
             而帶 momentum 項的 SGD 則寫成如下形式：
@@ -2269,22 +2300,24 @@
         * [機器/深度學習 - 基礎數學 : 梯度下降](https://medium.com/@chih.sheng.huang821/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-%E5%9F%BA%E7%A4%8E%E6%95%B8%E5%AD%B8-%E4%BA%8C-%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95-gradient-descent-406e1fd001f)
         * 各種衰減方法
             * exponential_decay : 指數衰減
-                ```
+                `
                 decayed_learning_rate = learning_rate * decay_rate ^ (global_step / decay_steps)
-                ```
+                `
             * natural_exp_decay : 自然指數衰減
-                ```
+                `
                 decayed_learning_rate = learning_rate * exp(-decay_rate * global_step)
-                ```
+                `
             * inverse_time_decay : 逆時間衰減
-                ```
+                `
                 decayed_learning_rate = learning_rate / (1 + decay_rate * global_step / decay_step)
-                ```
+                `
             * polynomial_decay : 多項式衰減
-                ```
+                `
                 global_step = min(global_step, decay_steps)
+                `
+                `
                 decayed_learning_rate = (learning_rate - end_learning_rate) *(1 - global_step / decay_steps) ^ (power) + end_learning_rate
-                ```
+                `
         ```py
         import numpy as np
         import matplotlib.pyplot as plt
@@ -2345,9 +2378,9 @@
         * 在微積分裡面，對多元函數的參數求 ∂ 偏導數，把求得的各個參數的**偏導數以向量的形式寫出來，就是梯度**。
         * 比如函數 f(x), 對 x 求偏導數，求得的梯度向量就是 (∂f/∂x)，簡稱 grad f(x)或者▽f (x)
     * 最常用的優化算法 - 梯度下降
-        * 目的：沿著目標函數梯度下降的方向搜索極小值（也可以沿著梯度上升的方向搜索極大值
+        * 目的：沿著目標函數梯度下降的方向搜索極小值 (也可以沿著梯度上升的方向搜索極大值)
         * 要計算 Gradient Descent，考慮
-            * Loss = 實際 ydata – 預測 ydata = w * 實際 xdata – w * 預測 xdata (bias 為 init value，被消除)
+            * Loss = (實際) ydata – (預測) ydata = w * (實際) xdata – w * (預測) xdata (bias 為 init value，被消除)
             * Gradient = ▽f (θ) (Gradient = ∂L/∂w)
             * 調整後的權重 = 原權重 – η(Learning rate) * Gradient
             $$ w \leftarrow w - \eta\frac{\partial{L}}{\partial{w}}$$
@@ -2361,10 +2394,10 @@
                     * decay 越小，學習率衰減地越慢，當 decay = 0 時，學習率保持不變
                     * decay 越大，學習率衰減地越快，當 decay = 1 時，學習率衰減最快
         * 使用 momentum 是梯度下降法中一種常用的加速技術。
-        $x ← x\ −\ \alpha\ ∗\ dx$ (x沿負梯度⽅方向下降)
+        $x ← x\ −\ \alpha\ ∗\ dx$ (x沿負梯度方向下降)
         $v\ = \beta\ ∗\ v\ −\ \alpha\ ∗\ dx$
         $x\ ←\ x\ +\ v$
-        * 其中 ß 即 momentum 係數，通俗的理解上面式子就是，如果上一次的 momentum（即ß ）與這一次的負梯度方向是相同的，那這次下降的幅度就會加大，所以這樣做能夠達到加速收斂的過程
+        * 其中 $\beta$ 即 momentum 係數，通俗的理解上面式子就是，如果上一次的 momentum（即 $\beta$ ）與這一次的負梯度方向是相同的，那這次下降的幅度就會加大，所以這樣做能夠達到加速收斂的過程
     * 延伸閱讀 :
         * [gradient descent using python and numpy](https://stackoverflow.com/questions/17784587/gradient-descent-using-python-and-numpy)
         * [梯度下降算法的参数更新公式](https://blog.csdn.net/hrkxhll/article/details/80395033)
@@ -2449,7 +2482,7 @@
         ```
 * **Day_75 : 反向式傳播簡介**
     * 何謂反向傳播
-        * 反向傳播（BP：Backpropagation）是「誤差反向傳播」的簡稱，是一種與最優化方法（如梯度下降法）結合使用的該方法對網路中所有權重計算損失函數的梯度。這個梯度會反饋給最優化方法，用來更新權值以最小化損失函數。
+        * **反向傳播**（BP：Backpropagation）是「誤差反向傳播」的簡稱，是一種與最優化方法（如梯度下降法）結合使用的該方法對網路中所有權重計算損失函數的梯度。這個梯度會反饋給最優化方法，用來更新權值以最小化損失函數。
         * 反向傳播要求有對每個輸入值想得到的已知輸出，來計算損失函數梯度。因此，它通常被認為是一種監督式學習方法，可以對每層疊代計算梯度。反向傳播要求人工神經元（或「節點」）的啟動函數可微。
     * 推導流程 :
         * $\to$ 建立神經網路 (Input、Hidden、Output)  
@@ -2461,14 +2494,14 @@
         $\to$ 解函數微分 
         $\to$ Back Propagation
     * BP 神經網路是一種按照逆向傳播算法訓練的多層前饋神經網路
-        * 優點：具有任意複雜的模式分類能力和優良的多維函數映射能力，解決了了簡單感知器不能解決的一些其他的問題。
+        * 優點：具有任意複雜的模式分類能力和優良的多維函數映射能力，解決了簡單感知器不能解決的一些其他的問題。
             * 從結構上講，BP 神經網路具有輸入層、隱含層和輸出層。
             * 從本質上講，BP 算法就是以網路誤差平方目標函數、採用梯度下降法來計算目標函數的最小值。
         * 缺點：
-            * ①學習速度慢，即使是一個簡單的過程，也需要幾百次甚⾄至上千次的學習才能收斂。
+            * ①學習速度慢，即使是一個簡單的過程，也需要幾百次甚至上千次的學習才能收斂。
             * ②容易陷入局部極小值。
             * ③網路層數、神經元個數的選擇沒有相應的理論指導。
-            * ④網路路推廣能力有限。
+            * ④網路推廣能力有限。
         * 應用：
             * ①函數逼近。
             * ②模式識別。
@@ -2520,14 +2553,14 @@
         d_price_Y, d_n_X =  mul_tax_layer.backward(d_fruit_price)
         ```
 * **Day_76 : 優化器 Optimizers 簡介**
-    * 什麼是優化算法 - Optimizer
+    * 什麼是**優化算法 - Optimizer**
         * 機器學習算法當中，大部分算法的本質就是建立優化模型，通過最優化方法對目標函數進行優化從而訓練出最好的模型
-        * 優化算法的功能，是通過改善訓練方式，來最小化(或最大化)損失函數 E(x)
+        * 優化算法的功能，是通過改善訓練方式，來最小化 (或最大化) 損失函數 E(x)
         * 優化策略和算法，是用來更新和計算影響模型訓練和模型輸出的網絡參數，使其逼近或達到最優值
     * 最常用的優化算法
         * Gradient Descent
             * 最常用的優化算法是梯度下降
-            * 這種算法使用各參數的梯度值來最小化或最大化損失函數E(x)。
+            * 這種算法使用各參數的梯度值來最小化或最大化損失函數 E(x)。
             * 通過尋找最小值，控制方差，更新模型參數，最終使模型收斂
         * 動量 Momentum
             * 「一顆球從山上滾下來，在下坡的時候速度越來越快，遇到上坡，方向改變，速度下降」
@@ -2536,17 +2569,17 @@
             * $v_t$ : 「方向速度」，會跟上一次的更新有關
             * 如果上一次的梯度跟這次同方向的話，$|V_t|$ (速度)會越來來越大(代表梯度增強)，$w$ 參數的更新梯度便會越來越快，如果方向不同，$|V_t|$ 便會比上次更小(梯度減弱)，$w$ 參數的更新梯度便會變小
             * 加入的這一項，可以使得梯度方向不變的維度上速度變快，梯度方向有所改變的維度上的更新速度變慢，這樣就可以加快收斂並減小震盪
-        * SGD - 隨機梯度下降法(stochastic gradient decent)
-            * 找出參數的梯度(利用微分的方法)，往梯度的方向去更新參數(weight)
+        * SGD - 隨機梯度下降法 (stochastic gradient decent)
+            * 找出參數的梯度 (利用微分的方法)，往梯度的方向去更新參數 (weight)
             $$ w \leftarrow w -\eta \frac{\partial{L}}{\partial{w}}$$
-            * $w$ 為權重 (weight) 參數，$L$ 為損失函數 (loss function)， $\eta$ 是學習率 (learning rate)， $\frac{\partial{L}}{\partial{w}}$ 是損失函數對參數的梯度(微分)
+            * $w$ 為權重 (weight) 參數，$L$ 為損失函數 (loss function)， $\eta$ 是學習率 (learning rate)， $\frac{\partial{L}}{\partial{w}}$ 是損失函數對參數的梯度 (微分)
             * 優點：SGD 每次更新時對每個樣本進行梯度更新，對於很大的數據集來說，可能會有相似的樣本，而 SGD 一次只進行一次更新，就沒有冗餘，而且比較快
             * 缺點：但是 SGD 因為更新比較頻繁，會造成 cost function 有嚴重的震盪
         * SGD 調用
             * `keras.optimizers.SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)`
                 * lr：<float> 學習率。
                 * Momentum 動量：<float> 參數，用於加速 SGD 在相關方向上前進，並抑制震盪。
-                * Decay(衰變)：<float> 每次參數更新後學習率衰減值。
+                * Decay (衰變)：<float> 每次參數更新後學習率衰減值。
                 * nesterov：布爾值。是否使用 Nesterov 動量。
             ```py
             from keras import optimizers
@@ -2683,7 +2716,7 @@
                 2. 對內存需求小
                 3. 對不同內存計算不同的學習
         * RMSProp：自適應調節學習率。對學習率進行了約束，適合處理非平穩目標和 RNN。
-        * 如果輸入數據集比較稀疏，SGD、NAG 和動量項等方法可能效果不好。因此對於稀疏數據集，應該使⽤用某種自適應學習率的方法，且另一好處為不需要⼈人為調整學習率，使用默認參參數就可能獲得最優值。
+        * 如果輸入數據集比較稀疏，SGD、NAG 和動量項等方法可能效果不好。因此對於稀疏數據集，應該使用某種自適應學習率的方法，且另一好處為不需要人為調整學習率，使用默認參數就可能獲得最優值。
             * Adagrad, RMSprop, Adam。
         * 如果想使訓練深層網絡模型快速收斂或所構建的神經網絡較為複雜，則應該使用 Adam 或其他自適應學習速率的方法，因為這些方法的實際效果更優。  
             * Adam 就是在 RMSprop 的基礎上加了 bias-correction 和 momentum，
@@ -2905,9 +2938,9 @@
             * 在實作過程中，建議先使用 Adam 驗證，若要做最終的優化，則再改用 SGD 找到最佳參數。
         * [An overview of gradient descent optimization algorithms](https://ruder.io/optimizing-gradient-descent/)
 * **Day_81 : 訓練神經網路的細節與技巧 - Regularization**
-    * 正規化 (Regularization)    
+    * **正規化 (Regularization)**    
         * Cost function = Loss + Regularization
-        * 透過 regularization，可以使的模型的weights 變得比較小
+        * 透過 regularization，可以使的模型的 weights 變得比較小
         * wi 較小 
         $\to$ Δxi 對 $\hat{y}$ 造成的影響(Δ$\hat{y}$)較小
         $\to$ 對 input 變化比較不敏感 ➔ better generalization
@@ -2977,8 +3010,8 @@
                                     'valid-acc': valid_acc}
         ```
 * **Day_82 : 訓練神經網路的細節與技巧 - Dropout**
-    * 隨機移除 (Dropout)
-        * 在訓練過程中，在原本全連結的前後兩層 layers ，隨機拿掉一些連結(weights 設為 0)
+    * **隨機移除 (Dropout)**
+        * 在訓練過程中，在原本全連結的前後兩層 layers ，隨機拿掉一些連結 (weights 設為 0)
         * 解釋1：增加訓練的難度 – 當你知道你的同伴中有豬隊友時，你會變得要更努力學習
         * 解釋2：被視為一種 model 自身的 ensemble 方法，因為 model 可以有 2^n 種 weights combination
         * 優點 : 強迫模型的每個參數有更強的泛化能力，也讓網路能在更多參數組合的狀態下習得表徵。
@@ -3009,7 +3042,7 @@
             return model
         ```
 * **Day_83 : 訓練神經網路的細節與技巧 - Batch normalization**
-    * 批次標準化 (Batch normalization)
+    * **批次標準化 (Batch normalization)**
         * 對於 Input 的數值，前面提到建議要 re-scale
             * Weights 修正的路徑比較會在同心圓山谷中往下滑
             * 只加在輸入層 re-scale 不夠，你可以每一層都 re-scale !!
@@ -3176,7 +3209,7 @@
                                     'valid-acc': model.history.history["val_accuracy"]}
         ```
 * **Day_85 : 訓練神經網路的細節與技巧 - 使用 callbacks 函數做 earlystop**
-    * 提前終止 (EarlyStopping)
+    * **提前終止 (EarlyStopping)**
         * 假如能夠早點停下來就好
         * 在 Overfitting 前停下，避免 model weights 被搞爛
         * 注意：Earlystop 不會使模型得到更好的結果，僅是避免更糟
@@ -3203,7 +3236,7 @@
                 )
         ```
 * **Day_86 : 訓練神經網路的細節與技巧 - 使用 callbacks 函數儲存 model**
-    * Model CheckPoint
+    * **Model CheckPoint**
         * 為何要使用 Model Check Point?
             * ModelCheckPoint：自動將目前最佳的模型權重存下
         * 假如電腦突然斷線、當機該怎麼辦? 難道我只能重新開始?
@@ -3253,7 +3286,7 @@
     * Reduce Learning Rate: 隨訓練更新次數，將 Learning rate 逐步減小
         * 因為通常損失函數越接近谷底的位置，開口越小 – 需要較⼩的 Learning rate 才可以再次下降
     * 可行的調降方式
-        * 每更更新 n 次後，將 Learning rate 做一次調降 – schedule decay
+        * 每更新 n 次後，將 Learning rate 做一次調降 – schedule decay
         * 當經過幾個 epoch 後，發現 performance 沒有進步 – Reduce on plateau
     * Reduce learning rate on plateau：模型沒辦法進步的可能是因為學習率太大導致每次改變量太大而無法落入較低的損失平面，透過適度的降低，就有機會得到更好的結果
     * 因為我們可以透過這樣的監控機制，初始的 Learning rate 可以調得比較高，讓訓練過程與 callback 來做適當的 learning rate 調降。
@@ -3722,11 +3755,11 @@
         ```
 ### 深度學習應用卷積神經網路
 * **Day_92 : 卷積神經網路(Convolution Neural Network, CNN) 簡介**
-    * ImageNet Challenge 是電腦視覺的競賽，需要對影像進行 1000 個類別的預測，在 CNN 出現後首次有超越⼈人類準確率的模型
+    * ImageNet Challenge 是電腦視覺的競賽，需要對影像進行 1000 個類別的預測，在 CNN 出現後首次有超越人類準確率的模型
     * 卷積是甚麼？
         * 卷積其實只是簡單的數學乘法與加法
         * 利用濾波器 (filter) 對圖像做卷積來找尋規則
-        * 卷積是將影像與 filter 的值相乘後再進行加總，即可得到特徵圖(Feature Map)
+        * 卷積是將影像與 filter 的值相乘後再進行加總，即可得到特徵圖 (Feature Map)
     * 卷積的目的
         * 透過卷積，我們可以找出圖像上與濾波器具有相同特徵的區域
     * 濾波器 (filter)
@@ -3742,9 +3775,9 @@
             * 例如，輸入影像的資料時，該 data 通常包含了水平、垂直、color channel 等三維資訊，但傳統 DNN 的輸入處理必須是平面的、也就是須一維的資料。
             * 一些重要的空間資料，只有在三維形狀中才能保留下來。
             * RGB 不同的 channel 之間也可能具有某些關連性、而遠近不同的像素彼此也應具有不同的關聯性
-        * 深度學習（Deep learning）中的 CNN 較傳統的 DNN 多了了Convolutional（卷積）及池化（Pooling）兩層 layer，用以維持形狀資訊並且避免參數大幅增加。
+        * 深度學習（Deep learning）中的 CNN 較傳統的 DNN 多了 Convolutional（卷積）及池化（Pooling）兩層 layer，用以維持形狀資訊並且避免參數大幅增加。
         * Convolution 原理是透過一個指定尺寸的window，由上而下依序滑動取得圖像中各局部特徵作為下一層的輸入，這個 sliding window 在 CNN 中稱為 Convolution kernel 利用此方式來取得圖像中各局部的區域加總計算後，透過 ReLU activation function 輸出為特徵值再提供給下一層使用
-    * 池化層(Pooling Layer)
+    * **池化層 (Pooling Layer)**
         * Pooling layer 稱為池化層，它的功能很單純，就是將輸入的圖片尺寸縮小（大部份為縮小一半）以減少每張 feature map 維度並保留重要的特徵，其好處有：
             * 特徵降維，減少後續 layer 需要參數。
             * 具有抗干擾的作用：圖像中某些像素在鄰近區域有微小偏移或差異時，對 Pooling layer 的輸出影響不大，結果仍是不變的。
